@@ -6,14 +6,14 @@ import { BiHomeAlt, BiUserCircle } from "react-icons/bi"
 export const MobileNav = () => {
     return (
         <Flex justifyContent="space-evenly" align="center" display={{ base: "flex", lg: "none"}}
-        position="fixed" bottom="0" w="full" h="30px" bg="white" py="30px">
+        position="fixed" bottom="0" w="full" h="30px" bg="#cacfd6" py="30px">
             <Flex direction="column" justifyContent="center" alignItems="center">
                 <BiHomeAlt />
                 <Text>Home</Text>
             </Flex>
             <Flex direction="column" justifyContent="center" alignItems="center">
                 <AiOutlineAppstore />
-                <Text>Category</Text>
+                <Text>Product</Text>
             </Flex>
             <Flex direction="column" justifyContent="center" alignItems="center">
                 <AiOutlineShoppingCart />

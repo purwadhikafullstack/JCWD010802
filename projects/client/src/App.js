@@ -2,24 +2,32 @@ import axios from "axios";
 import logo from "./logo.svg";
 import "./App.css";
 import { useEffect, useState } from "react";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { routes } from "./routes";
+import { useDispatch } from "react-redux";
+import { setValue } from "./redux/userSlice";
 
 function App() {
-  const [message, setMessage] = useState("");
+  const router = createBrowserRouter(routes);
+  const token = localStorage.getItem("token")
+  const dispatch = useDispatch()
+
+  const keepLogin = async () => {
+    const response = await axios.get("http://localhost:8000/api/auth/keeplogin", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    dispatch(setValue(response.data.result))
+  }
 
   useEffect(() => {
-    (async () => {
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/greetings`
-      );
-      setMessage(data?.message || "");
-    })();
-  }, []);
+    keepLogin()
+  }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        {message}
-      </header>
+      <RouterProvider router={router} />
     </div>
   );
 }
