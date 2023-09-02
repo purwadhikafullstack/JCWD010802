@@ -37,7 +37,6 @@ module.exports = {
                 token
             })
         } catch (err) {
-            console.log(err);
             res.status(400).send({
                 status: false,
                 message: err.message
@@ -63,7 +62,6 @@ module.exports = {
                 token
             })
         } catch (err) {
-            console.log(err);
             res.status(400).send({
                 status: false,
                 message: err.message
