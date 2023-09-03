@@ -33,7 +33,7 @@ export const RegisterCard = () => {
         <Flex direction="column" p="30px" align="center" w="60%">
             <Flex direction="column" w="312px" mb="30px">
                 <Heading fontSize="22px">Sign In</Heading>
-                <Text mt="10px">Log in to your account to start shopping</Text>
+                <Text mt="10px">Create your account to start finding your dream gadget here</Text>
             </Flex>
             <Formik
             initialValues={{email: ''}}

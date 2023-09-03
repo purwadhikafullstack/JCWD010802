@@ -13,7 +13,7 @@ export const RegisterView = () => {
             <Flex h="100vh" w="50%" direction="column" 
             align="center" p="15px">
                 <Heading mt="10px" w={{ base: "unset", lg: "full"}} fontSize="20px" as={Link} to="/">
-                    Warehouse
+                    techtok.id
                 </Heading>
                 <RegisterCard />
             </Flex>
