@@ -13,12 +13,16 @@ function App() {
   const dispatch = useDispatch()
 
   const keepLogin = async () => {
-    const response = await axios.get("http://localhost:8000/api/auth/keeplogin", {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    dispatch(setValue(response.data.result))
+    if (token) {
+      const response = await axios.get("http://localhost:8000/api/auth/keeplogin", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      dispatch(setValue(response.data.result))
+    } else {
+      
+    }
   }
 
   useEffect(() => {

@@ -6,5 +6,6 @@ const router = require("express").Router()
 router.post("/register", checkRegister, authController.register)
 router.post("/login", checkLogin, authController.login)
 router.get("/keeplogin", verifyToken, authController.keepLogin)
+router.put("/resend", authController.resendVerif)
 
 module.exports = router

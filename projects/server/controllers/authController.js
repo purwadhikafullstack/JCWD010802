@@ -84,5 +84,39 @@ module.exports = {
                 message: err.message
             })
         }
+    },
+    resendVerif: async (req, res) => {
+        try {
+            const { email, regisToken } = req.body
+
+            const result = await user.findOne({ where: { email }})
+            const tokenExist = await dbtoken.findOne({ where: { token: regisToken }})
+            if (tokenExist) await dbtoken.destroy({ where: { token: regisToken }})
+            
+            const payload = { email: email, id: result.id }
+            const token = jwt.sign(payload, process.env.KEY_JWT, { expiresIn: "3d" })
+            await dbtoken.create({ token })
+
+            const data = fs.readFileSync('./templates/register.html', 'utf-8')
+            const tempCompile = await handlebars.compile(data)
+            const tempResult = tempCompile({ token })
+
+            await transporter.sendMail({
+                from: process.env.USER_MAILER,
+                to: email,
+                subject: 'Registration Form',
+                html: tempResult
+            })
+
+            res.status(200).send({
+                status: true,
+                token
+            })
+        } catch (err) {
+            res.status(400).send({
+                status: false,
+                message: err.message
+            })
+        }
     }
 }
