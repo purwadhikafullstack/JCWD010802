@@ -1,6 +1,7 @@
-import { Button, Center, Flex, HStack, Heading, Text, useToast } from "@chakra-ui/react"
+import { Flex, Heading, Text } from "@chakra-ui/react"
 import axios from "axios"
 import { useSelector } from "react-redux"
+import Swal from "sweetalert2"
 
 
 export const OnboardCard = () => {
@@ -9,14 +10,25 @@ export const OnboardCard = () => {
         email: regis.email,
         regisToken: regis.token
     }
-    console.log(data);
 
     const onResend = async () => {
         try {
-            const response = await axios.put("http://localhost:8000/api/auth/resend", data)
-            console.log(response);
+            await axios.put("http://localhost:8000/api/auth/resend", data)
+            Swal.fire({
+                title: "Resend Email Success!",
+                text: "Please check your email to verify your account",
+                icon: "success",
+                confirmButtonText: "Okay",
+                confirmButtonColor: "green"
+            })
         } catch (error) {
-            console.log(error);
+            Swal.fire({
+                title: "Failed to resend email!",
+                text: error.response.data.message,
+                icon: "error",
+                confirmButtonText: "Okay",
+                confirmButtonColor: "red"
+            })
         }
     }
 

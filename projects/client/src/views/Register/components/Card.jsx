@@ -28,7 +28,6 @@ export const RegisterCard = () => {
                 navigate("/onboard")
             },1500)
         } catch (error) {
-            console.log(error);
             Swal.fire({
                 title: "Registration Failed!",
                 text: error.response.data.message,

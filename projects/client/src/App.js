@@ -1,7 +1,6 @@
 import axios from "axios";
-import logo from "./logo.svg";
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { routes } from "./routes";
 import { useDispatch } from "react-redux";
