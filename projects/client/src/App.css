@@ -4,18 +4,18 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #16f230;
+  background: #cacfd6;
   /* border-radius: 100vw; */
   /* margin-block: .5em; */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #0e6117;
+  background: #2d3319;
   border-radius: 100vw;
 }
 
 @supports (scrollbar-color: red blue) {
   * {
-      scrollbar-color: #0e6117 #16f230;
+      scrollbar-color: #2d3319 #cacfd6;
   }
 }

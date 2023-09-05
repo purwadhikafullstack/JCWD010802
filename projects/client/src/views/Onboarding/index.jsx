@@ -1,13 +1,13 @@
 import { Flex, Heading, Image } from "@chakra-ui/react"
-import { RegisterCard } from "./components/Card"
 import { Link } from "react-router-dom"
+import { OnboardCard } from "./components/OnboardCard"
 
 
-export const RegisterView = () => {    
+export const OnboardingView = () => {    
     return(
-        <Flex justifyContent="center" alignItems="center" minH="100vh" bg="#edf3f8">
+        <Flex justifyContent="center" m="auto" alignItems="center" minH="100vh" bg="#edf3f8">
             <Flex h="100vh" w="50%" p="15px" display={{ base: "none", lg: "flex"}}>
-                <Image src="https://www.lifewire.com/thmb/P1TZQWFtD_x4V8I77qDXd6Ae8F4=/5838x3894/filters:no_upscale():max_bytes(150000):strip_icc()/happy-woman-using-mobile-phone-on-sofa-516008710-5b85ec66c9e77c002c733634.jpg" 
+                <Image src="https://mynewzportal.com/wp-content/uploads/2021/05/high-tech-gadgets.jpg" 
                 objectFit="cover" borderRadius="10px"/>
             </Flex>
             <Flex h="100vh" w={{ base: "full", lg: "50%"}} direction="column" 
@@ -15,7 +15,7 @@ export const RegisterView = () => {
                 <Heading mt="10px" w={{ base: "unset", lg: "full"}} fontSize="20px" as={Link} to="/">
                     techtok.id
                 </Heading>
-                <RegisterCard />
+                <OnboardCard />
             </Flex>
         </Flex>
     )
