@@ -4,6 +4,6 @@ const router = require('express').Router()
 
 
 router.post('/forgot', authControllers.forgotPassword)
-router.patch('/reset/:token',verifyToken, authControllers.resetPassword)
+router.patch('/reset',verifyToken, authControllers.resetPassword)
 
 module.exports = router

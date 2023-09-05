@@ -10,7 +10,6 @@ export const WarehouseAdmin = () =>{
         <AddAdminButton/>
             </Flex>
             <Box mx={3}>
-
         <ListAdmin/>
             </Box>
         </Box>

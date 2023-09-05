@@ -5,7 +5,7 @@ export const UserProfileModal = ({ user, profile, isOpen, onClose }) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose} size={"md"}>
             <ModalOverlay />
-            <ModalContent bg={"#edf3f8"} color={"#2d3319"}>
+            <ModalContent bg={"white"} color={"#2d3319"}>
                 <ModalHeader color={"#2d3319"}fontWeight={"bold"}>User Profile</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
@@ -29,7 +29,7 @@ export const UserProfileModal = ({ user, profile, isOpen, onClose }) => {
                     )}
                 </ModalBody>
                 <ModalFooter>
-                    <Button onClick={onClose}color={"#2d3319"}>Close</Button>
+                    <Button onClick={onClose} colorScheme="red">Close</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

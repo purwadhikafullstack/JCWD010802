@@ -53,10 +53,9 @@ export const AddAdmin = ({ isOpen, onClose }) => {
         if (response.status === 200) {
             toast.success('successfully added new warehouse admin', {
               position: 'top-right',
-              autoClose: 3000, // Close the alert after 3 seconds
+              autoClose: 3000, 
             });
           }
-        console.log(response);
       } catch (error) {
         console.log(error);
       }
@@ -65,7 +64,6 @@ export const AddAdmin = ({ isOpen, onClose }) => {
   const getWarehouse = async () => {
     try {
       const response = await axios.get(`http://localhost:8000/api/warehouse`);
-      console.log(response);
       setWarehouse(response.data);
     } catch (error) {
       console.log(error);
@@ -149,7 +147,7 @@ export const AddAdmin = ({ isOpen, onClose }) => {
         </ModalBody>
       </ModalContent>
     </Modal>
-                </>
+    </>
   );
 };
 

@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react';
 
 export const DeleteUserModal = ({ isOpen, onClose, onDelete, adminName }) => {
+  
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -23,7 +24,7 @@ export const DeleteUserModal = ({ isOpen, onClose, onDelete, adminName }) => {
         </ModalBody>
 
         <ModalFooter>
-            <HStack gap={2}>
+          <HStack gap={2}>
 
           <Button onClick={onClose} colorScheme='red'>Cancel</Button>
           <Button colorScheme="green" onClick={onDelete}>

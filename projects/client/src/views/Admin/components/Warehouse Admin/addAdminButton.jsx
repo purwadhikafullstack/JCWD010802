@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@chakra-ui/react';
 import { AddAdmin } from './addAdmin';
-import axios from 'axios';
-import { color } from 'framer-motion';
 
 export const AddAdminButton = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,7 +8,6 @@ export const AddAdminButton = () => {
   const openModal = () => {
     setIsOpen(true);
   };
-
   const closeModal = () => {
     setIsOpen(false);
   };

@@ -7,7 +7,7 @@ import {
   Portal,
   Button,
 } from "@chakra-ui/react";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaChevronUp } from "react-icons/fa";
 
 export const AdminMenu = ({ index, toggleMenu, handleMenuItemClick, warehouse }) => {
   const [isOpen, setIsOpen] = useState(false);

@@ -9,12 +9,14 @@ export const PaginationAddress = ({ totalpage }) => {
   const navigate = useNavigate();
   const search = params.get("search") || "";
   const sort = params.get("sort") || "";
+  const roleId = params.get("roleId") || "";
+  const warehouseId = params.get("warehouseId") || "";
   const currentpage = Number(params.get("page")) || 1;
 
   function handlePage(newPage) {
     if (newPage >= 1 && newPage <= totalpage) {
       params.set("page", newPage);
-      navigate(`?search=${search}&sort=${sort}&page=${newPage}`);
+      navigate(`?search=${search}&sort=${sort}&page=${newPage}&roleId=${roleId}&warehouseId=${warehouseId}`);
     }
   }
   return (

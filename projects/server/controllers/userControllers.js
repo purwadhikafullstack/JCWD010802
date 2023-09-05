@@ -28,14 +28,22 @@ module.exports = {
         try {
             const page = +req.query.page || 1; 
             const limit = +req.query.limit || 5; 
-            const condition = {isDeleted:false}
+            const roleId = +req.query.roleId || ""
+    
+            const condition = {
+                isDeleted: false
+            };
+    
+            if (roleId) {
+                condition.roleId = roleId;
+            }
     
             const offset = (page - 1) * limit;
-            const total = await user.count({where:condition})
+            const total = await user.count({ where: condition });
             const result = await user.findAll({
                 limit: limit,
                 offset: offset,
-                where:condition
+                where: condition
             });
             res.status(200).send({
                 status: true,

@@ -50,17 +50,7 @@ module.exports = {
 
     resetPassword : async(req,res)=>{
             try {
-                const {password, confirmpassword} = req.body
-                // if(confirmpassword !== password) throw {message: "password tidak sesuai"}
-                // const cektoken = await user.findOne(
-                //     {
-                //         where : {
-                //             id : req.user.id
-                //         }
-                //     }
-                // )
-                // if(req.token == cektoken.token)
-             
+                const {password, confirmpassword} = req.body             
                 const salt = await bcrypt.genSalt(10)
                 const hashPassword = await bcrypt.hash(password, salt)
                 const result = await user.update(
@@ -70,8 +60,7 @@ module.exports = {
                         }
                     }
                     )
-    
-                    res.status(200).send({result, message:"password berhasil diubah"})
+                    res.status(200).send({result, message:"Change password success"})
             
         } catch (error) {
                 console.log(error);

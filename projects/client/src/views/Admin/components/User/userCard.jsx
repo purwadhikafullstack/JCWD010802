@@ -1,19 +1,16 @@
-
 import {
   Badge,
   Box,
   Button,
-  Center,
-  Divider,
   Flex,
   HStack,
   Heading,
   Image,
   ListItem,
+  Select,
   Stack,
   Text,
   UnorderedList,
-  useColorModeValue,
 } from '@chakra-ui/react'
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -21,7 +18,7 @@ import { BiSolidUser, BiSolidUserDetail } from 'react-icons/bi';
 import { UserProfileModal } from './userProfileModal';
 import { FaWarehouse } from 'react-icons/fa';
 import { PaginationAddress } from '../pagination';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const UserCard = () => {
     const [user, setUser] = useState([]);
@@ -32,12 +29,14 @@ export const UserCard = () => {
     const params = new URLSearchParams(location.search);
     const search = params.get("search") || "";
     const sort = params.get("sort") || "";
+    const roleId = params.get("roleId") || "";
     const currentPage = Number(params.get("page")) || 1
     const [page,setPage] = useState([])
+    const navigate = useNavigate()
       
     const getUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/user/list-user?&page=${currentPage}`);
+        const response = await axios.get(`http://localhost:8000/api/user/list-user?&page=${currentPage}&roleId=${roleId}`);
         console.log(response.data.result);
         setUser(response.data.result);
         setPage(response.data.totalPage)
@@ -45,10 +44,10 @@ export const UserCard = () => {
         console.log(error);
       }
     };
+   
     const getProfile = async (userId) => {
       try {
         const response = await axios.get(`http://localhost:8000/api/user/${userId}`);
-        console.log(response.data.result);
         setProfile(response.data.result);
 
       } catch (error) {
@@ -60,16 +59,32 @@ export const UserCard = () => {
         getProfile(user.id)
         setIsModalOpen(true);
     };
-   
+    const handleRoleChange = (e) => {
+      navigate(`?roleId=${e.target.value}`)
+  };
     useEffect(() => {
       getUser();
       getProfile()
-    }, [currentPage]);
+    }, [currentPage,roleId]);
   return (
     <>
     <Heading py={5} ml={5}>
         User List
     </Heading>
+    <Box py={3} ml={5}>
+                <Text htmlFor="roleSelect">Filter by Role: </Text>
+                <Select
+                id="roleSelect"
+                name="roleSelect"
+                onChange={handleRoleChange}
+                value={roleId}
+                maxWidth="200px"
+            >
+                <option value="">All</option>
+                <option value="1">User</option>
+                <option value="2">Warehouse Admin</option>
+            </Select>
+            </Box>
     <Stack py={6} mx={3}  gap={4}>
         {user?.map((item)=>(
             
@@ -93,7 +108,6 @@ export const UserCard = () => {
           />
         </Flex>
         <Box>
-
           <Heading fontSize={'xl'} fontFamily={'body'}>
             {item.name} 
           </Heading>
@@ -158,10 +172,8 @@ export const UserCard = () => {
       <BiSolidUserDetail />
     </Button>
           </Flex>
-          
       </Stack>
     ))}
-
     </Stack>
     <UserProfileModal
         user={selectedUser}

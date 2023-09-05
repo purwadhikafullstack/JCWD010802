@@ -32,10 +32,10 @@ module.exports = {
 getAdmin: async (req,res) => {
   try {
     const page = +req.query.page || 1;
-    const limit = +req.query.limit || 10;
+    const limit = +req.query.limit || 5;
     const offset = (page - 1) * limit
-    const total = await user.count()
-    const result = await user.findAll({  where:{roleId:2},limit, offset:offset} )
+    const total = await user.count({  where:{roleId:2, isDeleted:false}})
+    const result = await user.findAll({  where:{roleId:2, isDeleted:false},limit, offset:offset} )
     res.status(200).send({
       totalPage: Math.ceil(total / limit),
       currentPage: page,
@@ -54,8 +54,15 @@ getAdminProfile: async (req,res) => {
       const page = +req.query.page || 1;
       const limit = +req.query.limit || 5;
       const offset = (page - 1) * limit
-      const total = await warehouseAdmin.count()
-      const result = await warehouseAdmin.findAll({ limit, offset:offset,  include: [{model: warehouse,include:[{model:address}]},{model: user,where:{isDeleted:false}}]})
+      const warehouseId = +req.query.warehouseId || ""
+
+      const condition = {}
+      if (warehouseId) {
+        condition.warehouseId = warehouseId;
+      }
+      const total = await warehouseAdmin.count({where:condition})
+    
+      const result = await warehouseAdmin.findAll({ limit, offset:offset ,where:condition,  include: [{model: warehouse,include:[{model:address}]},{model: user,where:{isDeleted:false}}]})
       res.status(200).send({
         totalPage: Math.ceil(total / limit),
         currentPage: page,
@@ -108,5 +115,31 @@ getAdminProfile: async (req,res) => {
         console.log(error);
     }
   },
+  editAdmin: async (req, res) => {
+    try {
+        const id = req.params.id;
+        const updateFields = {};
+      
+        
+        if (req.body.name) {
+            updateFields.name = req.body.name;
+        }
+        
+        if (req.body.email) {
+            updateFields.email = req.body.email;
+        }
+      
+        console.log(id);
+        const result = await user.update(updateFields, {
+            where: { id: id }
+        });
+        
+        console.log(updateFields);
+        res.status(200).send({ msg: "Success to edit admin" ,result});
+    } catch (error) {
+        console.error(error);
+        res.status(400).send({ error, msg: "Failed to edit admin" });
+    }
+},
 
 }

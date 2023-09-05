@@ -1,6 +1,6 @@
 
 import { Avatar, Box, Center, Drawer, DrawerContent, DrawerOverlay, Flex, Icon, IconButton, Input, InputGroup, InputLeftElement, Text, useDisclosure } from "@chakra-ui/react";
-import { FiMenu, FiSearch, FiBell } from "react-icons/fi"; // Import missing icons
+import { FiMenu, FiSearch, FiBell } from "react-icons/fi";
 import { MdHome } from "react-icons/md";
 import { FaRss, FaClipboardCheck, FaWarehouse, FaUsers } from "react-icons/fa";
 import { HiCollection, HiCode } from "react-icons/hi";
@@ -76,7 +76,6 @@ export const Sidebar = () => {
         as="nav"
         gap={2}
         fontSize="sm"
-        // color="gray.600"
         aria-label="Main Navigation"
       >
         <NavLink to="/">
@@ -165,10 +164,6 @@ export const Sidebar = () => {
               md: "flex",
             }}
           >
-            {/* <InputLeftElement color="gray.500">
-                <FiSearch />
-              </InputLeftElement>
-              <Input placeholder="Search for articles..." /> */}
           </InputGroup>
 
           <Flex align="center">
