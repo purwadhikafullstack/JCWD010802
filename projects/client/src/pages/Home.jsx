@@ -1,7 +1,11 @@
-import HomepageView from "../views/Home";
+import { Outlet } from "react-router-dom";
 
 const Homepage = () => {
-  return <HomepageView />;
+  return (
+    <>
+    <Outlet/>
+    </>
+  )
 };
 
 export default Homepage;
