@@ -4,29 +4,45 @@ import { Button, Center, Flex, Heading, Text } from "@chakra-ui/react"
 import { Form, Formik } from "formik"
 import { InputField } from "../../../components/input/InputField"
 import { FcGoogle } from "react-icons/fc"
-import { useState } from "react"
-import { Link } from "react-router-dom"
-
+import { Link, useNavigate } from "react-router-dom"
+import Swal from "sweetalert2"
+import { useDispatch } from "react-redux"
+import { setEmail } from "../../../redux/regisSlice"
 
 export const RegisterCard = () => {
-    const [success, setSuccess] = useState(false)
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
     const onRegister = async (data) => {
         try {
-            const response = await axios.post("http://localhost:7799/api/auth/register", data)
-            setSuccess(true)
-            console.log(response);
+            const response = await axios.post("http://localhost:8000/api/auth/register", data)
+            dispatch(setEmail({email: data.email, token: response.data.token}))
+            Swal.fire({
+                title: "Register Success!",
+                text: "Please check your email to verify your account",
+                icon: "success",
+                confirmButtonText: "Okay",
+                confirmButtonColor: "green"
+            })
+            setTimeout(() => {
+                navigate("/onboard")
+            },1500)
         } catch (error) {
-            console.log(error);
-            setSuccess(false)
+            Swal.fire({
+                title: "Registration Failed!",
+                text: error.response.data.message,
+                icon: "error",
+                confirmButtonText: "Okay",
+                confirmButtonColor: "red"
+            })
         }
     }
 
     return (
-        <Flex bg="white" direction="column" p="30px" align="center" mt="50px"
-        shadow="md" borderRadius="10px">
-            <Flex justifyContent="space-between" align="center" w="full" mb="30px">
-                <Heading fontSize="22px">Register</Heading>
-                <Text as={Link} to="/login">Login</Text>
+        <Flex direction="column" p="30px" align="center" w="full">
+            <Flex direction="column" w="full" mb="30px">
+                <Heading fontSize="22px">Sign In</Heading>
+                <Text mt="10px">Create your account to start finding your dream gadget here</Text>
             </Flex>
             <Formik
             initialValues={{email: ''}}
@@ -35,31 +51,40 @@ export const RegisterCard = () => {
               })}
             onSubmit={(values, action) => {
                 onRegister(values)
-                if (success) {
-                    action.resetForm()
-                }
+                action.resetForm()
+                
             }}
         >
             {(props) => (
-            <Form>
-                <Flex direction="column">
-                    <InputField
-                        label="Email"
-                        name="email"
-                        id="email"
-                        className="email"
-                        type="text"
-                        w="300px"
-                        mb="10px"
-                        placeholder="Enter your email here"
-                    />
-                    <Button type="submit" mt="15px" bg="#0058AB" color="white">Submit</Button>
+            <Flex as={Form} direction="column" w="full">
+                <InputField
+                    label="Email"
+                    name="email"
+                    id="email"
+                    className="email"
+                    type="text"
+                    mb="10px"
+                    placeholder="Enter your email here"
+                    bg="white"
+                />
+                <Button type="submit" mt="15px" bg="#517664" color="white"
+                _hover={{color: "#517664", bg: "white"}}>
+                    Submit
+                </Button>
+                <Flex gap={1} mt="5px">
+                    <Text mt="5px" fontSize="14px">
+                        Been here before?
+                    </Text>
+                    <Text as={Link} to="/login" mt="5px" color="#517664"
+                    fontSize="14px" fontWeight="bold">
+                        Sign In
+                    </Text>
                 </Flex>
-            </Form>
+            </Flex>
             )}
             </Formik>
-            <Text mt="20px">Or</Text>
-            <Button w={'full'} bg="gray.200" leftIcon={<FcGoogle />}  mt="20px">
+            <Text mt="10px">Or</Text>
+            <Button w="full" bg="gray.200" leftIcon={<FcGoogle />} mt="10px">
                 <Center>
                     <Text>Register with Google</Text>
                 </Center>

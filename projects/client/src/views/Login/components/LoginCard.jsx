@@ -4,23 +4,31 @@ import { Button, Center, Flex, Heading, Text, useToast } from "@chakra-ui/react"
 import { Form, Formik } from "formik"
 import { InputField } from "../../../components/input/InputField"
 import { FcGoogle } from "react-icons/fc"
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
-import { firebaseAuth } from "../../../helpers/firebase"
-import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { setValue } from "../../../redux/userSlice"
 
 
 export const LoginCard = () => {
-    const [success, setSuccess] = useState(false)
     const dispatch = useDispatch()
     const toast = useToast()
     const navigate = useNavigate()
+
+    const loginSchema = Yup.object().shape({
+        email: Yup.string().email('Email is invalid').required('Email is required'),
+        password: Yup.string()
+          .min(6, 'Password contains minimal 6 characters')
+          .required('Password is required'),
+    });
+
+    const initialValues = {
+        email: '',
+        password: '',
+    };
+
     const onLogin = async (data) => {
         try {
-            const response = await axios.post("http://localhost:7799/api/auth/login", data)
-            setSuccess(true)
+            const response = await axios.post("http://localhost:8000/api/auth/login", data)
             dispatch(setValue(response.data.result))
             toast({
                 title: "Success",
@@ -33,63 +41,76 @@ export const LoginCard = () => {
               setTimeout(() => {
                 navigate("/")
               }, 2000)
-            console.log(response);
+            localStorage.setItem("token", response.data.token)
         } catch (error) {
-            console.log(error);
-            setSuccess(false)
+            toast({
+                title: "Login Failed!",
+                description: error.response.data.message,
+                status: "error",
+                duration: 1500,
+                isClosable: true,
+                position: "top"
+              })
         }
     }
-    
-    
 
     return (
-        <Flex bg="white" direction="column" p="30px" align="center" mt="50px"
-        shadow="md" borderRadius="10px">
-            <Flex justifyContent="space-between" align="center" w="full" mb="30px">
-                <Heading fontSize="22px">Register</Heading>
-                <Text as={Link} to="/register">Register</Text>
+        <Flex direction="column" p="30px" align="center" w="full">
+            <Flex direction="column" mb="30px" w="full">
+                <Heading fontSize="22px">Sign In</Heading>
+                <Text mt="10px">Log in to your account to start shopping</Text>
             </Flex>
             <Formik
-            initialValues={{email: ''}}
-            validationSchema={Yup.object().shape({
-                email: Yup.string().email('Email is invalid').required('Email is required')
-              })}
+            initialValues={initialValues}
+            validationSchema={loginSchema}
             onSubmit={(values, action) => {
                 onLogin(values)
                 action.resetForm()
                 
             }}
+            
         >
             {(props) => (
-            <Form>
-                <Flex direction="column">
-                    <InputField
-                        label="Email"
-                        name="email"
-                        id="email"
-                        className="email"
-                        type="text"
-                        w="300px"
-                        mb="10px"
-                        placeholder="Enter your email here"
-                    />
-                    <InputField
-                        label="Password"
-                        name="password"
-                        id="password"
-                        className="password"
-                        type="password"
-                        w="300px"
-                        mb="10px"
-                        placeholder="Enter your password here"
-                    />
-                    <Button type="submit" mt="15px" bg="#0058AB" color="white">Submit</Button>
+            <Flex as={Form} direction="column" w="full">
+                <InputField
+                    label="Email"
+                    name="email"
+                    id="email"
+                    className="email"
+                    type="text"
+                    mb="10px"
+                    placeholder="Enter your email here"
+                    bg="white"
+                />
+                <InputField
+                    label="Password"
+                    name="password"
+                    id="password"
+                    className="password"
+                    type="password"
+                    mb="10px"
+                    placeholder="Enter your password here"
+                    bg="white"
+                />
+                <Text as={Link} to="/forgotpassword" fontSize="14px" mt="5px">Forgot password?</Text>
+                <Button type="submit" mt="15px" bg="#517664" color="white"
+                _hover={{color: "#517664", bg: "white"}}>
+                    Submit
+                </Button>
+                <Flex gap={1} mt="5px">
+                    <Text mt="5px" fontSize="14px">
+                        Dont have an account?
+                    </Text>
+                    <Text as={Link} to="/register" mt="5px" color="#517664"
+                    fontSize="14px" fontWeight="bold">
+                        Sign Up
+                    </Text>
                 </Flex>
-            </Form>
+            </Flex>
             )}
             </Formik>
-            <Text mt="20px">Or</Text>
-            <Button w={'full'} bg="gray.200" leftIcon={<FcGoogle />} mt="20px">
+            <Text mt="10px">Or</Text>
+            <Button w={'full'} bg="gray.200" leftIcon={<FcGoogle />} mt="10px">
                 <Center>
                     <Text>Sign In with Google</Text>
                 </Center>

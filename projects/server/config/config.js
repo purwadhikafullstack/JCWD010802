@@ -1,6 +1,6 @@
-require('dotenv').config()
-module.exports=
-{
+require("dotenv/config");
+
+module.exports = {
   development: {
     username: process.env.USERNAME_SQL,
     password: process.env.PASSWORD_SQL,

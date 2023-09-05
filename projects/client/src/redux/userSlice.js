@@ -11,9 +11,12 @@ const userSlice = createSlice({
     reducers: {
         setValue: (state, action) => {
             state.value = action.payload
+        },
+        setLogOut: (state) => {
+            state.value = {}
         }
     }
 })
 
-export const { setValue } = userSlice.actions
+export const { setValue, setLogOut } = userSlice.actions
 export default userSlice.reducer

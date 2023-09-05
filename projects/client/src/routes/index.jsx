@@ -9,6 +9,7 @@ import { WarehouseAdmin } from "../views/Admin/Warehouse Admin";
 import { UserCard } from "../views/Admin/components/User/userCard";
 import { ForgotPass } from "../pages/ForgotPass";
 import { ResetPass } from "../pages/ResetPass";
+import { Onboarding } from "../pages/Onboarding";
 
 const Routes = (
     <>
@@ -16,7 +17,10 @@ const Routes = (
  <Route path="" element={<HomepageView />} />
  </Route>
  <Route path="/login" element={<Login />} />
- <Route path="/register" element={<Register />} /><Route path="/admin" element={<Admin/>}>
+ <Route path="/register" element={<Register />} />
+           <Route path="/onboard" element={<Onboarding />} /> 
+
+  <Route path="/admin" element={<Admin/>}>
 <Route path="list-user" element={<UserCard/>}/>
 <Route path="list-admin" element={<WarehouseAdmin/>}/>
 </Route>
