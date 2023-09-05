@@ -1,8 +1,7 @@
-import { Box, Button, Flex, HStack, Heading, Input, Text, VStack } from "@chakra-ui/react"
+import { Box, Button, Flex, HStack, Heading, Input, Text } from "@chakra-ui/react"
 import { BiPhone } from "react-icons/bi"
 import { ImLocation } from "react-icons/im"
-import { FaFacebook, FaInstagram } from "react-icons/fa"
-import { FiMail } from "react-icons/fi"
+import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa"
 import { Link } from "react-router-dom"
 
 export const Footer = () => {
@@ -20,7 +19,7 @@ export const Footer = () => {
                         <Text>Burangrang Street</Text>
                     </HStack>
                 </Box>
-                <VStack spacing={1} mt={{ base: "20px", lg: "0"}}>
+                <Flex direction="column" mt={{ base: "20px", lg: "0"}}>
                     <Heading fontSize="2xl">Links</Heading>
                     <Text mt="10px" as={Link} to="/">
                         Home
@@ -34,13 +33,13 @@ export const Footer = () => {
                     <Text mt="5px" as={Link} to="/contact">
                         Contact
                     </Text>
-                </VStack>
+                </Flex>
                 <Box mt={{ base: "20px", lg: "0"}}>
                     <Heading fontSize="2xl">Social Media</Heading>
                     <HStack spacing={3} mt="10px">
                         <FaInstagram />
                         <FaFacebook />
-                        <FiMail />
+                        <FaTwitter />
                     </HStack>
                 </Box>
                 <Box mt={{ base: "20px", lg: "0"}}>

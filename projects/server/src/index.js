@@ -1,17 +1,21 @@
 require("dotenv/config");
+const db = require('../models')
 const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
+const { authRouter } = require("../routers");
 
 const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(
-  cors({
-    origin: [
-      process.env.WHITELISTED_DOMAIN &&
-        process.env.WHITELISTED_DOMAIN.split(","),
-    ],
-  })
+  cors(
+  //   {
+  //   origin: [
+  //     process.env.WHITELISTED_DOMAIN &&
+  //       process.env.WHITELISTED_DOMAIN.split(","),
+  //   ],
+  // }
+  )
 );
 
 app.use(express.json());
@@ -20,6 +24,8 @@ app.use(express.json());
 
 // ===========================
 // NOTE : Add your routes here
+
+app.use("/api/auth", authRouter)
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
@@ -69,6 +75,7 @@ app.listen(PORT, (err) => {
   if (err) {
     console.log(`ERROR: ${err}`);
   } else {
+    // db.sequelize.sync({ alter: true })
     console.log(`APP RUNNING at ${PORT} ✅`);
   }
 });
