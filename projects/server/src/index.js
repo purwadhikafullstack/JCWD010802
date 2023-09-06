@@ -4,7 +4,6 @@ const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
 const {userRouters, adminRouters, warehouseRouters, authRouters,authRouter} = require('../routers')
-const { authRouter } = require("../routers");
 
 
 const PORT = process.env.PORT || 8000;
