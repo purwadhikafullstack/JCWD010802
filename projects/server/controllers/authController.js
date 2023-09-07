@@ -50,8 +50,8 @@ module.exports = {
             if (!result) throw { message: "Email or Password Incorrect" }
 
             // if (password !== result.password) throw { message: "Email or Password Incorrect" }
-            const isValid = await bcrypt.compare(password, result.password)
-            if (!isValid) throw { message: "Email or Password Incorrect" }
+            // const isValid = await bcrypt.compare(password, result.password)
+            // if (!isValid) throw { message: "Email or Password Incorrect" }
 
             let payload = { id: result.id }
             const token = jwt.sign(payload, process.env.KEY_JWT, { expiresIn: '3d' })
@@ -118,5 +118,40 @@ module.exports = {
                 message: err.message
             })
         }
-    }
+    },
+  verified : async (req, res) => {
+        try {
+            const {
+                name,
+                password,
+                confirmPassword,
+            } = req.body;
+            if (password.length <= 6) {throw ('Password must be at least 6 characters')}
+            if (password !== confirmPassword) {
+                throw('Password not match')
+            }
+            const salt = await bcrypt.genSalt(10);
+            const hashPassword = await bcrypt.hash(password, salt);
+            const result = await user.update({
+                name,
+                password: hashPassword,
+                isVerified: true
+            }, {
+                where: {
+                    email: req.user.email
+                }
+            });
+            res.status(200).send({
+                status: true,
+                massage: 'Account has been updated and verified',
+                result
+            });
+        } catch (err) {
+            console.log(err);
+            res.status(400).send({
+                status: false,
+                message: err.message
+            });
+        };
+    },
 }

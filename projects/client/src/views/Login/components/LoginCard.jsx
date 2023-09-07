@@ -38,9 +38,13 @@ export const LoginCard = () => {
                 isClosable: true,
                 position: "top"
               })
+              console.log(response);
               setTimeout(() => {
-                navigate("/")
-              }, 2000)
+                if (response.data.result.roleId === 1) {
+                    navigate("/"); 
+                  } else {
+                    navigate("/admin"); 
+                  }              }, 2000)
             localStorage.setItem("token", response.data.token)
         } catch (error) {
             toast({
