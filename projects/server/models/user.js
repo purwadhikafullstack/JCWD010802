@@ -12,6 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       user.hasMany(models.userAddress)
+      user.belongsTo(models.role)
+      user.hasOne(models.warehouseAdmin)
     }
   }
   user.init({
@@ -23,13 +25,15 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     },
+
     isDeleted: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
+
     }
   }, {
     sequelize,
-    modelName: 'user',
+    modelName: 'user'
   });
   return user;
 };

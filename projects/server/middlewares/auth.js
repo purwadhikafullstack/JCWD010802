@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 
 module.exports = {
-    verifyToken: (req, res, next) => {
+verifyToken: (req, res, next) => {
         try {
             let token = req.headers.authorization
             if (!token) throw { message: "Token is empty" }
@@ -17,19 +17,5 @@ module.exports = {
             console.log(err);
             res.status(400).send(err)
         }
-    },
-    isAdmin: async (req, res, next) => {
-        if (!req.user.isAdmin) res.status(401).send({
-            status: false,
-            message: 'Access Denied'
-        });
-        next();
-    },
-    isWarehouseAdmin: async (req, res, next) => {
-        if (req.user.isAdmin) res.status(401).send({
-            status: false,
-            message: 'Access Denied'
-        });
-        next();
     }
-};
+}
