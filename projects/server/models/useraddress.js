@@ -16,12 +16,17 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   userAddress.init({
-    isPrimary: DataTypes.BOOLEAN,
-    isDeleted: DataTypes.BOOLEAN
+    isPrimary: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+    },
+    isDeleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
   }, {
     sequelize,
     modelName: 'userAddress',
-    timestamps:false
   });
   return userAddress;
 };

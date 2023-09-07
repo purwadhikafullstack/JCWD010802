@@ -16,15 +16,14 @@ module.exports = (sequelize, DataTypes) => {
   }
   address.init({
     address: DataTypes.STRING,
-    kota: DataTypes.STRING,
-    provinsi: DataTypes.STRING,
-    kode_pos: DataTypes.STRING,
+    kota: DataTypes.INTEGER,
+    provinsi: DataTypes.INTEGER,
+    kode_pos: DataTypes.INTEGER,
     lat: DataTypes.STRING,
-    lgt: DataTypes.STRING
+    lng: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'address',
-    timestamps:false
   });
   return address;
 };
