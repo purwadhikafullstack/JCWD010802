@@ -13,6 +13,7 @@ import { Verified } from "../pages/Verified";
 import { ProfileView } from "../views/Profile";
 import { Product } from "../pages/Product";
 import { AllProduct } from "../views/Product/components/AllProduct";
+import { DetailProduct } from "../pages/ProductDetail";
 
 const Routes = (
   <>
@@ -22,6 +23,7 @@ const Routes = (
       <Route path="/" element={<Product />}>
         <Route path="product" element={<AllProduct />} />
       </Route>
+      <Route path="/product/:id" element={<DetailProduct />} />
     </Route>
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />

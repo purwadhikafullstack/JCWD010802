@@ -1,9 +1,9 @@
 import { Badge, Box, Flex, Image, Text } from "@chakra-ui/react";
 import formatIDR from "../../helpers/formatIDR";
 
-export const ProductCard = ({ name, price, image, category, reload, setReload }) => {
+export const ProductCardUser = ({ name, price, image, category, reload, setReload, onClick }) => {
   return (
-    <Flex m={3}>
+    <Flex m={3} onClick={onClick}>
       <Box
         w="100px"
         bg="white"

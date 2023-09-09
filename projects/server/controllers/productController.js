@@ -224,4 +224,25 @@ module.exports = {
             });
         }
     },
+    detailProduct: async (req, res) => {
+        try {
+            const id = req.params.id
+            const result = await product.findOne({
+                where: {
+                    id: id
+                }
+            })
+            res.status(200).send({
+                msg: "Here's the product",
+                status: true,
+                result
+            });
+        } catch (err) {
+            console.error(err);
+            res.status(400).send({
+                status: false,
+                message: err.message
+            });
+        }
+    },
 }

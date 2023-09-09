@@ -48,9 +48,9 @@ export const Navbar = () => {
   };
   const handleSort = (selectedSort) => {
     if (selectedSort === search) {
-      navigate(`?search=`);
+      navigate(`/product?search=`);
     } else {
-      navigate(`?search=${selectedSort}`);
+      navigate(`/product?search=${selectedSort}`);
     }
   };
   return (
