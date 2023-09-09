@@ -3,7 +3,7 @@ const db = require('../models')
 const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
-const {userRouters, adminRouters, warehouseRouters, authRouters, authRouter, userRouter, addressRouter, rajaongkirRouter} = require('../routers')
+const {userRouters, adminRouters, warehouseRouter, authRouters, authRouter, userRouter, addressRouter, rajaongkirRouter} = require('../routers')
 
 const PORT = process.env.PORT || 8000;
 const app = express();
@@ -33,7 +33,7 @@ app.use('/api/location', rajaongkirRouter); //---Perbaiki
 
 app.use('/api/user/',userRouters)
 app.use('/api/admin/',adminRouters)
-app.use('/api/warehouse/',warehouseRouters)
+app.use('/api/warehouse/',warehouseRouter)
 app.use('/api/auth/',authRouters)
 
 app.get("/api", (req, res) => {
@@ -85,7 +85,7 @@ app.listen(PORT, (err) => {
     console.log(`ERROR: ${err}`);
   } else {
         // db.sequelize.sync({alter:true})
-
     console.log(`APP RUNNING at ${PORT} ✅`);
   }
 });
+ 

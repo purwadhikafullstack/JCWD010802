@@ -4,14 +4,14 @@ const rajaOngkirController = require('./rajaOngkirController')
 
 const userControllers= require('./userControllers') //--- Perbaiki
 const adminControllers = require("./adminControllers")
-const warehouseControllers = require('./warehouseControllers')
+const warehouseController = require('./warehouseController')
 const authControllers = require('./authControllers')
 const authController = require("./authController")
 
 module.exports = {
     userControllers,
     adminControllers,
-    warehouseControllers,
+    warehouseController,
     authControllers,
     authController,
     userController,

@@ -124,7 +124,7 @@ export const ListAdmin = () => {
 
   const getWarehouse = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/warehouse`);
+      const response = await axios.get(`http://localhost:8000/api/warehouse/list`);
       console.log(response);
       setWarehouse(response.data);
     } catch (error) {
@@ -210,7 +210,7 @@ export const ListAdmin = () => {
             >
             Profile
           </Button>
-          <AdminEditForm admin={item} onUpdateAdmin={updateAdminData} />
+          <AdminEditForm admin={item} onUpdateAdmin={updateAdminData}  />
           <AdminMenu
               index={index}
               toggleMenu={toggleMenu}

@@ -1,7 +1,7 @@
 import { Avatar, Button, Flex, HStack, Heading, Image, Input, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Modal, Text, useToast } from "@chakra-ui/react"
 import { AiOutlineShoppingCart } from "react-icons/ai"
 import { useDispatch, useSelector } from "react-redux"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, NavLink, useNavigate } from "react-router-dom"
 import { ModalLogout } from "./ModalLogOut"
 import { setLogOut } from "../../redux/userSlice"
 import { AiFillHeart } from "react-icons/ai"
@@ -61,6 +61,7 @@ export const Navbar = () => {
                     <Button variant="ghost" color="white" _hover={{ color: "#517664", bg: "white"}}>
                         <AiFillHeart />
                     </Button>
+                    {data.roleId === 1?
                     <Menu>
                         <MenuButton as={Button} variant="ghost" _active={{ bg: "#517664"}} mr="10px">
                             <Avatar size="sm" />
@@ -70,8 +71,23 @@ export const Navbar = () => {
                             <MenuDivider />
                             <MenuItem as={ModalLogout} onLogout={onLogOut}>Sign Out</MenuItem>
                         </MenuList>
-                    </Menu>
-                </Flex> }
+                    </Menu> :
+                    <Menu>
+                    <MenuButton as={Button} variant="ghost" _active={{ bg: "#517664"}} mr="10px">
+                        <Avatar size="sm" />
+                    </MenuButton>
+                    <MenuList color="#517664">
+                        <MenuItem>Profile</MenuItem>
+                        <NavLink to={"/admin"}>
+                        <MenuItem>Admin</MenuItem>
+                        </NavLink>
+                        <MenuDivider />
+                        <MenuItem as={ModalLogout} onLogout={onLogOut}>Sign Out</MenuItem>
+                    </MenuList>
+                </Menu>
+                    }  
+                </Flex> 
+                }
             </HStack>
         </Flex>
     )

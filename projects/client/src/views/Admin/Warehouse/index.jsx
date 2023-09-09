@@ -1,38 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Grid, GridItem, Button, Flex } from "@chakra-ui/react";
-import { WarehouseCard } from "./component/warehouseCard";
-import {AddWarehouseModal} from "./component/addWarehouseModal";
+import axios from 'axios';
+import { WarehouseCard} from '../components/Warehouse/warehouseCard';
+import { AddWarehouseModal} from '../components/Warehouse/addWarehouseModal';
+import { useLocation } from 'react-router-dom';
+import { PaginationAddress } from '../../../components/pagination/paginationAddress';
+
 
 export const WarehousePageView = () => {
-  const dummyData = [
-    {
-      name: 'Warehouse 1',
-      location: 'New York, NY',
-      image: "https://cms.ar-racking.com/uploads/2020/06/2023-3.jpg",
-      tags: ['Electronics', 'Clothing', 'Furniture'],
-    },
-    {
-      name: 'Warehouse 2',
-      location: 'Los Angeles, CA',
-      image: "https://cms.ar-racking.com/uploads/2020/06/2023-3.jpg",
-      tags: ['Appliances', 'Toys'],
-    },
-    {
-      name: 'Warehouse 2',
-      location: 'Los Angeles, CA',
-      image: "https://cms.ar-racking.com/uploads/2020/06/2023-3.jpg",
-      tags: ['Appliances', 'Toys'],
-    },
-    {
-      name: 'Warehouse 2',
-      location: 'Los Angeles, CA',
-      image: "https://cms.ar-racking.com/uploads/2020/06/2023-3.jpg",
-      tags: ['Appliances', 'Toys'],
-    },
-  ];
-
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const currentPage = Number(params.get("page")) || 1;
+  const [warehouse, setWarehouse] = useState([])
+  const [reload, setReload] = useState(0);
+  const [page, setPage] = useState([]);
 
+  const getWarehouse = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/warehouse?page=${currentPage}`);
+      setWarehouse(response.data.result);
+      setPage(response.data.totalpage);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const openAddModal = () => {
     setIsAddModalOpen(true);
   };
@@ -41,6 +33,9 @@ export const WarehousePageView = () => {
     setIsAddModalOpen(false);
   };
 
+  useEffect (()=>{
+    getWarehouse()
+  },[reload,currentPage])
   return (
     <>
       <Container maxW="container.lg" mt="4">
@@ -51,26 +46,23 @@ export const WarehousePageView = () => {
         </Flex>
         <Grid
           templateColumns={{ base: '1fr', sm: '1fr 1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }}
-          gap={4}
+          gap={4} py={4}
         >
-          {dummyData.map((warehouse, index) => (
+          {warehouse.map((warehouse, index) => (
             <GridItem key={index}>
-              <WarehouseCard data={warehouse} />
+              <WarehouseCard data={warehouse} reload={reload} setReload={setReload} />
             </GridItem>
           ))}
         </Grid>
       </Container>
 
-      {/* Render AddWarehouseModal */}
       <AddWarehouseModal
         isOpen={isAddModalOpen}
-        onAdd={(newWarehouse) => {
-          // Handle adding the new warehouse data here
-          console.log('Added Warehouse:', newWarehouse);
-          closeAddModal(); // Close the modal after adding
-        }}
+        reload={reload} setReload={setReload}
         onClose={closeAddModal}
       />
+      <PaginationAddress totalpage={page} />
+
     </>
   );
 }

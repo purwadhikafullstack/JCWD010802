@@ -5,14 +5,14 @@ const rajaongkirRouter = require('./rajaOngkirRouter');
 
 const userRouters = require('./userRouters') //--- Perbaiki
 const adminRouters = require("./adminRouters")
-const warehouseRouters = require("./warehouseRouters")
+const warehouseRouter = require("./warehouseRouter")
 const authRouters = require('./authRouters')
 
 
 module.exports= {
     userRouters,
     adminRouters,
-    warehouseRouters,
+    warehouseRouter,
     authRouters,
     authRouter,
     userRouter,

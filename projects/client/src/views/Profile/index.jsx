@@ -4,7 +4,7 @@ import { AddressCard } from "./components/Address";
 
 export const ProfileView = () => {
   return (
-    <Flex p={5} justify={{base: "flex-start", lg: "center"}} bgColor={"#cacfd6"} direction={{base:"column", md:"row"}} minH={"100vh"}>
+    <Flex py={"50px"} justify={{base: "flex-start", lg: "center"}} bgColor={"#cacfd6"} direction={{base:"column", md:"row"}} minH={"100vh"}>
     <Tabs isFitted variant='enclosed' >
       <TabList >
         <Tab bgColor={"white"}>Profile</Tab>
