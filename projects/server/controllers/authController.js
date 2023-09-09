@@ -49,7 +49,7 @@ module.exports = {
             const result = await user.findOne({ where: { email }})
             if (!result) throw { message: "Email or Password Incorrect" }
 
-            // if (password !== result.password) throw { message: "Email or Password Incorrect" }
+            if (password !== result.password) throw { message: "Email or Password Incorrect" }
             // const isValid = await bcrypt.compare(password, result.password)
             // if (!isValid) throw { message: "Email or Password Incorrect" }
 

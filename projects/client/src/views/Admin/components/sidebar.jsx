@@ -93,9 +93,11 @@ export const Sidebar = () => {
             Warehouse Admin
           </NavItem>
         </NavLink>
+        <NavLink to="product-list">
+          <NavItem icon={AiFillGift} to="/admin/product-list">Products</NavItem>
+        </NavLink>
         <NavItem icon={FaClipboardCheck}>Checklists</NavItem>
         <NavItem icon={HiCode}>Integrations</NavItem>
-        <NavItem icon={AiFillGift}>Changelog</NavItem>
         <NavItem icon={BsGearFill}>Settings</NavItem>
       </Flex>
     </Box>

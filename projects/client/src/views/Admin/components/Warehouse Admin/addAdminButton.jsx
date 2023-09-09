@@ -14,7 +14,9 @@ export const AddAdminButton = () => {
 
   return (
     <div>
-      <Button onClick={openModal} bg={"#517664"} m={2}color={'white'} _hover={{bg:"#2d3319"}}>+ Add New Admin</Button>
+      <Button onClick={openModal} bg={"#517664"} m={2}color={'white'} _hover={{bg:"#2d3319"}}>
+        + Add New Admin
+      </Button>
       <AddAdmin isOpen={isOpen} onClose={closeModal}  />
     </div>
   );
