@@ -5,7 +5,6 @@ export const DeactivateProduct = ({ product }) => {
     const deactiveProduct = async () => {
     try {
       const response = await axios.delete(`http://localhost:8000/api/products/${product.id}`);
-      console.log(response);
     }
     catch(error){
 
