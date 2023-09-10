@@ -15,7 +15,7 @@ export const AddAdminButton = ({reload,setReload}) => {
   return (
     <div>
       <Button onClick={openModal} bg={"#517664"} m={2}color={'white'} _hover={{bg:"#2d3319"}}>+ Add New Admin</Button>
-      <AddAdmin isOpen={isOpen} onClose={closeModal} setReload={setReload} reload={reload}/>
+      <AddAdmin isOpen={isOpen} onClose={closeModal} setReload={setReload} reload={reload}/>    
     </div>
   );
 };

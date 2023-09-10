@@ -8,14 +8,15 @@ import { ChangeImage } from "./modal/modalProfile/modalImage";
 import { ChangePassword } from "./modal/modalProfile/modalPassword";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useSelector} from 'react-redux'
 
 export const ProfileCard = () => {
+  const profile = useSelector((state) => state.user.value)
   const token = localStorage.getItem("token");
   const CreateSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     email: Yup.string().email().required("Email is required"),
   });
-
   const EditProfile = async (data) => {
     try {
       const response = await axios.patch(
@@ -28,7 +29,6 @@ export const ProfileCard = () => {
         }
       );
       toast.success('Profile updated successfully');
-      console.log(response.data);
     } catch (error) {
       toast.error('Error updating profile');
       console.log(error);
@@ -48,12 +48,12 @@ export const ProfileCard = () => {
       >
         <Flex justifyContent={"center"} alignItems={"center"} w="full">
           <VStack spacing={5}>
-            <Avatar size="2xl" name="Edan wae" src="/path-to-your-image.jpg" />
+            <Avatar size="2xl"src={`http://localhost:8000/profileImg/${profile.profileImg}`} name={profile.name}/>
             <ChangeImage />
           </VStack>
         </Flex>
       </Box>
-
+      
       <Box
         p={5}
         borderWidth="1px"
@@ -67,8 +67,8 @@ export const ProfileCard = () => {
         <Box>
           <Formik
             initialValues={{
-              name: "",
-              email: "",
+              name: profile.name,
+              email: profile.email
             }}
             validationSchema={CreateSchema}
             onSubmit={(values, action) => {
