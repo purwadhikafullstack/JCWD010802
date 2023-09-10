@@ -11,6 +11,7 @@ import { ResetPass } from "../pages/ResetPass";
 import { Onboarding } from "../pages/Onboarding";
 import { Verified } from "../pages/Verified";
 import { ProfileView } from "../views/Profile";
+import { AdminProducts } from "../views/Admin/Products";
 
 const Routes = (
     <>
@@ -29,6 +30,7 @@ const Routes = (
 <Route path="/admin" element={<Admin/>}>
 <Route path="list-user" element={<UserCard/>}/>
 <Route path="list-admin" element={<WarehouseAdmin/>}/>
+<Route path="product-list" element={<AdminProducts />}/>
 </Route>
     </>
 ) 
