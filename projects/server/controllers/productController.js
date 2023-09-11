@@ -1,9 +1,8 @@
-const db = require('../models');
-const product = db.product;
+const db = require("../models")
+const product = db.product
+const user = db.user
 const categories = db.category
-const {
-    Op
-} = require("sequelize");
+const { Op } = require("sequelize");
 
 module.exports = {
     allProduct: async (req, res) => {
@@ -38,7 +37,6 @@ module.exports = {
             filter.price = {
                 [Op.between]: [minPrice, maxPrice],
             };
-    
             let order = [];
             if (sort === "az") {
                 order.push(["name", "ASC"]);
@@ -73,6 +71,8 @@ module.exports = {
                     "productImg",
                     "categoryId",
                     "isDeleted",
+                    "isActive",
+                    "weight"
                 ],
                 where: filter,
                 limit,
@@ -171,9 +171,7 @@ module.exports = {
                 categoryId: catLike.id,
                 productImg,
             }, {
-                where: {
-                    id
-                }
+                where: { id }
             });
             res.status(200).send({
                 msg: "Success update the product",
@@ -191,31 +189,18 @@ module.exports = {
     deleteProduct: async (req, res) => {
         try {
             const id = req.params.id
-            const result = await product.findOne({
-                where: {
-                    id: id
-                }
+            const isAdmin = await user.findOne({ where: { id: req.user.id }})
+            if (isAdmin.roleId !== 3) throw { message: "Only admin can edit product" }
+            const result = await product.findOne({ where: { id } })
+            if (result.isDeleted) throw { message: "Product already deleted" }
+            const update = await product.update({ isDeleted: true }, {
+                where: { id }
             })
-            if (result.isDeleted == false) {
-                await product.update({
-                    isDeleted: true
-                }, {
-                    where: {
-                        id: id
-                    }
-                })
-                res.status(200).send("Success to delete product")
-            }
-            if (result.isDeleted == true) {
-                await product.update({
-                    isDeleted: false
-                }, {
-                    where: {
-                        id: id
-                    }
-                })
-                res.status(200).send("Success to activate product")
-            }
+            res.status(200).send({
+                message: "Delete product success",
+                status: true,
+                result: update
+            })
         } catch (err) {
             console.error(err);
             res.status(400).send({
@@ -237,6 +222,39 @@ module.exports = {
                 status: true,
                 result
             });
+          } catch (err) {
+            console.error(err);
+            res.status(400).send({
+                status: false,
+                message: err.message
+            });
+        },
+      
+    activateProduct: async (req, res) => {
+        try {
+            const { id } = req.params
+            const isAdmin = await user.findOne({ where: { id: req.user.id }})
+            if (isAdmin.roleId !== 3) throw { message: "Only admin can activate product" }
+            const result = await product.findOne({ where: { id } })
+            if (result.isActive) {
+                const update = await product.update({ isActive: false }, {
+                    where: { id }
+                })
+                res.status(200).send({
+                    status: true,
+                    message: "Product deactivated",
+                    result: update
+                })
+            } else {
+                const update = await product.update({ isActive: true }, {
+                    where: { id }
+                })
+                res.status(200).send({
+                    status: true,
+                    message: "Product activated",
+                    result: update
+                })
+            }
         } catch (err) {
             console.error(err);
             res.status(400).send({
@@ -245,4 +263,5 @@ module.exports = {
             });
         }
     },
+
 }

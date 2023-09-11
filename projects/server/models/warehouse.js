@@ -16,11 +16,14 @@ module.exports = (sequelize, DataTypes) => {
   }
   warehouse.init({
     name: DataTypes.STRING,
-    image: DataTypes.STRING
+    image: DataTypes.STRING,
+    isDeleted : {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
   }, {
     sequelize,
     modelName: 'warehouse',
-    timestamps:false
 
   });
   return warehouse;
