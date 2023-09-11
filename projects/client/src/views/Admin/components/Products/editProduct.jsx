@@ -52,14 +52,14 @@ export const EditProduct = ({ isOpen, onClose, category, product, reload }) => {
         data.append("weight", value.weight)
         try {
             const response = await axios.patch(`http://localhost:8000/api/product/edit/${product.id}`, data, { headers })
-            toast.success('successfully added new warehouse admin', {
+            toast.success('successfully edit product', {
                 position: 'top-right',
                 autoClose: 3000, 
             });
             reload()
             onClose()
         } catch (error) {
-            toast.error('Failed to add product. Please try again later.', {
+            toast.error('Failed to edit product. Please try again later.', {
                 position: "top-right",
                 autoClose: 3000
             });

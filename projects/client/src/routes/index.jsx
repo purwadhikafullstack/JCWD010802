@@ -13,27 +13,31 @@ import { WarehousePageView } from "../views/Admin/Warehouse";
 import { Verified } from "../pages/Verified";
 import { ProfileView } from "../views/Profile";
 import { AdminProducts } from "../views/Admin/Products";
+import { StockView } from "../views/Admin/Stock";
+import { DetailStockWarehouse } from "../views/Admin/components/Stock/WarehouseDetailStok";
 
 const Routes = (
     <>
- <Route path="/" element={<Homepage />}>
- <Route path="" element={<HomepageView />} />
- <Route path="profile" element={<ProfileView />} />
+    <Route path="/" element={<Homepage />}>
+        <Route path="" element={<HomepageView />} />
+        <Route path="profile" element={<ProfileView />} />
+    </Route>
 
- </Route>
- <Route path="/login" element={<Login />} />
- <Route path="/register" element={<Register />} />
- <Route path="/verified/:token" element={<Verified />} />
- <Route path="/onboard" element={<Onboarding />} />
- <Route path="/forgot-password" element={<ForgotPass/>}/>
- <Route path="/reset-password/:token" element={<ResetPass/>}/>
+    <Route path="/login" element={<Login />} />
+    <Route path="/register" element={<Register />} />
+    <Route path="/verified/:token" element={<Verified />} />
+    <Route path="/onboard" element={<Onboarding />} />
+    <Route path="/forgot-password" element={<ForgotPass/>}/>
+    <Route path="/reset-password/:token" element={<ResetPass/>}/>
    
-<Route path="/admin" element={<Admin/>}>
-<Route path="list-user" element={<UserCard/>}/>
-<Route path="list-admin" element={<WarehouseAdmin/>}/>
-<Route path="warehouse" element={<WarehousePageView/>}/>
-<Route path="product-list" element={<AdminProducts />}/>
-</Route>
+    <Route path="/admin" element={<Admin/>}>
+        <Route path="list-user" element={<UserCard/>}/>
+        <Route path="list-admin" element={<WarehouseAdmin/>}/>
+        <Route path="warehouse" element={<WarehousePageView/>}/>
+        <Route path="product-list" element={<AdminProducts />}/>
+        <Route path="warehouse-stock" element={<StockView />}/>
+        <Route path="warehouse-stock/:id" element={<DetailStockWarehouse />} />
+    </Route>
     </>
 ) 
 

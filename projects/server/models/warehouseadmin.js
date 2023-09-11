@@ -16,7 +16,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   warehouseAdmin.init({
-    tes: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'warehouseAdmin',

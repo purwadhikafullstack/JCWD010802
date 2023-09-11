@@ -24,7 +24,7 @@ export const AdminProducts = () => {
 
     const getProduct = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/product?page=${currentPage}&category=${sort}&search=${search}`)
+            const response = await axios.get(`http://localhost:8000/api/product?page=${currentPage}&category=${sort}&search=${search}&limit=10`)
             setProduct(response.data.result);
             setTotalPage(response.data.totalpage)
         } catch (error) {
