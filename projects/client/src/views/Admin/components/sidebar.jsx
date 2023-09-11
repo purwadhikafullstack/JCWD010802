@@ -93,6 +93,10 @@ export const Sidebar = () => {
             Warehouse Admin
           </NavItem>
         </NavLink>
+        <NavLink to="warehouse">
+          <NavItem icon={FaWarehouse} to="/admin/warehouse">
+            Warehouse
+          </NavItem>
         <NavLink to="product-list">
           <NavItem icon={AiFillGift} to="/admin/product-list">Products</NavItem>
         </NavLink>

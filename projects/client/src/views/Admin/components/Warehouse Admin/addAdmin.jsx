@@ -29,9 +29,10 @@ const SignupSchema = Yup.object().shape({
   warehouse: Yup.string().required('Warehouse is required'),
 });
 
-export const AddAdmin = ({ isOpen, onClose }) => {
+export const AddAdmin = ({ isOpen, onClose, setReload,reload}) => {
     const [warehouses, setWarehouse] = useState([]);
   const [selectedWarehouse, setSelectedWarehouse] = useState('');
+
   const initialValues = {
     name: '',
     email: '',
@@ -56,6 +57,7 @@ export const AddAdmin = ({ isOpen, onClose }) => {
               autoClose: 3000, 
             });
           }
+          setReload(!reload)
       } catch (error) {
         console.log(error);
       }
