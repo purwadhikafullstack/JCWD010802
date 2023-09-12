@@ -1,3 +1,21 @@
+import {
+  Avatar,
+  Button,
+  Flex,
+  HStack,
+  Heading,
+  Image,
+  Input,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  Modal,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
+
 import { Avatar, Button, Flex, HStack, Heading, Image, Input, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Modal, Text, useToast } from "@chakra-ui/react"
 import { AiOutlineShoppingCart } from "react-icons/ai"
 import { useDispatch, useSelector } from "react-redux"
@@ -7,27 +25,35 @@ import { setLogOut } from "../../redux/userSlice"
 import { AiFillHeart } from "react-icons/ai"
 import { CartNotif } from "./cartNotif"
 
-
 export const Navbar = () => {
-    const data = useSelector((state) => state.user.value)
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
-    const toast = useToast()
+  const data = useSelector((state) => state.user.value);
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const search = params.get("search") || "";
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const toast = useToast();
 
-    const onLogOut = () => {
-        localStorage.removeItem("token")
-        dispatch(setLogOut())
-        toast({
-            title: "Sign Out Success",
-            description: "See you next time!",
-            status: 'success',
-            duration: 1200,
-            isClosable: true,
-            position: "top"
-          })
-        setTimeout(() => {
-            navigate("/login")
-        }, 1500)
+  const onLogOut = () => {
+    localStorage.removeItem("token");
+    dispatch(setLogOut());
+    toast({
+      title: "Sign Out Success",
+      description: "See you next time!",
+      status: "success",
+      duration: 1200,
+      isClosable: true,
+      position: "top",
+    });
+    setTimeout(() => {
+      navigate("/login");
+    }, 1500);
+  };
+  const handleSort = (selectedSort) => {
+    if (selectedSort === search) {
+      navigate(`/product?search=`);
+    } else {
+      navigate(`/product?search=${selectedSort}`);
     }
     return (
         <Flex minW="full" h="80px" bg="#517664" alignItems="center" 
@@ -89,4 +115,4 @@ export const Navbar = () => {
             </HStack>
         </Flex>
     )
-}
+}}
