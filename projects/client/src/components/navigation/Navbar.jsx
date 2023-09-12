@@ -5,6 +5,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom"
 import { ModalLogout } from "./ModalLogOut"
 import { setLogOut } from "../../redux/userSlice"
 import { AiFillHeart } from "react-icons/ai"
+import { CartNotif } from "./cartNotif"
 
 
 export const Navbar = () => {
@@ -41,10 +42,7 @@ export const Navbar = () => {
             </HStack>
             <Input maxW="500px" h="40px" bg="white" color="#517664" placeholder="Find your desired items" />
             <HStack  spacing={3} display={{ base: "none", lg: "flex"}}>
-                <Button variant="ghost" color="white" as={Link} to="/cart"
-                _hover={{ color: "#517664", bg: "white"}}>
-                    <AiOutlineShoppingCart />
-                </Button>
+                <CartNotif/>
                 <Text>|</Text>
                 {!data.name ? 
                 <Flex align="center">

@@ -13,6 +13,7 @@ import { WarehousePageView } from "../views/Admin/Warehouse";
 import { Verified } from "../pages/Verified";
 import { ProfileView } from "../views/Profile";
 import { AdminProducts } from "../views/Admin/Products";
+import { AddToCart } from "../views/Product/components/addToCart";
 
 const Routes = (
     <>
@@ -34,6 +35,7 @@ const Routes = (
 <Route path="warehouse" element={<WarehousePageView/>}/>
 <Route path="product-list" element={<AdminProducts />}/>
 </Route>
+<Route path="cart" element={<AddToCart/>}/>
     </>
 ) 
 
