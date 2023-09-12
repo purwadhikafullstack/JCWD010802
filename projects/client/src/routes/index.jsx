@@ -12,14 +12,21 @@ import { Onboarding } from "../pages/Onboarding";
 import { WarehousePageView } from "../views/Admin/Warehouse";
 import { Verified } from "../pages/Verified";
 import { ProfileView } from "../views/Profile";
+import { Product } from "../pages/Product";
+import { AllProduct } from "../views/Product/components/AllProduct";
+import { DetailProduct } from "../pages/ProductDetail";
 import { AdminProducts } from "../views/Admin/Products";
 
 const Routes = (
     <>
  <Route path="/" element={<Homepage />}>
- <Route path="" element={<HomepageView />} />
- <Route path="profile" element={<ProfileView />} />
-
+      <Route path="" element={<HomepageView />} />
+      <Route path="profile" element={<ProfileView />} />
+      <Route path="/" element={<Product />}>
+        <Route path="product" element={<AllProduct />} />
+      </Route>
+      <Route path="/product/:id" element={<DetailProduct />} />
+    </Route>
  </Route>
  <Route path="/login" element={<Login />} />
  <Route path="/register" element={<Register />} />
@@ -36,8 +43,5 @@ const Routes = (
 </Route>
     </>
 ) 
-
-
-
 
 export const routes = createRoutesFromElements(Routes);

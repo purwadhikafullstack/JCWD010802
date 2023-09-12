@@ -13,7 +13,14 @@ module.exports = {
         const filter = {
             isDeleted: false, 
         };
-        
+        const totalProduct = await product.findAll({
+            where: filter,
+            group: "CategoryId",
+            attributes : [
+                "CategoryId",
+                [Sequelize.fn("count", Sequelize.col("id")), "total"]
+            ]
+        });
         const total = await category.count({
             where: filter,
         });
@@ -30,6 +37,7 @@ module.exports = {
             totalpage: Math.ceil(total / limit),
             currentpage: page,
             all_category: total,
+            totalProduct,
             result,
             status: true
         });
