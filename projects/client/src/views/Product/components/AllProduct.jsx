@@ -2,7 +2,7 @@ import { Box, Container, Grid, GridItem, useMediaQuery } from "@chakra-ui/react"
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { PaginationAddress } from "../../../components/pagination/paginationAddress";
+import { Pagination } from "../../../components/pagination/pagination";
 import { DrawerSorting } from "./Drawer/DrawerSort";
 import { ProductCardUser } from "../../../components/product/ProductCardUser";
 
@@ -71,7 +71,7 @@ export const AllProduct = () => {
           ))}
         </Grid>
       </Container>
-      <PaginationAddress totalpage={page} />
+      <Pagination totalpage={page} />
     </Box>
   );
 };

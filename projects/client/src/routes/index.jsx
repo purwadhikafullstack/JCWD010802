@@ -14,6 +14,7 @@ import { ProfileView } from "../views/Profile";
 import { Product } from "../pages/Product";
 import { AllProduct } from "../views/Product/components/AllProduct";
 import { DetailProduct } from "../pages/ProductDetail";
+import { CategoryView } from "../views/Admin/Category";
 
 const Routes = (
   <>
@@ -35,6 +36,9 @@ const Routes = (
     <Route path="/admin" element={<Admin />}>
       <Route path="list-user" element={<UserCard />} />
       <Route path="list-admin" element={<WarehouseAdmin />} />
+      <Route path="list-category" element={<CategoryView />} />
+
+
     </Route>
   </>
 );
