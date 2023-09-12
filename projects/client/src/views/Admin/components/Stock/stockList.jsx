@@ -35,7 +35,8 @@ export const StockList = ({ data, triggerReload }) => {
                             boxSize="100px" 
                         />
                         <Box ml={4} w="full">
-                            <Flex justifyContent="space-between" w="full" align="center">
+                            <Flex justifyContent="space-between" w="full" align="center"
+                            direction={{base: "column", lg: "row"}}>
                                 <Heading fontSize="20px">
                                     {item.product.name}
                                 </Heading>
@@ -50,7 +51,7 @@ export const StockList = ({ data, triggerReload }) => {
                     </Flex>
                     <Flex>
                     </Flex>
-                    <ManageProduct isOpen={isOpen[item.id]} onClose={() => handleCloseModal(item.id)} data={item} />
+                    <ManageProduct isOpen={isOpen[item.id]} onClose={() => handleCloseModal(item.id)} data={item} triggerReload={triggerReload} />
                 </Card>
             ))}
         </>
