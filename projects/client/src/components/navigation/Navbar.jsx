@@ -1,26 +1,10 @@
-import {
-  Avatar,
-  Button,
-  Flex,
-  HStack,
-  Heading,
-  Image,
-  Input,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
-  Modal,
-  Text,
-  useToast,
-} from "@chakra-ui/react";
-import { AiOutlineShoppingCart } from "react-icons/ai";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ModalLogout } from "./ModalLogOut";
-import { setLogOut } from "../../redux/userSlice";
-import { AiFillHeart } from "react-icons/ai";
+import { Avatar, Button, Flex, HStack, Heading, Image, Input, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Modal, Text, useToast } from "@chakra-ui/react"
+import { AiOutlineShoppingCart } from "react-icons/ai"
+import { useDispatch, useSelector } from "react-redux"
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom"
+import { ModalLogout } from "./ModalLogOut"
+import { setLogOut } from "../../redux/userSlice"
+import { AiFillHeart } from "react-icons/ai"
 
 export const Navbar = () => {
   const data = useSelector((state) => state.user.value);
@@ -48,9 +32,9 @@ export const Navbar = () => {
   };
   const handleSort = (selectedSort) => {
     if (selectedSort === search) {
-      navigate(`?search=`);
+      navigate(`/product?search=`);
     } else {
-      navigate(`?search=${selectedSort}`);
+      navigate(`/product?search=${selectedSort}`);
     }
   };
   return (

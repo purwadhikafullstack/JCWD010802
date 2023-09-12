@@ -1,10 +1,10 @@
 import { Box, Container, Grid, GridItem, useMediaQuery } from "@chakra-ui/react";
-import { ProductCard } from "../../../components/product/ProductCard";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { PaginationAddress } from "../../../components/pagination/paginationAddress";
 import { DrawerSorting } from "./Drawer/DrawerSort";
+import { ProductCardUser } from "../../../components/product/ProductCardUser";
 
 export const AllProduct = () => {
   const location = useLocation();
@@ -19,6 +19,7 @@ export const AllProduct = () => {
   const [page, setPage] = useState([]);
   const [product, setProduct] = useState([]);
   const [reload, setReload] = useState(false);
+  const navigate = useNavigate()
   
   const getProduct = async () => {
     try {
@@ -36,6 +37,9 @@ export const AllProduct = () => {
       console.log(error);
     }
   };
+  const handleClick = (id) => {
+    navigate(`/product/${id}`)
+  }
   useEffect(() => {
     getProduct();
   }, [search, sort, category, minPrice, maxPrice, currentPage, reload]);
@@ -54,7 +58,8 @@ export const AllProduct = () => {
         >
           {product.map((item, index) => (
             <GridItem key={index}>
-              <ProductCard
+              <ProductCardUser
+                onClick={() => handleClick(item.id)}
                 name={item.name}
                 price={item.price}
                 image={item.productImg}
