@@ -228,8 +228,8 @@ module.exports = {
                 status: false,
                 message: err.message
             });
-        },
-      
+        }
+    },
     activateProduct: async (req, res) => {
         try {
             const { id } = req.params

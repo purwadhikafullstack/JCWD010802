@@ -9,7 +9,7 @@ const userRouters = require('./userRouters') //--- Perbaiki
 const adminRouters = require("./adminRouters")
 const warehouseRouter = require("./warehouseRouter")
 const authRouters = require('./authRouters')
-const categoryRouter = require("./categoryRouter")
+const cartRouter = require('./cartRouter')
 
 
 module.exports= {
@@ -24,5 +24,6 @@ module.exports= {
     categoryRouter,
     productRouter,
     stockRouter,
-    categoryRouter
+    categoryRouter,
+    cartRouter
 }

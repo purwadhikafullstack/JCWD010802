@@ -16,19 +16,19 @@ import { Product } from "../pages/Product";
 import { AllProduct } from "../views/Product/components/AllProduct";
 import { DetailProduct } from "../pages/ProductDetail";
 import { AdminProducts } from "../views/Admin/Products";
-import { AddToCart } from "../views/Product/components/addToCart";
+import { Cart } from "../pages/Cart";
 
 const Routes = (
     <>
  <Route path="/" element={<Homepage />}>
       <Route path="" element={<HomepageView />} />
       <Route path="profile" element={<ProfileView />} />
+      <Route path="cart" element={<Cart/>}/>
       <Route path="/" element={<Product />}>
-        <Route path="product" element={<AllProduct />} />
+      <Route path="product" element={<AllProduct />} />
       </Route>
       <Route path="/product/:id" element={<DetailProduct />} />
     </Route>
- </Route>
  <Route path="/login" element={<Login />} />
  <Route path="/register" element={<Register />} />
  <Route path="/verified/:token" element={<Verified />} />
@@ -42,7 +42,6 @@ const Routes = (
 <Route path="warehouse" element={<WarehousePageView/>}/>
 <Route path="product-list" element={<AdminProducts />}/>
 </Route>
-<Route path="cart" element={<AddToCart/>}/>
     </>
 ) 
 
