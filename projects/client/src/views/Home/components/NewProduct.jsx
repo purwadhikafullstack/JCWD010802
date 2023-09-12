@@ -1,4 +1,5 @@
 import { Flex, Heading } from "@chakra-ui/react"
+import { ProductCardUser } from "../../../components/product/ProductCardUser"
 // import { ProductCard } from "../../../components/product/ProductCard"
 
 
@@ -59,6 +60,7 @@ export const NewProduct = () => {
         <Flex direction="column" px={{base: "20px", lg: "50px"}} py="30px" maxW="100vw">
             <Heading fontSize="22px">Newest Product</Heading>
             <Flex gap={3} mt="20px" overflowX="scroll" pb="20px" maxW="1400px">
+                <ProductCardUser data={data} />
                 {/* <ProductCard data={data} /> */}
             </Flex>
         </Flex>

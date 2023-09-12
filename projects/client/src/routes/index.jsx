@@ -12,23 +12,30 @@ import { Onboarding } from "../pages/Onboarding";
 import { WarehousePageView } from "../views/Admin/Warehouse";
 import { Verified } from "../pages/Verified";
 import { ProfileView } from "../views/Profile";
+import { Product } from "../pages/Product";
+import { AllProduct } from "../views/Product/components/AllProduct";
+import { DetailProduct } from "../pages/ProductDetail";
 import { AdminProducts } from "../views/Admin/Products";
 import { StockView } from "../views/Admin/Stock";
 import { DetailStockWarehouse } from "../views/Admin/components/Stock/WarehouseDetailStok";
 
 const Routes = (
     <>
-    <Route path="/" element={<Homepage />}>
-        <Route path="" element={<HomepageView />} />
-        <Route path="profile" element={<ProfileView />} />
+ <Route path="/" element={<Homepage />}>
+      <Route path="" element={<HomepageView />} />
+      <Route path="profile" element={<ProfileView />} />
+      <Route path="/" element={<Product />}>
+        <Route path="product" element={<AllProduct />} />
+      </Route>
+      <Route path="/product/:id" element={<DetailProduct />} />
     </Route>
-
-    <Route path="/login" element={<Login />} />
-    <Route path="/register" element={<Register />} />
-    <Route path="/verified/:token" element={<Verified />} />
-    <Route path="/onboard" element={<Onboarding />} />
-    <Route path="/forgot-password" element={<ForgotPass/>}/>
-    <Route path="/reset-password/:token" element={<ResetPass/>}/>
+ </Route>
+ <Route path="/login" element={<Login />} />
+ <Route path="/register" element={<Register />} />
+ <Route path="/verified/:token" element={<Verified />} />
+ <Route path="/onboard" element={<Onboarding />} />
+ <Route path="/forgot-password" element={<ForgotPass/>}/>
+ <Route path="/reset-password/:token" element={<ResetPass/>}/>
    
     <Route path="/admin" element={<Admin/>}>
         <Route path="list-user" element={<UserCard/>}/>
@@ -40,8 +47,5 @@ const Routes = (
     </Route>
     </>
 ) 
-
-
-
 
 export const routes = createRoutesFromElements(Routes);
