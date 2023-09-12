@@ -3,7 +3,7 @@ const db = require('../models')
 const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
-const {userRouters, adminRouters, warehouseRouters, authRouters, authRouter, userRouter, addressRouter, rajaongkirRouter, categoryRouter, productRouter} = require('../routers')
+const {userRouters, adminRouters, warehouseRouters, authRouters, authRouter, userRouter, addressRouter, rajaongkirRouter, productRouter, stockRouter, categoryRouter} = require('../routers')
 
 const PORT = process.env.PORT || 8000;
 const app = express();
@@ -30,13 +30,13 @@ app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/address', addressRouter);
 app.use('/api/location', rajaongkirRouter); //---Perbaiki 
-app.use('/api/category', categoryRouter);
 app.use('/api/product', productRouter);
-
+app.use('/api/category', categoryRouter)
 app.use('/api/user/',userRouters)
 app.use('/api/admin/',adminRouters)
-app.use('/api/warehouse/',warehouseRouters)
+app.use('/api/warehouse/',warehouseRouter)
 app.use('/api/auth/',authRouters)
+app.use("/api/stock", stockRouter)
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
@@ -87,7 +87,7 @@ app.listen(PORT, (err) => {
     console.log(`ERROR: ${err}`);
   } else {
         // db.sequelize.sync({alter:true})
-
     console.log(`APP RUNNING at ${PORT} ✅`);
   }
 });
+ 

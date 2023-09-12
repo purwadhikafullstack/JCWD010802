@@ -6,64 +6,40 @@ const product = db.product;
 module.exports = {
     allCategory: async (req, res) => {
         try {
-            const page = +req.query.page || 1;
-            const limit = +req.query.limit || 5;
-            const offset = (page - 1) * limit;
-            const search = req.query.search || "";
-            const sort = req.query.sort || "";
-    
-            const filter = {
-                isDeleted: false,
-            };
-            if (search) {
-                filter[Op.or] = [
-                    {
-                        name: {
-                            [Op.like]: `%${search}%`,
-                        },
-                    },
-                ];
-            }
-            const totalProduct = await product.findAll({
-                where: filter,
-                group: "CategoryId",
-                attributes: [
-                    "CategoryId",
-                    [Sequelize.fn("count", Sequelize.col("id")), "total"],
-                ],
-            });
-            const total = await category.count({
-                where: filter,
-            });
-            if (sort === "asc") {
-                result = await category.findAll({
-                    where: filter,
-                    order: [["name", "ASC"]],
-                    limit,
-                    offset,
-                });
-            } else if (sort === "desc") {
-                result = await category.findAll({
-                    where: filter,
-                    order: [["name", "DESC"]],
-                    limit,
-                    offset,
-                });
-            } else {
-                result = await category.findAll({
-                    where: filter,
-                    limit,
-                    offset,
-                });
-            }
-            res.status(200).send({
-                totalpage: Math.ceil(total / limit),
-                currentpage: page,
-                all_category: total,
-                totalProduct,
-                result,
-                status: true,
-            });
+        const page = +req.query.page || 1;
+        const limit = +req.query.limit || 5;
+        const offset = (page - 1) * limit;
+        const filter = {
+            isDeleted: false, 
+        };
+        const totalProduct = await product.findAll({
+            where: filter,
+            group: "CategoryId",
+            attributes : [
+                "CategoryId",
+                [Sequelize.fn("count", Sequelize.col("id")), "total"]
+            ]
+        });
+        const total = await category.count({
+            where: filter,
+        });
+        const result = await category.findAll({
+            attributes: [
+                "id",
+                "name",
+            ],
+            where: filter,
+            limit,
+            offset
+        });
+        res.status(200).send({
+            totalpage: Math.ceil(total / limit),
+            currentpage: page,
+            all_category: total,
+            totalProduct,
+            result,
+            status: true
+        });
         } catch (err) {
             console.error(err);
             res.status(400).send({
@@ -113,7 +89,6 @@ module.exports = {
             }
     
             await category.update(updateData, { where: { id } });
-    
             res.status(200).send({
                 msg: "Category has been updated successfully",
                 status: true,
@@ -122,7 +97,7 @@ module.exports = {
             console.error(err);
             res.status(400).send({
                 status: false,
-                message: err.message,
+                message: err.message
             });
         }
     },

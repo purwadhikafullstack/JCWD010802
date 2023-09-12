@@ -45,6 +45,7 @@ export const TopProduct = () => {
             <Heading fontSize="22px">Top Selling Products</Heading>
             <Flex gap={3} mt="20px" overflowX="scroll" pb="20px" maxW="1400px">
                 <ProductCardUser data={data} />
+                {/* <ProductCard data={data} /> */}
             </Flex>
         </Flex>
     )
