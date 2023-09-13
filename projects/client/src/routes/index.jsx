@@ -17,17 +17,19 @@ import { AllProduct } from "../views/Product/components/AllProduct";
 import { DetailProduct } from "../pages/ProductDetail";
 import { CategoryView } from "../views/Admin/Category";
 import { AdminProducts } from "../views/Admin/Products";
+import { Cart } from "../pages/Cart";
 
 const Routes = (
   <>
     <Route path="/" element={<Homepage />}>
       <Route path="" element={<HomepageView />} />
       <Route path="profile" element={<ProfileView />} />
+      <Route path="cart" element={<Cart/>}/>
       <Route path="/" element={<Product />}>
-        <Route path="product" element={<AllProduct />} />
+      <Route path="product" element={<AllProduct />} />
       </Route>
       <Route path="/product/:id" element={<DetailProduct />} />
- </Route>
+    </Route>
  <Route path="/login" element={<Login />} />
  <Route path="/register" element={<Register />} />
  <Route path="/verified/:token" element={<Verified />} />

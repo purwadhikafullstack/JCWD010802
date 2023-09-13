@@ -3,7 +3,7 @@ const db = require('../models')
 const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
-const {userRouters, adminRouters, warehouseRouters, authRouters, authRouter, userRouter, addressRouter, rajaongkirRouter, productRouter, stockRouter, categoryRouter} = require('../routers')
+const {userRouters, adminRouters, warehouseRouter, authRouters, authRouter, userRouter, addressRouter, rajaongkirRouter, productRouter, stockRouter, categoryRouter, cartRouter} = require('../routers')
 
 const PORT = process.env.PORT || 8000;
 const app = express();
@@ -37,6 +37,7 @@ app.use('/api/admin/',adminRouters)
 app.use('/api/warehouse/',warehouseRouters)
 app.use('/api/auth/',authRouters)
 app.use("/api/stock", stockRouter)
+app.use("/api/cart", cartRouter)
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
