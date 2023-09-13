@@ -17,6 +17,8 @@ import { AllProduct } from "../views/Product/components/AllProduct";
 import { DetailProduct } from "../pages/ProductDetail";
 import { CategoryView } from "../views/Admin/Category";
 import { AdminProducts } from "../views/Admin/Products";
+import { StockView } from "../views/Admin/Stock";
+import { DetailStockWarehouse } from "../views/Admin/components/Stock/WarehouseDetailStok";
 import { Cart } from "../pages/Cart";
 
 const Routes = (
@@ -37,13 +39,15 @@ const Routes = (
  <Route path="/forgot-password" element={<ForgotPass/>}/>
  <Route path="/reset-password/:token" element={<ResetPass/>}/>
    
-<Route path="/admin" element={<Admin/>}>
-<Route path="list-user" element={<UserCard/>}/>
-<Route path="list-admin" element={<WarehouseAdmin/>}/>
-<Route path="list-category" element={<CategoryView />} />
-<Route path="warehouse" element={<WarehousePageView/>}/>
-<Route path="product-list" element={<AdminProducts />}/>
-</Route>
+    <Route path="/admin" element={<Admin/>}>
+        <Route path="list-user" element={<UserCard/>}/>
+        <Route path="list-admin" element={<WarehouseAdmin/>}/>
+        <Route path="list-category" element={<CategoryView />} />
+        <Route path="warehouse" element={<WarehousePageView/>}/>
+        <Route path="product-list" element={<AdminProducts />}/>
+        <Route path="warehouse-stock" element={<StockView />}/>
+        <Route path="warehouse-stock/:id" element={<DetailStockWarehouse />} />
+    </Route>
     </>
 ) 
 export const routes = createRoutesFromElements(Routes);
