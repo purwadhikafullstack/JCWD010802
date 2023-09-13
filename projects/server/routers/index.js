@@ -12,6 +12,7 @@ const authRouters = require('./authRouters')
 const cartRouter = require('./cartRouter')
 
 
+
 module.exports= {
     userRouters,
     adminRouters,
@@ -21,7 +22,6 @@ module.exports= {
     userRouter,
     addressRouter,
     rajaongkirRouter,
-    categoryRouter,
     productRouter,
     stockRouter,
     categoryRouter,

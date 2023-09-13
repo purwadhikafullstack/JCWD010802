@@ -11,8 +11,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const DeleteAddress = ({ id, reload, setReload }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -28,12 +28,12 @@ export const DeleteAddress = ({ id, reload, setReload }) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      toast.success('Address deleted successfully');
-      setReload(!reload)
+      toast.success("Address deleted successfully");
+      setReload(!reload);
       onClose();
       console.log(response);
     } catch (error) {
-      toast.error('Error deleting address');
+      toast.error("Error deleting address");
       console.log(error);
     }
   };
@@ -46,7 +46,9 @@ export const DeleteAddress = ({ id, reload, setReload }) => {
       <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Are you sure you want to delete this address?</ModalHeader>
+          <ModalHeader>
+            Are you sure you want to delete this address?
+          </ModalHeader>
           <ModalCloseButton />
           <ModalFooter>
             <Button colorScheme="red" mr={3} onClick={onClose}>
@@ -58,7 +60,11 @@ export const DeleteAddress = ({ id, reload, setReload }) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+      />
     </Box>
   );
 };

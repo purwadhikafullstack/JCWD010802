@@ -3,7 +3,6 @@ const { productController } = require('../controllers');
 const { verifyToken } = require('../middlewares/auth');
 const { multerUpload } = require('../middlewares/multer')
 
-
 router.get('/', productController.allProduct);
 router.post('/', verifyToken, multerUpload('./public/productImg', 'productImg').single('file'),productController.createProduct);
 router.get('/:id', productController.detailProduct);

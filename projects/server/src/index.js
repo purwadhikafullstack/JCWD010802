@@ -34,9 +34,8 @@ app.use('/api/product', productRouter);
 app.use('/api/category', categoryRouter)
 app.use('/api/user/',userRouters)
 app.use('/api/admin/',adminRouters)
-app.use('/api/warehouse/',warehouseRouter)
+app.use('/api/warehouse/',warehouseRouters)
 app.use('/api/auth/',authRouters)
-app.use("/api/product", productRouter)
 app.use("/api/stock", stockRouter)
 app.use("/api/cart", cartRouter)
 
@@ -92,4 +91,3 @@ app.listen(PORT, (err) => {
     console.log(`APP RUNNING at ${PORT} ✅`);
   }
 });
- 

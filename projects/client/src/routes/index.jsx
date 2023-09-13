@@ -15,12 +15,13 @@ import { ProfileView } from "../views/Profile";
 import { Product } from "../pages/Product";
 import { AllProduct } from "../views/Product/components/AllProduct";
 import { DetailProduct } from "../pages/ProductDetail";
+import { CategoryView } from "../views/Admin/Category";
 import { AdminProducts } from "../views/Admin/Products";
 import { Cart } from "../pages/Cart";
 
 const Routes = (
-    <>
- <Route path="/" element={<Homepage />}>
+  <>
+    <Route path="/" element={<Homepage />}>
       <Route path="" element={<HomepageView />} />
       <Route path="profile" element={<ProfileView />} />
       <Route path="cart" element={<Cart/>}/>
@@ -39,10 +40,10 @@ const Routes = (
 <Route path="/admin" element={<Admin/>}>
 <Route path="list-user" element={<UserCard/>}/>
 <Route path="list-admin" element={<WarehouseAdmin/>}/>
+<Route path="list-category" element={<CategoryView />} />
 <Route path="warehouse" element={<WarehousePageView/>}/>
 <Route path="product-list" element={<AdminProducts />}/>
 </Route>
     </>
 ) 
-
 export const routes = createRoutesFromElements(Routes);
