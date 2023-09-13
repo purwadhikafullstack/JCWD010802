@@ -15,6 +15,7 @@ import { ProfileView } from "../views/Profile";
 import { Product } from "../pages/Product";
 import { AllProduct } from "../views/Product/components/AllProduct";
 import { DetailProduct } from "../pages/ProductDetail";
+import { CategoryView } from "../views/Admin/Category";
 import { AdminProducts } from "../views/Admin/Products";
 
 const Routes = (
@@ -26,20 +27,21 @@ const Routes = (
         <Route path="product" element={<AllProduct />} />
       </Route>
       <Route path="/product/:id" element={<DetailProduct />} />
-    </Route>
-    <Route path="/login" element={<Login />} />
-    <Route path="/register" element={<Register />} />
-    <Route path="/verified/:token" element={<Verified />} />
-    <Route path="/onboard" element={<Onboarding />} />
-    <Route path="/forgot-password" element={<ForgotPass />} />
-    <Route path="/reset-password/:token" element={<ResetPass />} />
-
-    <Route path="/admin" element={<Admin />}>
-      <Route path="list-user" element={<UserCard />} />
-      <Route path="list-admin" element={<WarehouseAdmin />} />
-      <Route path="warehouse" element={<WarehousePageView />} />
-      <Route path="product-list" element={<AdminProducts />} />
-    </Route>
-  </>
-);
+ </Route>
+ <Route path="/login" element={<Login />} />
+ <Route path="/register" element={<Register />} />
+ <Route path="/verified/:token" element={<Verified />} />
+ <Route path="/onboard" element={<Onboarding />} />
+ <Route path="/forgot-password" element={<ForgotPass/>}/>
+ <Route path="/reset-password/:token" element={<ResetPass/>}/>
+   
+<Route path="/admin" element={<Admin/>}>
+<Route path="list-user" element={<UserCard/>}/>
+<Route path="list-admin" element={<WarehouseAdmin/>}/>
+<Route path="list-category" element={<CategoryView />} />
+<Route path="warehouse" element={<WarehousePageView/>}/>
+<Route path="product-list" element={<AdminProducts />}/>
+</Route>
+    </>
+) 
 export const routes = createRoutesFromElements(Routes);

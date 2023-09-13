@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   category.init({
     name: DataTypes.STRING,
+    categoryImg: DataTypes.STRING,
     isDeleted: {
       type: DataTypes.BOOLEAN,
       defaultValue: false

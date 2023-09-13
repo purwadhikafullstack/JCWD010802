@@ -16,11 +16,11 @@ import { useEffect } from "react";
 import { AddAddress } from "./modal/modalAddress/modalAddAdddress";
 import { EditAddress } from "./modal/modalAddress/modalEditAddress";
 import { DeleteAddress } from "./modal/modalAddress/modalDelete";
-import { PaginationAddress } from "../../../components/pagination/paginationAddress";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Sort } from "./modal/sortBy/sortBy";
 import { PrimaryAddress } from "./modal/modalAddress/modalPrimaryAddress";
 import { BsSearch } from "react-icons/bs";
+import { Pagination } from "../../../components/pagination/pagination";
 
 export const AddressCard = () => {
   const location = useLocation();
@@ -177,7 +177,7 @@ export const AddressCard = () => {
           </Flex>
         </Box>
       ))}
-      <PaginationAddress totalpage={page} />
+      <Pagination totalpage={page} />
       <EditAddress
         onOpen={onOpenModalEdit}
         onClose={() => setOnOpenModalEdit(false)}

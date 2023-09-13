@@ -36,7 +36,6 @@ app.use('/api/user/',userRouters)
 app.use('/api/admin/',adminRouters)
 app.use('/api/warehouse/',warehouseRouters)
 app.use('/api/auth/',authRouters)
-app.use("/api/product", productRouter)
 app.use("/api/stock", stockRouter)
 
 app.get("/api", (req, res) => {

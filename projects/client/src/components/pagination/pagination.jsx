@@ -3,7 +3,7 @@ import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ButtomTemp } from "./button";
 
-export const PaginationAddress = ({ totalpage }) => {
+export const Pagination = ({ totalpage }) => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const navigate = useNavigate();

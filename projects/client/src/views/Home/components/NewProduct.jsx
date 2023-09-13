@@ -2,7 +2,6 @@ import { Flex, Heading } from "@chakra-ui/react"
 import { ProductCardUser } from "../../../components/product/ProductCardUser"
 // import { ProductCard } from "../../../components/product/ProductCard"
 
-
 export const NewProduct = () => {
     const data = [
         {
