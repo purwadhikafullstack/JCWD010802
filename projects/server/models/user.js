@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       user.hasMany(models.userAddress)
       user.belongsTo(models.role)
       user.hasOne(models.warehouseAdmin)
+      user.hasMany(models.cart)
     }
   }
   user.init({

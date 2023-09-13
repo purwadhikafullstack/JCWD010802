@@ -15,21 +15,23 @@ import { ProfileView } from "../views/Profile";
 import { Product } from "../pages/Product";
 import { AllProduct } from "../views/Product/components/AllProduct";
 import { DetailProduct } from "../pages/ProductDetail";
+import { CategoryView } from "../views/Admin/Category";
 import { AdminProducts } from "../views/Admin/Products";
 import { StockView } from "../views/Admin/Stock";
 import { DetailStockWarehouse } from "../views/Admin/components/Stock/WarehouseDetailStok";
+import { Cart } from "../pages/Cart";
 
 const Routes = (
-    <>
- <Route path="/" element={<Homepage />}>
+  <>
+    <Route path="/" element={<Homepage />}>
       <Route path="" element={<HomepageView />} />
       <Route path="profile" element={<ProfileView />} />
+      <Route path="cart" element={<Cart/>}/>
       <Route path="/" element={<Product />}>
-        <Route path="product" element={<AllProduct />} />
+      <Route path="product" element={<AllProduct />} />
       </Route>
       <Route path="/product/:id" element={<DetailProduct />} />
     </Route>
- </Route>
  <Route path="/login" element={<Login />} />
  <Route path="/register" element={<Register />} />
  <Route path="/verified/:token" element={<Verified />} />
@@ -40,6 +42,7 @@ const Routes = (
     <Route path="/admin" element={<Admin/>}>
         <Route path="list-user" element={<UserCard/>}/>
         <Route path="list-admin" element={<WarehouseAdmin/>}/>
+        <Route path="list-category" element={<CategoryView />} />
         <Route path="warehouse" element={<WarehousePageView/>}/>
         <Route path="product-list" element={<AdminProducts />}/>
         <Route path="warehouse-stock" element={<StockView />}/>
@@ -47,5 +50,4 @@ const Routes = (
     </Route>
     </>
 ) 
-
 export const routes = createRoutesFromElements(Routes);

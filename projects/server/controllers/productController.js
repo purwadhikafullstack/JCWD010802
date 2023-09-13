@@ -37,6 +37,7 @@ module.exports = {
             filter.price = {
                 [Op.between]: [minPrice, maxPrice],
             };
+
             let order = [];
             if (sort === "az") {
                 order.push(["name", "ASC"]);
@@ -228,8 +229,8 @@ module.exports = {
                 status: false,
                 message: err.message
             });
-        },
-      
+        }
+    },
     activateProduct: async (req, res) => {
         try {
             const { id } = req.params
@@ -254,6 +255,7 @@ module.exports = {
                     message: "Product activated",
                     result: update
                 })
+
             }
         } catch (err) {
             console.error(err);
@@ -263,5 +265,4 @@ module.exports = {
             });
         }
     },
-
 }

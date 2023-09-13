@@ -3,6 +3,7 @@ import { Carousel } from "./components/Carousel"
 import { TopProduct } from "./components/TopProduct"
 import { NewProduct } from "./components/NewProduct"
 import { Category } from "./components/Category"
+import { Navbar } from "../../components/navigation/Navbar"
 
 
 export const HomepageView = () => {

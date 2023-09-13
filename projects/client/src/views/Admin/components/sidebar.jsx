@@ -1,5 +1,19 @@
-
-import { Avatar, Box, Center, Drawer, DrawerContent, DrawerOverlay, Flex, Icon, IconButton, Input, InputGroup, InputLeftElement, Text, useDisclosure } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Center,
+  Drawer,
+  DrawerContent,
+  DrawerOverlay,
+  Flex,
+  Icon,
+  IconButton,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Text,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { FiMenu, FiSearch, FiBell } from "react-icons/fi";
 import { MdHome } from "react-icons/md";
 import { FaRss, FaClipboardCheck, FaWarehouse, FaUsers } from "react-icons/fa";
@@ -7,6 +21,7 @@ import { HiCollection, HiCode } from "react-icons/hi";
 import { AiFillGift } from "react-icons/ai";
 import { BsGearFill } from "react-icons/bs";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { BiSolidCategoryAlt } from "react-icons/bi";
 export const Sidebar = () => {
   const sidebar = useDisclosure();
   const location = useLocation();
@@ -93,11 +108,16 @@ export const Sidebar = () => {
             Warehouse Admin
           </NavItem>
         </NavLink>
+        <NavLink to="list-category">
+          <NavItem icon={BiSolidCategoryAlt} to="/admin/list-category">
+            Category
+          </NavItem>
         <NavLink to="warehouse">
           <NavItem icon={FaWarehouse} to="/admin/warehouse">
             Warehouse
           </NavItem>
-        </NavLink>
+          </NavLink>
+
         <NavLink to="product-list">
           <NavItem icon={AiFillGift} to="/admin/product-list">Products</NavItem>
         </NavLink>
@@ -106,6 +126,7 @@ export const Sidebar = () => {
         </NavLink>
         <NavItem icon={HiCode}>Integrations</NavItem>
         <NavItem icon={BsGearFill}>Settings</NavItem>
+        </NavLink>
       </Flex>
     </Box>
   );
@@ -172,8 +193,7 @@ export const Sidebar = () => {
               base: "none",
               md: "flex",
             }}
-          >
-          </InputGroup>
+          ></InputGroup>
 
           <Flex align="center">
             <Icon color="white" as={FiBell} cursor="pointer" />
@@ -188,9 +208,14 @@ export const Sidebar = () => {
         </Flex>
 
         <Box as="main" p="4" bg={"#edf3f8"}>
-
-          <Box borderWidth="4px" rounded="md" h={"fit-content"} w={"full"} bg={"#d6e5e3"}>
-            <Outlet/>
+          <Box
+            borderWidth="4px"
+            rounded="md"
+            h={"fit-content"}
+            w={"full"}
+            bg={"#d6e5e3"}
+          >
+            <Outlet />
           </Box>
         </Box>
       </Box>

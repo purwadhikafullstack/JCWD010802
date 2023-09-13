@@ -23,7 +23,6 @@ export const CategorySort = () => {
           // }
         );
         setCategories(response.data.result);
-        console.log(response.data.result);
       } catch (error) {
         console.log(error);
       }

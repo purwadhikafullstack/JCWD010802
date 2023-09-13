@@ -6,7 +6,7 @@ import { Navbar } from "../components/navigation/Navbar";
 export const Homepage = () => {
   return (
     <>
-      <Navbar />
+      <Navbar/>
       <Outlet />
       <Footer />
       <MobileNav />

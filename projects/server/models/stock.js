@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       stock.belongsTo(models.product)
       stock.belongsTo(models.warehouse)
       stock.hasOne(models.journal)
+
     }
   }
   stock.init({

@@ -14,16 +14,28 @@ import { useParams } from "react-router-dom";
 import { ButtonQuantity } from "./Button/ButtonQuantity";
 import { FiShoppingCart, FiHeart, FiCheckCircle } from "react-icons/fi";
 import formatIDR from "../../../../helpers/formatIDR";
+import { AddToCart } from "../addToCart";
 
 export const DetailCard = () => {
   const { id } = useParams();
   const [detail, setDetail] = useState([]);
+  const [stock, setStock] = useState([])
   const [wish, setWish] = useState(false);
 
   const getDetail = async () => {
     try {
       const response = await axios.get(`http://localhost:8000/api/product/${id}`);
       setDetail(response.data.result);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getStock = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/stock/${id}`);
+      setStock(response.data.result.stock.totalStock);
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -31,6 +43,7 @@ export const DetailCard = () => {
 
   useEffect(() => {
     getDetail();
+    getStock()
   }, []);
 
   return (
@@ -59,6 +72,7 @@ export const DetailCard = () => {
         pt={{ base: "20px", md: "60px" }} 
         pl={{ base: "20px", md: "0" }} 
       >
+
         <Stack spacing={4}>
           <Heading fontSize={"6xl"}>{detail.name}</Heading>
           <Text color={"gray.500"} fontSize={"xl"}>
@@ -72,12 +86,6 @@ export const DetailCard = () => {
           </Text>
           <Text color={"black"} fontSize={"lg"}>
             {detail.weight} Kg
-          </Text>
-          <Text color={"gray.500"} fontSize={"xl"}>
-            Stock :
-          </Text>
-          <Text color={"black"} fontSize={"lg"}>
-            Sisa stock : 10
           </Text>
           <Stack
             spacing={4}
@@ -95,26 +103,10 @@ export const DetailCard = () => {
                 {formatIDR(detail.price)}
               </Text>
             </Flex>
-            <ButtonQuantity /> 
-            <Text>Only <span style={{color: 'red'}}>Stock</span> left!</Text>
-            <Flex gap={5}>
-              <Button leftIcon={<FiCheckCircle />} bgColor={"transparent"}>
-                Buy now
-              </Button>
-              <Button leftIcon={<FiShoppingCart />} bgColor={"transparent"}>
-                Add to cart
-              </Button>
-              <Button
-                leftIcon={<FiHeart />}
-                onClick={() => setWish(!wish)}
-                color={wish ? "red.500" : "gray.500"}
-                bgColor={"transparent"}
-              >
-                Wishlist
-              </Button>
-            </Flex>
+           
           </Stack>
         </Stack>
+          <AddToCart detail={detail} stock={stock}/>
       </Flex>
     </Flex>
   );
