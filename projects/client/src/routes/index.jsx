@@ -19,8 +19,8 @@ import { CategoryView } from "../views/Admin/Category";
 import { AdminProducts } from "../views/Admin/Products";
 
 const Routes = (
-    <>
- <Route path="/" element={<Homepage />}>
+  <>
+    <Route path="/" element={<Homepage />}>
       <Route path="" element={<HomepageView />} />
       <Route path="profile" element={<ProfileView />} />
       <Route path="/" element={<Product />}>

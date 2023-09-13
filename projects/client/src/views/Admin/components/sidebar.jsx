@@ -122,6 +122,7 @@ export const Sidebar = () => {
         <NavItem icon={FaClipboardCheck}>Checklists</NavItem>
         <NavItem icon={HiCode}>Integrations</NavItem>
         <NavItem icon={BsGearFill}>Settings</NavItem>
+        </NavLink>
       </Flex>
     </Box>
   );

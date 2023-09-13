@@ -20,7 +20,6 @@ module.exports= {
     userRouter,
     addressRouter,
     rajaongkirRouter,
-    categoryRouter,
     productRouter,
     stockRouter,
     categoryRouter
