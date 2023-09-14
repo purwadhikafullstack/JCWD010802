@@ -33,8 +33,8 @@ export const DetailCard = () => {
   };
   const getStock = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/stock/${id}`);
-      setStock(response.data.result.stock.totalStock);
+      const response = await axios.get(`http://localhost:8000/api/stock/product/${id}`);
+      setStock(response.data.result);
       console.log(response);
     } catch (error) {
       console.log(error);

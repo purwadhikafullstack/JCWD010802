@@ -24,10 +24,6 @@ module.exports = {
             where: filter,
         });
         const result = await category.findAll({
-            attributes: [
-                "id",
-                "name",
-            ],
             where: filter,
             limit,
             offset

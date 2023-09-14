@@ -14,6 +14,7 @@ export const CartNotif = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log(response);
       const cartItems = response.data.result;
       setNumberOfItems(cartItems.length);
     } catch (error) {
@@ -24,12 +25,12 @@ export const CartNotif = () => {
   useEffect(() => {
     getCart();
 
-    const intervalId = setInterval(() => {
-      getCart();
-    }, 1000); 
-    return () => {
-      clearInterval(intervalId);
-    };
+    // const intervalId = setInterval(() => {
+    //   getCart();
+    // }, 1000); 
+    // return () => {
+    //   clearInterval(intervalId);
+    // };
   }, []);
 
   return (
