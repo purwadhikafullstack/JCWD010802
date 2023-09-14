@@ -3,10 +3,10 @@ import { AddProductButton } from "../components/Products/addProductButton"
 import { ProductList } from "../components/Products/listProduct"
 import { useEffect, useState } from "react"
 import axios from 'axios';
-import { PaginationAddress } from "../../../components/pagination/paginationAddress";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SearchProductAdmin } from "../components/Products/searchProductAdmin";
 import { CategorySort } from "../components/Products/categorySort";
+import { Pagination } from "../../../components/pagination/pagination";
 
 
 
@@ -68,7 +68,7 @@ export const AdminProducts = () => {
             <Flex mx="5">
                 <ProductList reload={triggerReload}  product={product} category={category} />
             </Flex>
-            <PaginationAddress  totalpage={totalPage}/>
+            <Pagination totalpage={totalPage}/>
         </Flex>
     )
 }
