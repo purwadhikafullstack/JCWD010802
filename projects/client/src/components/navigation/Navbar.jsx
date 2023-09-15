@@ -123,7 +123,7 @@ export const Navbar = () => {
                         <Avatar size="sm" />
                     </MenuButton>
                     <MenuList color="#517664">
-                        <MenuItem>Profile</MenuItem>
+                        <MenuItem as={Link} to={"/profile"}>Profile</MenuItem>
                         <NavLink to={"/admin"}>
                         <MenuItem>Admin</MenuItem>
                         </NavLink>

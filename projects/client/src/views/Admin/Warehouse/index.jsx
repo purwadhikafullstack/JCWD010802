@@ -4,7 +4,7 @@ import axios from 'axios';
 import { WarehouseCard} from '../components/Warehouse/warehouseCard';
 import { AddWarehouseModal} from '../components/Warehouse/addWarehouseModal';
 import { useLocation } from 'react-router-dom';
-import { PaginationAddress } from '../../../components/pagination/paginationAddress';
+import { Pagination } from '../../../components/pagination/pagination';
 
 
 export const WarehousePageView = () => {
@@ -61,7 +61,7 @@ export const WarehousePageView = () => {
         reload={reload} setReload={setReload}
         onClose={closeAddModal}
       />
-      <PaginationAddress totalpage={page} />
+      <Pagination totalpage={page} />
 
     </>
   );
