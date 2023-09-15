@@ -117,7 +117,6 @@ export const Sidebar = () => {
             Warehouse
           </NavItem>
           </NavLink>
-
         <NavLink to="product-list">
           <NavItem icon={AiFillGift} to="/admin/product-list">Products</NavItem>
         </NavLink>

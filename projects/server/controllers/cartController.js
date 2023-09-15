@@ -1,4 +1,4 @@
-const {product,cartItem} = require("../models")
+const {product,cartItem,cart} = require("../models")
 const {Sequelize} = require("sequelize")
 module.exports = {
     addToCart : async (req, res) => {
@@ -14,23 +14,37 @@ module.exports = {
               message: 'Product not found',
             });
           }
-      
+          const [userCart] = await cart.findOrCreate({where:{userId:req.user.id}})
+          
           const existingCartItem = await cartItem.findOne({
-            where: { productId: id, userId: req.user.id },
-          });
+            where: { productId: id, cartId:userCart.id  },
+          })
           if (existingCartItem) {
             const updatedQuantity = Sequelize.literal(`quantity + ${quantity}`);
             await existingCartItem.update({ quantity: updatedQuantity });
           } else {
            
             await cartItem.create({
-              userId: req.user.id,
+              cartId:userCart.id,
               productId: id,
               quantity,
             });
           }
+          const cartItems = await cartItem.findAll({
+            where: { cartId: userCart.id },
+          });
       
-          res.status(200).json({
+          let totalCartPrice = 0;
+          for (const item of cartItems) {
+            const sproduct = await product.findOne({ where: { id: item.productId } });
+            totalCartPrice += item.quantity * sproduct.price;
+          }
+      
+          await cart.update(
+            { totalPrice: totalCartPrice },
+            { where: { id: userCart.id } } 
+          );      
+          res.status(200).send({
             status: true,
             message: 'Product added to the cart',
           });
@@ -46,14 +60,17 @@ module.exports = {
        getUserCart: async (req, res) => {
         try {
           const userId = req.user.id;
+          const userCart = await cart.findOne({where:{userId:userId}})
+
           const cartItems = await cartItem.findAll({
-            where: { userId },
+            where: { cartId:userCart.id  },
             include: [{ model: product }],
           });
       
       
           res.status(200).json({
             status: true,
+            totalPrice: userCart.totalPrice,
             message: 'User cart retrieved successfully',
             result: cartItems,
           });
@@ -66,4 +83,69 @@ module.exports = {
           });
         }
       },
+      removeFromCart : async (req, res) => {
+        try {
+          const  id  = req.params.id
+          const userId = req.user.id;
+      
+          const cekproduct = await product.findOne({ where: { id: id } });
+      
+          if (!cekproduct) {
+            return res.status(404).send({
+              status: false,
+              message: 'Product not found',
+            });
+          }
+      
+          const userCart = await cart.findOne({ where: { userId } });
+      
+          if (!userCart) {
+            return res.status(404).send({
+              status: false,
+              message: 'User cart not found',
+            });
+          }
+      
+          const existingCartItem = await cartItem.findOne({
+            where: { productId:id, cartId: userCart.id },
+          });
+      
+          if (!existingCartItem) {
+            return res.status(404).send({
+              status: false,
+              message: 'Product not found in the cart',
+            });
+          }
+      
+          await existingCartItem.destroy();
+      
+          const cartItems = await cartItem.findAll({
+            where: { cartId: userCart.id },
+          });
+      
+          let totalCartPrice = 0;
+          for (const item of cartItems) {
+            const sproduct = await product.findOne({ where: { id: item.productId } });
+            totalCartPrice += item.quantity * sproduct.price;
+          }
+      
+          await cart.update(
+            { totalPrice: totalCartPrice },
+            { where: { id: userCart.id } }
+          );
+      
+          res.status(200).send({
+            status: true,
+            message: 'Product removed from the cart',
+          });
+        } catch (error) {
+          console.error(error);
+          res.status(500).send({
+            status: false,
+            message: 'Error removing product from the cart',
+            error: error.message,
+          });
+        }
+      },
+      
 }
