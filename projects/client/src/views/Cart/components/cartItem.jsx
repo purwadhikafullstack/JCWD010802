@@ -6,11 +6,16 @@ import { DeleteCart } from './deleteCart';
 import formatIDR from '../../../helpers/formatIDR';
 import { BsFillTrash3Fill } from 'react-icons/bs';
 import axios from 'axios';
-
+import { useDispatch, useSelector } from "react-redux";
+import { setCart } from '../../../redux/cartSlice';
+import { toast } from 'react-toastify';
 export const CartItem = ({ cart,reload,setReload }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
- 
+
+  const token = localStorage.getItem("token")
+  const dispatch = useDispatch()
+
   const handleDelete = async (itemId) => {
     try {
       await axios.delete(`http://localhost:8000/api/cart/${itemId}`, {
@@ -18,12 +23,16 @@ export const CartItem = ({ cart,reload,setReload }) => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-  
+      const cartResponse = await axios.get(`http://localhost:8000/api/cart`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       setIsModalOpen(false);
       setItemToDelete(null)
+      dispatch(setCart(cartResponse.data.result))
       setReload(!reload)
-  
-    
     } catch (error) {
       console.error(error);
     }
@@ -48,7 +57,7 @@ export const CartItem = ({ cart,reload,setReload }) => {
               {item.product.name}
             </Text>
             <Text mt={2}>Price: {formatIDR( item.product.price)}</Text>
-            <HStack justifyContent={"flex-end"} gap={8} mt={10}>
+            <Flex justifyContent={"flex-end"} align={"center"} gap={8} mt={10} >
               <Text color={"gray.500"}>Move to Wishlist</Text>
               <Divider orientation='vertical' h={6} borderWidth={2}/>
               <Button
@@ -60,8 +69,9 @@ export const CartItem = ({ cart,reload,setReload }) => {
           >
             <BsFillTrash3Fill size={"15px"}/>
           </Button>       
-           <CartCounter initialCount={item.quantity} productId={item.productId}/>
-        </HStack>
+           <CartCounter initialCount={item.quantity} productId={item.productId} cartId={item.id}  
+/>
+        </Flex>
           </Box>
         </Box>
           <Divider borderWidth={4}/>

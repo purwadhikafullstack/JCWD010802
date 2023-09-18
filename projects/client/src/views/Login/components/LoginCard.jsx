@@ -7,6 +7,8 @@ import { FcGoogle } from "react-icons/fc"
 import { Link, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { setValue } from "../../../redux/userSlice"
+import {  setCart} from "../../../redux/cartSlice"
+
 
 
 export const LoginCard = () => {
@@ -46,6 +48,14 @@ export const LoginCard = () => {
                     navigate("/admin"); 
                   }              }, 2000)
             localStorage.setItem("token", response.data.token)
+            const cartResponse = await axios.get("http://localhost:8000/api/cart", {
+            headers: {
+                Authorization: `Bearer ${response.data.token}`,
+            },
+        });
+        const userCart = cartResponse.data.result;
+        dispatch(setCart(userCart))
+        console.log(userCart);
         } catch (error) {
             toast({
                 title: "Login Failed!",
