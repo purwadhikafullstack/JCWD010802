@@ -13,6 +13,7 @@ import { ModalChooseAddress } from "./modal/modalChooseAddress";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CheckoutList } from "./ListCheckout";
+import { LatLon } from "./LatLon";
 
 export const CardCheckout = () => {
   const token = localStorage.getItem("token");
@@ -22,7 +23,7 @@ export const CardCheckout = () => {
     useState(false);
   const [primaryAddress, setPrimaryAddress] = useState(null);
 
-  const fetchAddresses = async () => {
+  const AllAddress = async () => {
     try {
       const response = await axios.get(`http://localhost:8000/api/address/`, {
         headers: {
@@ -46,8 +47,14 @@ export const CardCheckout = () => {
     }
   };
   useEffect(() => {
-    fetchAddresses();
+    AllAddress();
   }, []);
+  
+  useEffect(() => {
+    if (primaryAddress) {
+      setSelectedId(primaryAddress.id);
+    }
+  }, [primaryAddress]);
 
   return (
     <Flex direction="column" w={"60%"} p={{ base: "40px", lg: "100px" }}>
@@ -148,6 +155,7 @@ export const CardCheckout = () => {
         handleClick={handleClick}
         selectedId={selectedId}
       />
+      <LatLon id={selectedId} primid={primaryAddress?.id} />
       <ToastContainer />
     </Flex>
   );

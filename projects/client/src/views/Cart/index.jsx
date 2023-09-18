@@ -16,13 +16,14 @@ export const CartView = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+        console.log(response);
         setCart(response.data.result)
         setTotal(response.data.totalPrice)
       } catch (error) {
         console.error(error);
       }
     }
-    
+ 
   
     useEffect(() => {
       getCart();
@@ -31,7 +32,7 @@ export const CartView = () => {
         <Box pt={20} minH={"100vh"} px={{base: "20px", lg: "50px"}}maxW="100vw">
         <Flex justifyContent={"center"} py={10}>
         <CartItem cart={cart} reload={reload} setReload={setReload}/>
-        <CartCheckout cart={cart}  total={total}/>
+        <CartCheckout cart={cart}  total={total} />
         </Flex>
         </Box>
     )
