@@ -7,30 +7,103 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export const CheckoutList = () => {
+  const token = localStorage.getItem("token");
+  const [cartItems, setCartItems] = useState([]);
+  const [subtotal, setSubtotal] = useState(0);
+  const [shipChecked, setShipChecked] = useState(false);
+  const [protectCehecked, setProtectCehecked] = useState(false);
+
+  const Cart = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/cart`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setCartItems(response.data.result);
+
+      const calculatedSubtotal = response.data.result.reduce((value, item) => {
+        return value + item.product.price * item.quantity;
+      }, 0);
+
+      setSubtotal(calculatedSubtotal);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    Cart();
+  }, []);
+
+  useEffect(() => {
+    updateSubtotal();
+  }, [shipChecked, protectCehecked]);
+
+  const updateSubtotal = () => {
+    let newSubtotal = 0;
+
+    if (cartItems.length > 0) {
+      newSubtotal = cartItems.reduce((value, item) => {
+        return value + item.product.price * item.quantity;
+      }, 0);
+    }
+    if (shipChecked) {
+      newSubtotal += 2000;
+    }
+    if (protectCehecked) {
+      newSubtotal += 1500;
+    }
+    setSubtotal(newSubtotal);
+  };
+
   return (
     <Flex direction={"column"}>
-      <Flex >
-        <Image
-          src="https://cdn.eraspace.com/media/catalog/product/i/p/iphone_14_pro_deep_purple_3_9.jpg"
-          maxW={{ base: "50px", sm: "100px" }}
-          objectFit="cover"
-        />
-        <Stack>
-          <Text fontWeight={"bold"} fontSize={"lg"}>
-            Name
-          </Text>
-          <Text fontWeight={"light"}>Weight</Text>
-          <Text fontWeight={"semibold"}>Price</Text>
-        </Stack>
-      </Flex>
-      <Divider borderWidth={2} my={3} marginTop={5} />
-
-      <CheckboxGroup colorScheme="green" defaultValue={["2000"]}>
-        <Stack spacing={[1, 5]} direction={["column", "row"]} justifyContent={"flex-start"}>
-          <Checkbox value="2000">Shipping insurance</Checkbox>
-          <Checkbox value="1500">Protection discount</Checkbox>
+      {cartItems?.map((item) => (
+        <>
+          <Flex key={item.product.id}>
+            <Image
+              src={`http://localhost:8000/productImg/${item.product.productImg}`}
+              maxW={{ base: "50px", sm: "100px" }}
+              objectFit="cover"
+              mr={5}
+            />
+            <Stack>
+              <Text fontWeight={"bold"} fontSize={"lg"}>
+                {item.product.name}
+              </Text>
+              <Text fontWeight={"light"}>{item.quantity} item</Text>
+              <Text fontWeight={"light"}>{item.product.weight} kg</Text>
+              <Text fontWeight={"semibold"}>
+                Rp. {item.product.price * item.quantity}
+              </Text>
+            </Stack>
+          </Flex>
+          <Divider borderWidth={2} my={3} marginTop={5} />
+        </>
+      ))}
+      <CheckboxGroup colorScheme="green">
+        <Stack
+          spacing={[1, 5]}
+          direction={["column", "row"]}
+          justifyContent={"flex-start"}
+        >
+          <Checkbox
+            value="2000"
+            onChange={() => setShipChecked(!shipChecked)}
+          >
+            Shipping insurance
+          </Checkbox>
+          <Checkbox
+            value="1500"
+            onChange={() => setProtectCehecked(!protectCehecked)}
+          >
+            Protection discount
+          </Checkbox>
         </Stack>
       </CheckboxGroup>
       <Divider borderWidth={2} my={3} marginTop={5} />
@@ -39,7 +112,7 @@ export const CheckoutList = () => {
           Subtotal :
         </Text>
         <Text fontWeight={"bold"} fontSize={{ base: "15px", lg: "25px" }}>
-          Rp. 1.000
+          Rp. {subtotal}
         </Text>
       </Flex>
     </Flex>

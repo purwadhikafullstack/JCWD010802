@@ -15,7 +15,6 @@ import { AddressCheckout } from "../AddressCheckout";
 
 export const ModalChooseAddress = ({ id, onOpen, onClose, handleClick, selectedId  }) => {
   const finalRef = React.useRef(null);
-  const token = localStorage.getItem("token");
 
   return (
     <Box>

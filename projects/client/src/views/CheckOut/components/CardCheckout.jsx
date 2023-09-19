@@ -155,7 +155,7 @@ export const CardCheckout = () => {
         handleClick={handleClick}
         selectedId={selectedId}
       />
-      <LatLon id={selectedId} primid={primaryAddress?.id} />
+      {/* <LatLon id={selectedId} primid={primaryAddress?.id} /> */}
       <ToastContainer />
     </Flex>
   );
