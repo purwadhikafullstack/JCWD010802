@@ -13,14 +13,14 @@ import { ModalChooseAddress } from "./modal/modalChooseAddress";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CheckoutList } from "./ListCheckout";
-import { LatLon } from "./LatLon";
 
 export const CardCheckout = () => {
   const token = localStorage.getItem("token");
   const [addresses, setAddresses] = useState([]);
-  const [selectedId, setSelectedId] = useState(0);
-  const [onOpenModalChooseAddress, setOnOpenModalChooseAddress] =
-    useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [onOpenModalChooseAddress, setOnOpenModalChooseAddress] = useState(
+    false
+  );
   const [primaryAddress, setPrimaryAddress] = useState(null);
 
   const AllAddress = async () => {
@@ -31,16 +31,18 @@ export const CardCheckout = () => {
         },
       });
       const data = response.data.result;
-      console.log(data);
       setAddresses(data);
       const primary = data.find((item) => item.isPrimary);
       setPrimaryAddress(primary);
+      setSelectedAddress(primary);
     } catch (error) {
       console.error(error);
     }
   };
+  
   const handleClick = (id) => {
-    setSelectedId(id);
+    const selected = addresses.find((item) => item.id === id);
+    setSelectedAddress(selected);
     setOnOpenModalChooseAddress(false);
     if (id !== 0) {
       toast.success("Shipping address change");
@@ -52,10 +54,10 @@ export const CardCheckout = () => {
   
   useEffect(() => {
     if (primaryAddress) {
-      setSelectedId(primaryAddress.id);
+      setSelectedAddress(primaryAddress);
     }
   }, [primaryAddress]);
-
+  
   return (
     <Flex direction="column" w={"60%"} p={{ base: "40px", lg: "100px" }}>
       <Heading fontSize={{ base: "20px", lg: "30px" }}>Checkout</Heading>
@@ -64,7 +66,7 @@ export const CardCheckout = () => {
         Shipping address :
       </Text>
       <Divider borderWidth={2} my={3} marginTop={5} />
-      {selectedId === 0 && primaryAddress && (
+      {selectedAddress === null && primaryAddress && (
         <Box
           key={primaryAddress.id}
           borderRadius="md"
@@ -96,9 +98,9 @@ export const CardCheckout = () => {
           </Box>
         </Box>
       )}
-      {selectedId !== 0 &&
+      {selectedAddress !== null &&
         addresses.map((item) => {
-          if (item.id === selectedId) {
+          if (item.id === selectedAddress.id) {
             return (
               <Box
                 key={item.id}
@@ -148,15 +150,14 @@ export const CardCheckout = () => {
         Other address
       </Button>
       <Divider borderWidth={2} my={3} marginTop={5} />
-      <CheckoutList/>
+      <CheckoutList selectedAddress={selectedAddress} />
       <ModalChooseAddress
         onOpen={onOpenModalChooseAddress}
         onClose={() => setOnOpenModalChooseAddress(false)}
         handleClick={handleClick}
-        selectedId={selectedId}
+        selectedId={selectedAddress ? selectedAddress.id : 0}
       />
-      {/* <LatLon id={selectedId} primid={primaryAddress?.id} /> */}
-      <ToastContainer />
+      <ToastContainer/>
     </Flex>
   );
 };

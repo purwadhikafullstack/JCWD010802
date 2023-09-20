@@ -9,13 +9,17 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { ShippingMethod } from "./ShippingMethod";
+import { useSelector } from "react-redux";
+import formatIDR from "../../../helpers/formatIDR";
 
-export const CheckoutList = () => {
+export const CheckoutList = ({ selectedAddress }) => {
   const token = localStorage.getItem("token");
   const [cartItems, setCartItems] = useState([]);
   const [subtotal, setSubtotal] = useState(0);
   const [shipChecked, setShipChecked] = useState(false);
-  const [protectCehecked, setProtectCehecked] = useState(false);
+  const [protectChecked, setProtectChecked] = useState(false);
+  const cost = parseFloat(useSelector((state) => state.cost.value));
 
   const Cart = async () => {
     try {
@@ -42,7 +46,7 @@ export const CheckoutList = () => {
 
   useEffect(() => {
     updateSubtotal();
-  }, [shipChecked, protectCehecked]);
+  }, [shipChecked, protectChecked]);
 
   const updateSubtotal = () => {
     let newSubtotal = 0;
@@ -55,12 +59,17 @@ export const CheckoutList = () => {
     if (shipChecked) {
       newSubtotal += 2000;
     }
-    if (protectCehecked) {
+    if (protectChecked) {
       newSubtotal += 1500;
     }
     setSubtotal(newSubtotal);
   };
-
+  
+  const allWeight = cartItems.reduce((total, item) => {
+    return total + item.product.weight;
+  }, 0);
+  const totalWeight = allWeight * 1000;
+  const totalPrice = subtotal + cost
   return (
     <Flex direction={"column"}>
       {cartItems?.map((item) => (
@@ -92,27 +101,31 @@ export const CheckoutList = () => {
           direction={["column", "row"]}
           justifyContent={"flex-start"}
         >
-          <Checkbox
-            value="2000"
-            onChange={() => setShipChecked(!shipChecked)}
-          >
+          <Checkbox value="2000" onChange={() => setShipChecked(!shipChecked)}>
             Shipping insurance
           </Checkbox>
           <Checkbox
             value="1500"
-            onChange={() => setProtectCehecked(!protectCehecked)}
+            onChange={() => setProtectChecked(!protectChecked)}
           >
             Protection discount
           </Checkbox>
         </Stack>
       </CheckboxGroup>
       <Divider borderWidth={2} my={3} marginTop={5} />
+      <Flex>
+        <ShippingMethod
+          selectedAddress={selectedAddress}
+          totalWeight={totalWeight}
+        />
+      </Flex>
+      <Divider borderWidth={2} my={3} marginTop={5} />
       <Flex justifyContent={"space-between"}>
         <Text fontWeight={"bold"} fontSize={{ base: "15px", lg: "25px" }}>
           Subtotal :
         </Text>
         <Text fontWeight={"bold"} fontSize={{ base: "15px", lg: "25px" }}>
-          Rp. {subtotal}
+        {formatIDR(totalPrice)}
         </Text>
       </Flex>
     </Flex>
