@@ -32,7 +32,7 @@ const SignupSchema = Yup.object().shape({
 export const AddAdmin = ({ isOpen, onClose, setReload,reload}) => {
     const [warehouses, setWarehouse] = useState([]);
   const [selectedWarehouse, setSelectedWarehouse] = useState('');
-
+console.log(warehouses);
   const initialValues = {
     name: '',
     email: '',
@@ -65,7 +65,7 @@ export const AddAdmin = ({ isOpen, onClose, setReload,reload}) => {
   
   const getWarehouse = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/warehouse`);
+      const response = await axios.get(`http://localhost:8000/api/warehouse/list`);
       setWarehouse(response.data);
     } catch (error) {
       console.log(error);

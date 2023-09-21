@@ -1,37 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Icon } from '@chakra-ui/react';
 import { FaShoppingCart } from 'react-icons/fa';
-import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 export const CartNotif = () => {
-  const [numberOfItems, setNumberOfItems] = useState(0);
-  const token = localStorage.getItem("token");
+  const cart = useSelector(state => state.cart.value); 
 
-  const getCart = async () => {
-    try {
-      const response = await axios.get(`http://localhost:8000/api/cart`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const cartItems = response.data.result;
-      setNumberOfItems(cartItems.length);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    getCart();
-
-    const intervalId = setInterval(() => {
-      getCart();
-    }, 1000); 
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
-
+  const numberOfItems = cart.length;
+console.log(cart);
   return (
     <Box>
       <Icon as={FaShoppingCart} boxSize={5} />
