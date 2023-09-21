@@ -9,6 +9,7 @@ import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
 import { setCart } from '../../../redux/cartSlice';
 import { toast } from 'react-toastify';
+import { setPrice } from '../../../redux/totalPrice';
 export const CartItem = ({ cart,reload,setReload }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
@@ -32,6 +33,7 @@ export const CartItem = ({ cart,reload,setReload }) => {
       setIsModalOpen(false);
       setItemToDelete(null)
       dispatch(setCart(cartResponse.data.result))
+      dispatch(setPrice(cartResponse.data.totalPrice))
       setReload(!reload)
     } catch (error) {
       console.error(error);

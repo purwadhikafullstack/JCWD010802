@@ -20,6 +20,7 @@ import { AdminProducts } from "../views/Admin/Products";
 import { StockView } from "../views/Admin/Stock";
 import { DetailStockWarehouse } from "../views/Admin/components/Stock/WarehouseDetailStok";
 import { Cart } from "../pages/Cart";
+import { ConfirmCheckout } from "../views/CheckOut/components/confirmChekcout";
 
 const Routes = (
   <>
@@ -38,6 +39,7 @@ const Routes = (
  <Route path="/onboard" element={<Onboarding />} />
  <Route path="/forgot-password" element={<ForgotPass/>}/>
  <Route path="/reset-password/:token" element={<ResetPass/>}/>
+ <Route path="/checkout" element={<ConfirmCheckout/>}/>
    
     <Route path="/admin" element={<Admin/>}>
         <Route path="list-user" element={<UserCard/>}/>
