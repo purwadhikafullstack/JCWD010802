@@ -112,19 +112,25 @@ export const Sidebar = () => {
           <NavItem icon={BiSolidCategoryAlt} to="/admin/list-category">
             Category
           </NavItem>
-        <NavLink to="warehouse">
-          <NavItem icon={FaWarehouse} to="/admin/warehouse">
-            Warehouse
-          </NavItem>
+          <NavLink to="warehouse">
+            <NavItem icon={FaWarehouse} to="/admin/warehouse">
+              Warehouse
+            </NavItem>
           </NavLink>
-        <NavLink to="product-list">
-          <NavItem icon={AiFillGift} to="/admin/product-list">Products</NavItem>
-        </NavLink>
-        <NavLink to="warehouse-stock">
-          <NavItem to="/admin/warehouse-stock" icon={FaClipboardCheck}>Stock</NavItem>
-        </NavLink>
-        <NavItem icon={HiCode}>Integrations</NavItem>
-        <NavItem icon={BsGearFill}>Settings</NavItem>
+          <NavLink to="product-list">
+            <NavItem icon={AiFillGift} to="/admin/product-list">
+              Products
+            </NavItem>
+          </NavLink>
+          <NavLink to="warehouse-stock">
+            <NavItem to="/admin/warehouse-stock" icon={FaClipboardCheck}>
+              Stock
+            </NavItem>
+          </NavLink>
+          <NavLink to="report">
+            <NavItem icon={HiCode}>Report</NavItem>
+          </NavLink>
+          <NavItem icon={BsGearFill}>Settings</NavItem>
         </NavLink>
       </Flex>
     </Box>

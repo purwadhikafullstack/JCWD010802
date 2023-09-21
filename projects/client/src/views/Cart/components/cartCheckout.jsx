@@ -1,6 +1,7 @@
 import { Box, Button, Divider, HStack, Heading, Text, VStack } from "@chakra-ui/react";
 import formatIDR from "../../../helpers/formatIDR";
 import { useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 
 export const CartCheckout = () => {
   const cart = useSelector((state) => state.cart.value);
@@ -48,9 +49,11 @@ export const CartCheckout = () => {
           <Heading fontSize={"2xl"}>Total Price</Heading>
           <Heading fontSize={"2xl"}>{formatIDR(total)}</Heading>
         </HStack>
+        <NavLink to={"/checkout"}>
         <Button colorScheme="green" mt={5} w={"full"}>
           Buy
         </Button>
+        </NavLink>
       </Box>
     </>
   );

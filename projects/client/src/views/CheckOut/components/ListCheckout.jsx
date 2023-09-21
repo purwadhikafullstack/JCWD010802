@@ -77,8 +77,7 @@ export const CheckoutList = ({ selectedAddress }) => {
           <Flex key={item.product.id}>
             <Image
               src={`http://localhost:8000/productImg/${item.product.productImg}`}
-              maxW={{ base: "50px", sm: "100px" }}
-              objectFit="cover"
+              h="100px" w="100px" objectFit={"cover"}
               mr={5}
             />
             <Stack>

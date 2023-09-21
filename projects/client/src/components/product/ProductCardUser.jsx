@@ -17,9 +17,10 @@ export const ProductCardUser = ({ name, price, image, category, reload, setReloa
         <Box>
           <Image
             src={`http://localhost:8000/productImg/${image}`}
-            w="full"
-            h="200px"
-            objectFit="contain"
+            w="180px"
+            h="180px"
+            objectFit="cover"
+            mb={2}
           />
         </Box>
         <Box>

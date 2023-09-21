@@ -16,7 +16,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BiSolidUser, BiSolidUserDetail } from "react-icons/bi";
 import { UserProfileModal } from "./userProfileModal";
-import { FaWarehouse } from "react-icons/fa";
+import { FaImage, FaWarehouse } from "react-icons/fa";
 import { PaginationAddress } from "../pagination";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -105,15 +105,27 @@ export const UserCard = () => {
             boxShadow={"2xl"}
             padding={4}
           >
-            <Flex bg="blue.200">
-              <Image
-                objectFit="cover"
-                boxSize="100%"
-                src={
-                  "https://images.unsplash.com/photo-1520810627419-35e362c5dc07?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
-                }
-                alt="#"
-              />
+            <Flex>
+            {item.profileImg ? (
+      <Image
+        w={"170px"}
+        h={"170px"}
+        src={`http://localhost:8000/profileImg/${item.profileImg}`}
+        alt="#"
+        objectFit="cover"
+      />
+    ) : (
+      <Box
+        w={"170px"}
+        h={"170px"}
+        bg="gray.200"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <FaImage size={40} color="gray" /> {/* Broken image icon */}
+      </Box>
+    )}
             </Flex>
             <Box>
               <Heading fontSize={"xl"} fontFamily={"body"}>
