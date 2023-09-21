@@ -1,7 +1,7 @@
 import {
   Badge,
   Box,
-  Button,
+  Divider,
   Flex,
   Heading,
   Icon,
@@ -9,20 +9,19 @@ import {
   InputGroup,
   InputLeftElement,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
-import { AddAddress } from "./modal/modalAddress/modalAddAdddress";
-import { EditAddress } from "./modal/modalAddress/modalEditAddress";
-import { DeleteAddress } from "./modal/modalAddress/modalDelete";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Sort } from "./modal/sortBy/sortBy";
-import { PrimaryAddress } from "./modal/modalAddress/modalPrimaryAddress";
 import { BsSearch } from "react-icons/bs";
+import { AddAddress } from "../../Profile/components/modal/modalAddress/modalAddAdddress";
 import { Pagination } from "../../../components/pagination/pagination";
+import { EditAddress } from "../../Profile/components/modal/modalAddress/modalEditAddress";
+import { PrimaryAddress } from "../../Profile/components/modal/modalAddress/modalPrimaryAddress";
 
-export const AddressCard = () => {
+export const AddressCheckout = ({ handleClick, selectedId }) => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const search = params.get("search") || "";
@@ -39,14 +38,14 @@ export const AddressCard = () => {
   const [onOpenModalPrimary, setOnOpenModalPrimary] = useState(false);
   const [onOpenModalEdit, setOnOpenModalEdit] = useState(false);
   const [reload, setReload] = useState(0);
-  const itemsPerPage = 5;
+  const itemsPerPage = 3;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const navigate = useNavigate();
 
   const AllAdrress = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/address?search=${search}&sort=${sort}&page=${currentPage}`,
+        `http://localhost:8000/api/address?search=${search}&sort=${sort}&page=${currentPage}&limit=3`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -96,8 +95,8 @@ export const AddressCard = () => {
 
   return (
     <Box>
-      <Flex justifyContent={"space-between"} gap={3}>
-        <InputGroup width={"60%"}>
+      <VStack>
+        <InputGroup>
           <Input
             variant="outline"
             placeholder="Search"
@@ -112,17 +111,14 @@ export const AddressCard = () => {
             <Icon as={BsSearch} color={"gray.500"} />
           </InputLeftElement>
         </InputGroup>
-        <Flex gap={3}>
-          <AddAddress
-            dataCities={dataCities}
-            dataProvince={dataProvince}
-            reload={reload}
-            setReload={setReload}
-          />
-          <Sort />
-        </Flex>
-      </Flex>
-      {address?.map((item, index) => (
+        <AddAddress
+          dataCities={dataCities}
+          dataProvince={dataProvince}
+          reload={reload}
+          setReload={setReload}
+        />
+      </VStack>
+      {address.map((item, index) => (
         <Box
           bgColor={"whiteAlpha.700"}
           p={5}
@@ -132,10 +128,13 @@ export const AddressCard = () => {
           display="flex"
           w="full"
           mb={5}
+          style={{
+            borderRight: selectedId === item.id ? "10px solid green" : "none",
+          }}
         >
-          <Flex width={"full"}>
-            <Box w="50%">
-              {item?.isPrimary ? (
+          <Flex width={"full"} direction={"column"}>
+            <Box w="100%">
+              {item.isPrimary ? (
                 <Badge colorScheme="whatsapp" mb={3}>
                   Primary address
                 </Badge>
@@ -143,46 +142,68 @@ export const AddressCard = () => {
               <Heading fontSize="24px" mb={5}>
                 Address {startIndex + index + 1}
               </Heading>
-              <Text>{`${item?.address?.address}, ${item?.address?.nama_kota}, ${item?.address?.nama_provinsi}`}</Text>
+              <Text>{`${item.address.address}, ${item.address.nama_kota}, ${item.address.nama_provinsi}`}</Text>
             </Box>
-            <Box w="50%">
+            <Box w="100%">
               <Flex
-                direction={{ base: "column", lg: "row" }}
-                gap={1}
-                justifyContent={"flex-end"}
-                align={{ base: "flex-end" }}
+                justifyContent={"flex-start"}
+                gap={3}
+                alignItems={"center"}
+                mt={"20px"}
               >
                 {item.isPrimary ? null : (
-                  <Button
-                    mb={5}
-                    colorScheme="whatsapp"
-                    size={"xs"}
-                    onClick={() => {
-                      setOnOpenModalPrimary(true);
-                      setSelectedAddress(item);
-                    }}
-                  >
-                    Set primary
-                  </Button>
+                  <>
+                    <Text
+                      as={"button"}
+                      fontWeight={"bold"}
+                      size={"xs"}
+                      onClick={() => {
+                        setOnOpenModalPrimary(true);
+                        setSelectedAddress(item);
+                      }}
+                      _hover={{ color: "green.500" }}
+                    >
+                      Set primary
+                    </Text>
+                    <Divider
+                      orientation="vertical"
+                      h={5}
+                      borderColor={"green"}
+                      borderWidth={1}
+                    />
+                  </>
                 )}
-                <Button
-                  mb={5}
-                  colorScheme="blue"
+                {selectedId === item.id ? null : (
+                  <>
+                    <Text
+                      as={"button"}
+                      fontWeight={"bold"}
+                      size={"xs"}
+                      onClick={() => handleClick(item.id)}
+                      _hover={{ color: "green.500" }}
+                    >
+                      Set as address
+                    </Text>
+                    <Divider
+                      orientation="vertical"
+                      h={5}
+                      borderColor={"green"}
+                      borderWidth={1}
+                    />
+                  </>
+                )}
+                <Text
+                  as={"button"}
+                  fontWeight={"bold"}
                   size={"xs"}
                   onClick={() => {
                     setOnOpenModalEdit(true);
                     setSelectedAddress(item);
                   }}
+                  _hover={{ color: "green.500" }}
                 >
                   Edit
-                </Button>
-                {item.isPrimary ? null : (
-                  <DeleteAddress
-                    id={item.id}
-                    reload={reload}
-                    setReload={setReload}
-                  />
-                )}
+                </Text>
               </Flex>
             </Box>
           </Flex>

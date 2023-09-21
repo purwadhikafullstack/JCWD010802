@@ -1,11 +1,13 @@
 import { CartItem } from "./components/cartItem"
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Box, Flex, Heading } from "@chakra-ui/react";
+import { Box, Flex, Heading, Spacer } from "@chakra-ui/react";
 import { CartCheckout } from "./components/cartCheckout";
 export const CartView = () => {
     const token = localStorage.getItem("token");
     const [cart,setCart] = useState([])
+    const [total,setTotal] = useState([])
+    const [reload,setReload] = useState(0)
   
     const getCart = async () => {
       try {
@@ -14,22 +16,23 @@ export const CartView = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setCart(response.data.result)
         console.log(response);
+        setCart(response.data.result)
+        setTotal(response.data.totalPrice)
       } catch (error) {
         console.error(error);
       }
     }
+ 
   
     useEffect(() => {
       getCart();
-    },[])
+    },[reload])
     return(
-        <Box pt={20}>
-        <Heading>Cart</Heading>
-        <Flex justifyContent={"center"} gap={5}>
-        <CartItem cart={cart}/>
-        <CartCheckout cart={cart}/>
+        <Box pt={20} minH={"100vh"} px={{base: "20px", lg: "50px"}}maxW="100vw">
+        <Flex justifyContent={"center"} py={10}>
+        <CartItem cart={cart} reload={reload} setReload={setReload}/>
+        <CartCheckout cart={cart}  total={total} />
         </Flex>
         </Box>
     )
