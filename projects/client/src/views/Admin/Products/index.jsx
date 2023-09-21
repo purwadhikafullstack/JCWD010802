@@ -68,7 +68,7 @@ export const AdminProducts = () => {
             <Flex mx="5">
                 <ProductList reload={triggerReload}  product={product} category={category} />
             </Flex>
-            <Pagination  totalpage={totalPage}/>
+            <Pagination totalpage={totalPage}/>
         </Flex>
     )
 }

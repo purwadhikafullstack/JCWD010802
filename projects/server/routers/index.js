@@ -11,6 +11,7 @@ const warehouseRouter = require("./warehouseRouter")
 const authRouters = require('./authRouters')
 const cartRouter = require('./cartRouter')
 const orderRouter = require('./orderRouter')
+const shippingRouter = require('./shippingRouter')
 
 
 
@@ -27,5 +28,6 @@ module.exports= {
     stockRouter,
     categoryRouter,
     cartRouter,
-    orderRouter
+    orderRouter,
+    shippingRouter
 }
