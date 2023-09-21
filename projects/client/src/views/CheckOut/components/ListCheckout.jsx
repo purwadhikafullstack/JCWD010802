@@ -19,6 +19,7 @@ export const CheckoutList = ({ selectedAddress }) => {
   const [subtotal, setSubtotal] = useState(0);
   const [shipChecked, setShipChecked] = useState(false);
   const [protectChecked, setProtectChecked] = useState(false);
+  
   const cost = parseFloat(useSelector((state) => state.cost.value));
 
   const Cart = async () => {
@@ -63,8 +64,7 @@ export const CheckoutList = ({ selectedAddress }) => {
       newSubtotal += 1500;
     }
     setSubtotal(newSubtotal);
-  };
-  
+  };  
   const allWeight = cartItems.reduce((total, item) => {
     return total + item.product.weight;
   }, 0);

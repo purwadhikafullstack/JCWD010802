@@ -38,8 +38,7 @@ export const CardCheckout = () => {
     } catch (error) {
       console.error(error);
     }
-  };
-  
+  };  
   const handleClick = (id) => {
     const selected = addresses.find((item) => item.id === id);
     setSelectedAddress(selected);

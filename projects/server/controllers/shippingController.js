@@ -5,14 +5,12 @@ module.exports = {
   findNearestWarehouse: async (req, res) => {
     try {
       const { lat, lng } = req.query; 
-
       const userLat = parseFloat(lat);
       const userLon = parseFloat(lng);
 
       if (isNaN(userLat) || isNaN(userLon)) {
         return res.status(400).json({ error: 'Invalid user location coordinates.' });
       }
-
       const warehouses = await warehouse.findAll({ include: { model: address } });
 
       if (warehouses.length === 0) {
@@ -21,6 +19,7 @@ module.exports = {
 
       let nearestWarehouse = null;
       let shortestDistance = Infinity;
+      
       warehouses.forEach((warehouse) => {
         const distance = calculateDistance(userLat, userLon, warehouse.address.lat, warehouse.address.lng);
         if (distance < shortestDistance) {
