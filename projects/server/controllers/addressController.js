@@ -19,7 +19,7 @@ module.exports = {
             const response = await axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(query)}&key=${apiKey}`);
             if (response.status === 200 && response.data.results.length > 0) {
                 const { lat, lng } = response.data.results[0].geometry;
-                const result = await addresses.create({ address, kota, provinsi, kode_pos, lat, lng: lng });
+                const result = await addresses.create({ address, kota, nama_kota: city.data.rajaongkir.results.city_name, provinsi, nama_provinsi: city.data.rajaongkir.results.province,kode_pos, lat, lng: lng });
                 const primary = await userAddresses.findOne({where: {userId:req.user.id,isPrimary: true}})
                 if (!primary) {
                     await userAddresses.create({userId:req.user.id,addressId:result.id})
@@ -110,7 +110,7 @@ module.exports = {
             const response = await axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(query)}&key=${apiKey}`);
             if (response.status === 200 && response.data.results.length > 0) {
                 const { lat, lng } = response.data.results[0].geometry;
-                const result = await addresses.update({ address, kota, provinsi, kode_pos, lat, lng: lng },{where : { id }});
+                const result = await addresses.update({ address, kota, nama_kota: city.data.rajaongkir.results.city_name, provinsi, nama_provinsi: city.data.rajaongkir.results.province,kode_pos, lat, lng: lng },{where : { id }});
                 res.status(200).send({
                     status: true,
                     message: 'Success to update your address',
