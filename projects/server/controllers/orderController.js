@@ -4,7 +4,12 @@ const calculateDistance = require('../utils/calculateDistance');
 module.exports = {
     checkout: async (req, res) => {
         try {
-            const { cartId, addressId,shippingMethod, shippingCost } = req.query;
+            const {
+                cartId,
+                addressId,
+                shippingMethod,
+                shippingCost,
+            } = req.body; 
             const findCartItem = await cartItem.findAll({ where: { cartId: cartId } });
             const findAddress = await address.findOne({ where: { id: addressId } });
             const findCart = await cart.findOne({where:{userId:req.user.id, isCheckOut:false}})
@@ -99,7 +104,8 @@ module.exports = {
             res.status(200).send({
                 response,
                 cartCheckout,
-                stockWarehouse
+                stockWarehouse,
+                status: true
             });
 
         } catch (error) {

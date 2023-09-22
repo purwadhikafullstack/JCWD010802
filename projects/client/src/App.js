@@ -5,7 +5,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { routes } from "./routes";
 import { useDispatch } from "react-redux";
 import { setValue } from "./redux/userSlice";
-import { setCart } from "./redux/cartSlice";
+import { setCart,setCartId } from "./redux/cartSlice";
 import { setPrice } from "./redux/totalPrice";
 
 function App() {
@@ -34,6 +34,7 @@ function App() {
         },
       });
       dispatch(setCart(response.data.result))
+      dispatch(setCartId(response.data.Cart.id))
       dispatch(setPrice(response.data.totalPrice))
     } catch (error) {
       console.error(error);
