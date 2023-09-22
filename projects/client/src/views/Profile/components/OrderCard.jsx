@@ -1,8 +1,8 @@
 import { Badge, Flex, Image, Text } from "@chakra-ui/react"
-// import { ButtonPaymentProof } from "./ButtonPaymentProof"
+import { ButtonPaymentProof } from "./ButtonPaymentProof"
 import { ButtonDetailOrder } from "./ButtonDetailOrder"
-// import { ButtonConfirmOrder } from "./ButtonConfirmOrder"
-// import { ButtonCancelOrder } from "./ButtonCancelOrder"
+import { ButtonConfirmOrder } from "./ButtonConfirmOrder"
+import { ButtonCancelOrder } from "./ButtonCancelOrder"
 import formatIDR from "../../../helpers/formatIDR"
 import dateFormater from "../../../helpers/dateFormater"
 
@@ -36,10 +36,10 @@ export const OrderCard = ({ data }) => {
                 </Flex>
             </Flex>
             <Flex justify="flex-end" gap={2}>
-                {/* {data.statusId === 1 ? <ButtonCancelOrder id={data.id} /> : null}
-                {data.statusId === 1 ? <ButtonPaymentProof id={data.id}/> : null} */}
+                {data.statusId === 1 ? <ButtonCancelOrder id={data.id} /> : null}
+                {data.statusId === 1 ? <ButtonPaymentProof id={data.id}/> : null}
                 <ButtonDetailOrder data={data} />
-                {/* {data.statusId === 4 ? <ButtonConfirmOrder id={data.id} /> : null} */}
+                {data.statusId === 4 ? <ButtonConfirmOrder id={data.id} /> : null}
             </Flex>
         </Flex>
     )
