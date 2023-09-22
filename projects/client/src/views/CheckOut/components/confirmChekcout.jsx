@@ -4,8 +4,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useLocation } from 'react-router-dom';
-import { TbReload } from "react-icons/tb";
+import convertToUppercase from "../../../helpers/upperCase";
 
 export const ConfirmCheckout = ({addressId}) => {
   const cartId = useSelector((state) => state.cart.id);
@@ -15,8 +14,6 @@ export const ConfirmCheckout = ({addressId}) => {
   const ship = useSelector((state) => state.cost.ship)
   const token = localStorage.getItem("token")
   const chekoutPrice = total+cost
-  const location = useLocation();
-console.log(cartId);
   const handleBuyClick = async () => {
     try {
       const dataToSend = {
@@ -77,6 +74,14 @@ console.log(cartId);
           ) : (
             <Text>No items in the cart.</Text>
           )}
+                  <HStack  justifyContent={"space-between"} >
+                    <Text   color={"gray.500"} fontSize={"18px"}>
+                    Shipping Method
+                    </Text>
+                    <Text   color={"gray.500"} fontSize={"18px"}>
+                      {convertToUppercase(ship)}
+                    </Text>
+                  </HStack>
                   <HStack  justifyContent={"space-between"} >
                     <Text   color={"gray.500"} fontSize={"18px"}>
                     Shipping Cost
