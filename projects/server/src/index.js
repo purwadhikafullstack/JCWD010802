@@ -39,7 +39,7 @@ app.use('/api/warehouse/',warehouseRouter)
 app.use('/api/auth/',authRouters)
 app.use("/api/stock", stockRouter)
 app.use("/api/cart", cartRouter)
-app.use("/api/order", orderRouter)
+app.use("/api/userOrder", orderRouter)
 app.use("/api/ship", shippingRouter)
 
 app.get("/api", (req, res) => {

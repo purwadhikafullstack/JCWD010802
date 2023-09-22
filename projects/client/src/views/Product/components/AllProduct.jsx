@@ -45,7 +45,7 @@ export const AllProduct = () => {
   }, [search, sort, category, minPrice, maxPrice, currentPage, reload]);
 
   return (
-    <Box minH={"100vh"} bgColor={"#edf3f8"} w={"full"}>
+    <Box minH={"100vh"} bgColor={"#edf3f8"} w={"full"} pb="20px">
       <Container maxW="container.lg" pt={"100px"}>
         <DrawerSorting />
         <Grid
