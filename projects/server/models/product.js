@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       product.belongsTo(models.category)
       product.hasOne(models.stock)
+      product.hasOne(models.orderItem)
     }
   }
   product.init({
