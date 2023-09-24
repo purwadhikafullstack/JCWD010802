@@ -18,7 +18,13 @@ const runAutoCancel = async () => {
         { model: status }
       ],
       where: {
-        [Op.between]: [threeDaysAgoStart, threeDaysAgoEnd]
+        createdAt: {
+            [Op.and]: {
+                [Op.gte]: threeDaysAgoStart,
+                [Op.lte]: threeDaysAgoEnd
+            }
+        },
+        paymentProof: null
       }
     });
 
@@ -31,7 +37,7 @@ const runAutoCancel = async () => {
         console.log(result);
     }
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 };
 

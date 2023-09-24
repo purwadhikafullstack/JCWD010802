@@ -8,7 +8,6 @@ const runAutoConfirm = async () => {
     const sevenDaysAgoEnd = moment().subtract(7, 'days').endOf('day').toDate();
 
     const orders = await order.findAll({
-      attributes: { exclude: ['updatedAt'] },
       include: [
         {
           model: orderItem,
@@ -18,7 +17,13 @@ const runAutoConfirm = async () => {
         { model: status }
       ],
       where: {
-        [Op.between]: [sevenDaysAgoStart, sevenDaysAgoEnd]
+        updatedAt: {
+            [Op.and]: {
+                [Op.gte]: sevenDaysAgoStart,
+                [Op.lte]: sevenDaysAgoEnd
+            }
+        },
+        statusId: 4
       }
     });
 
