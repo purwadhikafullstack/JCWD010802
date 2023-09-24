@@ -6,6 +6,7 @@ import { OrderCard } from "./OrderCard"
 
 export const OrderList = () => {
     const [order, setOrder] = useState([])
+    const [reload, setReload] = useState(0)
     const token = localStorage.getItem("token")
     const headers = {
         Authorization: `Bearer ${token}`
@@ -20,14 +21,17 @@ export const OrderList = () => {
             console.log(error);
         }
     }
+    const triggerReload = () => {
+        setReload(!reload)
+    }
     useEffect(() => {
         getOrderList()
-    },[])
+    },[reload])
     return (
         <Flex w="full" direction="column" gap={5}>
             {order?.map((item) => (
                 <Flex w="full" key={item.id} direction="column" >
-                    <OrderCard data={item} />
+                    <OrderCard reload={triggerReload} data={item} />
                 </Flex>
             ))}
         </Flex>

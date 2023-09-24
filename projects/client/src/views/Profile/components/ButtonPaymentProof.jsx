@@ -3,7 +3,7 @@ import { PaymentProof } from "./modal/modalOrder/PaymentProof"
 import { useState } from "react"
 
 
-export const ButtonPaymentProof = ({ id }) => {
+export const ButtonPaymentProof = ({ id, reload }) => {
     const [isOpen, setIsOpen] = useState(false)
     
     const openModal = () => {
@@ -15,7 +15,7 @@ export const ButtonPaymentProof = ({ id }) => {
     return (
         <>
             <Button onClick={openModal} bg={"#517664"} color={'white'} _hover={{bg:"#2d3319"}}>Upload Payment</Button>
-            <PaymentProof isOpen={isOpen} onClose={closeModal} id={id} />
+            <PaymentProof isOpen={isOpen} onClose={closeModal} id={id} reload={reload} />
         </>
     )
 }

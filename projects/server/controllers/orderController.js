@@ -50,13 +50,14 @@ module.exports = {
     uploadPayment: async (req, res) => {
         try {
             const paymentImg = req.file.filename
+            console.log(paymentImg);
             const { id } = req.params
 
             const isOrderExist = await order.findOne({ where: { id } })
             if (!isOrderExist) throw { message: "Order not found!" }
             if (isOrderExist.userId !== req.user.id) throw { message: "Invalid account" }
             if (isOrderExist.paymentProof) throw { message: "Order already paid" }
-            const result = await order.update({ paymentProof: paymentImg }, {
+            const result = await order.update({ paymentProof: paymentImg, statusId: 2 }, {
                 where: { id, userId: req.user.id }
             })
             res.status(200).send({
@@ -78,7 +79,7 @@ module.exports = {
             if (isOrderExist.userId !== req.user.id) throw { message: "Invalid account" }
             if (isOrderExist.paymentProof) throw { message: "Cannot cancel your order" }
             const result = await order.update({ statusId: 6 }, {
-                where: { id, userId: req.user.id }
+                where: { id }
             })
             res.status(200).send({
                 status: true,

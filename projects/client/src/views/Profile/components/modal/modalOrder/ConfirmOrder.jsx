@@ -1,20 +1,32 @@
 import { Button, Flex, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from "@chakra-ui/react"
+import { ToastContainer, toast } from 'react-toastify';
 import axios from "axios"
+import 'react-toastify/dist/ReactToastify.css';
 
-export const ConfirmOrder = ({ isOpen, onClose, id }) => {
+export const ConfirmOrder = ({ isOpen, onClose, id, reload }) => {
     const token = localStorage.getItem("token")
     const headers = {
         Authorization: `Bearer ${token}`
     }
     const handleConfirm = async () => {
         try {
-            const response = await axios.patch(`http://localhost:8000/api/userOrder/confirm/${id}`, headers)
-            console.log(response);
+            const response = await axios.patch(`http://localhost:8000/api/userOrder/confirm/${id}`, {}, {headers})
+            toast.success('Your order have arrived', {
+                position: 'top-right',
+                autoClose: 3000, 
+            });
+            reload()
+            onClose()
         } catch (error) {
-            console.log(error);
+            toast.error("Failed to confirm your order arrival", {
+                position: "top-right",
+                autoClose: 3000
+            })
         }
     }
     return (
+        <>
+        <ToastContainer />
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
@@ -23,15 +35,16 @@ export const ConfirmOrder = ({ isOpen, onClose, id }) => {
                 </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <Heading>Are you sure your order have arrived?</Heading>
+                    <Heading fontSize="22px">Are you sure your order have arrived?</Heading>
                 </ModalBody>
                 <ModalFooter>
                     <Flex w="full" justifyContent="flex-end">
                         <Button onClick={onClose}>Close</Button>
-                        <Button onClick={onClose}>Confirm</Button>
+                        <Button onClick={handleConfirm}>Confirm</Button>
                     </Flex>
                 </ModalFooter>
             </ModalContent>
         </Modal>
+        </>
     )
 }
