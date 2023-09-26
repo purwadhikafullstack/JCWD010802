@@ -3,7 +3,7 @@ import { useState } from "react"
 import { CancelOrder } from "./modal/modalOrder/CancelOrder"
 
 
-export const ButtonCancelOrder = ({ id }) => {
+export const ButtonCancelOrder = ({ id, reload }) => {
     const [isOpen, setIsOpen] = useState(false)
     
     const openModal = () => {
@@ -15,7 +15,7 @@ export const ButtonCancelOrder = ({ id }) => {
     return (
         <>
             <Button onClick={openModal} bg={"red"} color={'white'} _hover={{bg:"#2d3319"}}>Cancel Order</Button>
-            <CancelOrder isOpen={isOpen} onClose={closeModal} id={id}/>
+            <CancelOrder isOpen={isOpen} onClose={closeModal} id={id} reload={reload}/>
         </>
     )
 }
