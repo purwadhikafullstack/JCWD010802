@@ -11,10 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      order.hasMany(models.orderItem)
-      order.belongsTo(models.user)
       order.belongsTo(models.status)
+      order.belongsTo(models.user)
       order.belongsTo(models.address)
+      order.belongsTo(models.cart)
+      order.hasMany(models.orderItem)
+
     }
   }
   order.init({

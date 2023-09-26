@@ -33,6 +33,7 @@ const Routes = (
       </Route>
       <Route path="/product/:id" element={<DetailProduct />} />
     </Route>
+
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
     <Route path="/verified/:token" element={<Verified />} />

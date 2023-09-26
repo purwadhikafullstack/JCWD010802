@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       journal.belongsTo(models.stock)
+      journal.belongsTo(models.order)
     }
   }
   journal.init({

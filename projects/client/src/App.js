@@ -1,15 +1,18 @@
 import axios from "axios";
 import "./App.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { routes } from "./routes";
 import { useDispatch } from "react-redux";
 import { setValue } from "./redux/userSlice";
+import { setCart,setCartId } from "./redux/cartSlice";
+import { setPrice } from "./redux/totalPrice";
 
 function App() {
   const router = createBrowserRouter(routes);
   const token = localStorage.getItem("token")
   const dispatch = useDispatch()
+
 
   const keepLogin = async () => {
     if (token) {
@@ -23,9 +26,24 @@ function App() {
       
     }
   }
+  const userCart = async()=>{
+    try {
+      const response = await axios.get(`http://localhost:8000/api/cart`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      dispatch(setCart(response.data.result))
+      dispatch(setCartId(response.data.Cart.id))
+      dispatch(setPrice(response.data.totalPrice))
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   useEffect(() => {
     keepLogin()
+    userCart()
   }, [])
 
   return (

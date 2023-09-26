@@ -13,6 +13,7 @@ import { ModalChooseAddress } from "./modal/modalChooseAddress";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CheckoutList } from "./ListCheckout";
+import { ConfirmCheckout } from "./confirmChekcout";
 
 export const CardCheckout = () => {
   const token = localStorage.getItem("token");
@@ -58,7 +59,9 @@ export const CardCheckout = () => {
   }, [primaryAddress]);
   
   return (
-    <Flex direction="column" w={"60%"} p={{ base: "40px", lg: "100px" }}>
+    <Flex p={{ base: "40px", lg: "100px" }}>
+
+    <Flex direction="column" w={"60%"} >
       <Heading fontSize={{ base: "20px", lg: "30px" }}>Checkout</Heading>
       <Divider borderWidth={4} my={3} />
       <Text fontWeight={"bold"} fontSize={{ base: "15px", lg: "25px" }}>
@@ -102,7 +105,7 @@ export const CardCheckout = () => {
           if (item.id === selectedAddress.id) {
             return (
               <Box
-                key={item.id}
+              key={item.id}
                 borderRadius="md"
                 display="flex"
                 flexDirection="row"
@@ -145,7 +148,7 @@ export const CardCheckout = () => {
           setOnOpenModalChooseAddress(true);
         }}
         w={"120px"}
-      >
+        >
         Other address
       </Button>
       <Divider borderWidth={2} my={3} marginTop={5} />
@@ -155,8 +158,10 @@ export const CardCheckout = () => {
         onClose={() => setOnOpenModalChooseAddress(false)}
         handleClick={handleClick}
         selectedId={selectedAddress ? selectedAddress.id : 0}
-      />
+        />
       <ToastContainer/>
     </Flex>
+    <ConfirmCheckout addressId={selectedAddress}/>
+        </Flex>
   );
 };

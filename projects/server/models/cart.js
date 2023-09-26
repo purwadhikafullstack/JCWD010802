@@ -15,7 +15,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   cart.init({
-    totalPrice: DataTypes.INTEGER
+    totalPrice: DataTypes.INTEGER,
+    isCheckOut: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
   }, {
     sequelize,
     modelName: 'cart',

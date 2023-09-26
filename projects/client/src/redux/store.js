@@ -11,6 +11,6 @@ export const store = configureStore({
         regis: regisSlice,
         cart: cartSlice,
         total: totalPriceSlice,
-        cost: costSlice
+        cost: costSlice,
     }
 })
