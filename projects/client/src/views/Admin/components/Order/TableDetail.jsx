@@ -30,6 +30,15 @@ export const TableDetail = ({ id }) => {
     const handleCancel = async () => {
         try {
            const response = await axios.put(`http://localhost:8000/api/adminOrder/cancel/${id}`, {}, { headers }) 
+           console.log(response);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const handleSend = async () => {
+        try {
+           const response = await axios.put(`http://localhost:8000/api/adminOrder/send/${id}`, {}, { headers }) 
+           console.log(response);
         } catch (error) {
             console.log(error);
         }
@@ -90,6 +99,9 @@ export const TableDetail = ({ id }) => {
                             </Button>
                             <Button bg="green" color="white" onClick={handleConfirm}>
                                 Confirm
+                            </Button>
+                            <Button bg="green" color="white" onClick={handleSend}>
+                                Send Order
                             </Button>
                         </Flex>
                     </Td>
