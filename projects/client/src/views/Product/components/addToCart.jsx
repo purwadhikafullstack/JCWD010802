@@ -19,6 +19,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from 'react-router-dom';
 import { setCart } from '../../../redux/cartSlice';
+import { setPrice } from '../../../redux/totalPrice';
 
 export const AddToCart = ({ detail, stock }) => {
   const [count, setCount] = useState(0);
@@ -63,7 +64,9 @@ export const AddToCart = ({ detail, stock }) => {
         },
       });
       setReload(!reload);
+      console.log(cartResponse);
       dispatch(setCart(cartResponse.data.result))
+      dispatch(setPrice(cartResponse.data.Cart.totalPrice))
       toast.success("Product added to cart", { position: "top-center" });
     } catch (error) {
       console.error(error);

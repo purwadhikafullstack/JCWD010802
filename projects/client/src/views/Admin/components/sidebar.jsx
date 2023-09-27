@@ -21,7 +21,7 @@ import { HiCollection, HiCode } from "react-icons/hi";
 import { AiFillGift } from "react-icons/ai";
 import { BsGearFill } from "react-icons/bs";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { BiSolidCategoryAlt } from "react-icons/bi";
+import { BiSolidCategoryAlt, BiTransfer } from "react-icons/bi";
 export const Sidebar = () => {
   const sidebar = useDisclosure();
   const location = useLocation();
@@ -37,6 +37,7 @@ export const Sidebar = () => {
         mx="2"
         rounded="md"
         py="3"
+        mt={2}
         cursor="pointer"
         color={isActive ? "#9fd8cb" : "#2d3319"}
         _hover={{
@@ -89,7 +90,6 @@ export const Sidebar = () => {
       <Flex
         direction="column"
         as="nav"
-        gap={2}
         fontSize="sm"
         aria-label="Main Navigation"
       >
@@ -123,7 +123,9 @@ export const Sidebar = () => {
         <NavLink to="warehouse-stock">
           <NavItem to="/admin/warehouse-stock" icon={FaClipboardCheck}>Stock</NavItem>
         </NavLink>
-        <NavItem icon={HiCode}>Integrations</NavItem>
+        <NavLink to="mutation">
+          <NavItem to="/admin/mutation" icon={BiTransfer}>Request Stock</NavItem>
+        </NavLink>
         <NavItem icon={BsGearFill}>Settings</NavItem>
         </NavLink>
       </Flex>

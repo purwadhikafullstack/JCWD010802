@@ -51,7 +51,7 @@ export const CartCheckout = () => {
         </HStack>
         <NavLink to={"/checkout"}>
 
-        <Button colorScheme="green" mt={5} w={"full"}>
+        <Button colorScheme="green" mt={5} w={"full"} isDisabled={total===0}>
           Buy
         </Button>
         </NavLink>
