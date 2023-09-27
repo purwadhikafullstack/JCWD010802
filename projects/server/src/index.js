@@ -3,8 +3,13 @@ const db = require('../models')
 const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
+const schedule = require('node-schedule');
+
 
 const {userRouters, adminRouters, warehouseRouter, authRouters, authRouter, userRouter, addressRouter, rajaongkirRouter, productRouter, stockRouter, categoryRouter, cartRouter,shippingRouter,orderRouter, mutationRouter} = require('../routers')
+const { checkPaymentProof } = require("../schedulers/autoCancel");
+const runAutoCancel = require("../schedulers/autoCancel");
+const runAutoConfirm = require("../schedulers/autoConfirm");
 
 const PORT = process.env.PORT || 8000;
 const app = express();
@@ -39,9 +44,13 @@ app.use('/api/warehouse/',warehouseRouter)
 app.use('/api/auth/',authRouters)
 app.use("/api/stock", stockRouter)
 app.use("/api/cart", cartRouter)
-app.use("/api/order", orderRouter)
+app.use("/api/userOrder", orderRouter)
 app.use("/api/ship", shippingRouter)
 app.use("/api/mutation", mutationRouter)
+
+// Scheduler
+schedule.scheduleJob('0 0 * * *', runAutoCancel)
+schedule.scheduleJob('0 0 * * *', runAutoConfirm)
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);

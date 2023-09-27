@@ -15,11 +15,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   status.init({
-    status: DataTypes.STRING
+    name: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'status',
     timestamps:false
+
   });
   return status;
 };

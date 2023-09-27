@@ -19,10 +19,10 @@ const cartSlice = createSlice({
         setCartOut:(state,action) =>{
             state.value = {}
             state.id = 0
-        }
-        
-       
+        }        
 }})
 
+
 export const { setCart,setCartId, setCartOut  } = cartSlice.actions
+
 export default cartSlice.reducer

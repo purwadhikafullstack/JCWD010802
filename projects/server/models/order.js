@@ -15,6 +15,8 @@ module.exports = (sequelize, DataTypes) => {
       order.belongsTo(models.user)
       order.belongsTo(models.address)
       order.belongsTo(models.cart)
+      order.hasMany(models.orderItem)
+
     }
   }
   order.init({
