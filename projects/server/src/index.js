@@ -5,7 +5,7 @@ const cors = require("cors");
 const { join } = require("path");
 const schedule = require('node-schedule');
 
-const {userRouters, adminRouters, warehouseRouter, authRouters, authRouter, userRouter, addressRouter, rajaongkirRouter, productRouter, stockRouter, categoryRouter, cartRouter,shippingRouter,orderRouter} = require('../routers');
+const {userRouters, adminRouters, warehouseRouter, authRouters, authRouter, userRouter, addressRouter, rajaongkirRouter, productRouter, stockRouter, categoryRouter, cartRouter,shippingRouter,orderRouter, adminOrderRouter} = require('../routers');
 const { checkPaymentProof } = require("../schedulers/autoCancel");
 const runAutoCancel = require("../schedulers/autoCancel");
 const runAutoConfirm = require("../schedulers/autoConfirm");
@@ -45,6 +45,7 @@ app.use("/api/stock", stockRouter)
 app.use("/api/cart", cartRouter)
 app.use("/api/userOrder", orderRouter)
 app.use("/api/ship", shippingRouter)
+app.use("/api/adminOrder", adminOrderRouter)
 
 // Scheduler
 schedule.scheduleJob('0 0 * * *', runAutoCancel)

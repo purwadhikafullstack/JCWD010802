@@ -1,0 +1,10 @@
+.left-header {
+    text-align: left;
+    width: 40%; 
+    font-weight: bold;
+}
+  
+.right-data {
+    text-align: left;
+    width: 60%;
+}

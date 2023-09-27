@@ -26,7 +26,7 @@ console.log(cartId);
         shippingCost: cost,
       };
 
-      const response = await axios.post('http://localhost:8000/api/order', dataToSend,{
+      const response = await axios.post('http://localhost:8000/api/userOrder', dataToSend,{
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -19,7 +19,7 @@ import { MdHome } from "react-icons/md";
 import { FaRss, FaClipboardCheck, FaWarehouse, FaUsers } from "react-icons/fa";
 import { HiCollection, HiCode } from "react-icons/hi";
 import { AiFillGift } from "react-icons/ai";
-import { BsGearFill } from "react-icons/bs";
+import { BsGearFill, BsFillCartFill } from "react-icons/bs";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { BiSolidCategoryAlt } from "react-icons/bi";
 export const Sidebar = () => {
@@ -123,7 +123,9 @@ export const Sidebar = () => {
         <NavLink to="warehouse-stock">
           <NavItem to="/admin/warehouse-stock" icon={FaClipboardCheck}>Stock</NavItem>
         </NavLink>
-        <NavItem icon={HiCode}>Integrations</NavItem>
+        <NavLink to="">
+          <NavItem to="/admin/" icon={BsFillCartFill}>Order</NavItem>
+        </NavLink>
         <NavItem icon={BsGearFill}>Settings</NavItem>
         </NavLink>
       </Flex>

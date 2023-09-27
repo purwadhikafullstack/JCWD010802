@@ -15,6 +15,7 @@ module.exports = {
             const findCart = await cart.findOne({where:{userId:req.user.id, isCheckOut:false}})
             const warehouses = await warehouse.findAll({ include: { model: address } });
             
+            let orderItemId
             if (warehouses.length === 0) {
                 return res.status(404).send({ error: 'No warehouses found.' });
             }
@@ -53,6 +54,12 @@ module.exports = {
                     },
                 });
 
+                const items = await orderItem.create({
+                    productId: item.productId,
+                    quantity: item.quantity
+                })
+
+                orderItemId = items.id
                 const currentQuantityToSubtract = productQuantityToSubtract.get(sproduct.id) || 0;
                 productQuantityToSubtract.set(sproduct.id, currentQuantityToSubtract + item.quantity);
             }
@@ -64,8 +71,14 @@ module.exports = {
                 shippingMethod,
                 addressId,
                 cartId,
-                statusId:1
+                statusId:1,
+                warehouseId: nearestWarehouse
+            })
 
+            await orderItem.update({
+                orderId: response.id
+            },{
+                where: { id: orderItemId }
             })
 
             for (const [productId, totalQuantity] of productQuantityToSubtract.entries()) {
