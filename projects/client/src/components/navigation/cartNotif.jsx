@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Icon } from '@chakra-ui/react';
+import { Box, Flex, Icon } from '@chakra-ui/react';
 import { FaShoppingCart } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 
@@ -9,7 +9,7 @@ export const CartNotif = () => {
   const numberOfItems = cart.length;
 console.log(cart);
   return (
-    <Box>
+    <Flex direction="column" align="center">
       <Icon as={FaShoppingCart} boxSize={5} />
       {numberOfItems > 0 && (
         <Box
@@ -29,6 +29,6 @@ console.log(cart);
           {numberOfItems}
         </Box>
       )}
-    </Box>
+    </Flex>
   );
 };

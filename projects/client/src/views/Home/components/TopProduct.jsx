@@ -1,51 +1,41 @@
 import { Flex, Heading } from "@chakra-ui/react"
 import { ProductCardUser } from "../../../components/product/ProductCardUser"
+import axios from "axios"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 
 export const TopProduct = () => {
-    const data = [
-        {
-            name: "iPhone 20 Pro Max XXL",
-            price: "35000000",
-            img: "https://cdn.eraspace.com/media/catalog/product/i/p/iphone_13_green_1_4.jpg"
-        },
-        {
-            name: "iPhone 20 Pro Max XXL",
-            price: "35000000",
-            img: "https://cdn.eraspace.com/media/catalog/product/i/p/iphone_13_green_1_4.jpg"
-        },
-        {
-            name: "iPhone 20 Pro Max XXL",
-            price: "35000000",
-            img: "https://cdn.eraspace.com/media/catalog/product/i/p/iphone_13_green_1_4.jpg"
-        },
-        {
-            name: "iPhone 20 Pro Max XXL",
-            price: "35000000",
-            img: "https://cdn.eraspace.com/media/catalog/product/i/p/iphone_13_green_1_4.jpg"
-        },
-        {
-            name: "iPhone 20 Pro Max XXL",
-            price: "35000000",
-            img: "https://cdn.eraspace.com/media/catalog/product/i/p/iphone_13_green_1_4.jpg"
-        },
-        {
-            name: "iPhone 20 Pro Max XXL",
-            price: "35000000",
-            img: "https://cdn.eraspace.com/media/catalog/product/i/p/iphone_13_green_1_4.jpg"
-        },
-        {
-            name: "iPhone 20 Pro Max XXL",
-            price: "35000000",
-            img: "https://cdn.eraspace.com/media/catalog/product/i/p/iphone_13_green_1_4.jpg"
-        },
-    ]
+    const [data, setData] = useState()
+    const navigate = useNavigate()
+
+    const getData = async () => {
+        try {
+            const response = await axios.get("http://localhost:8000/api/product?sort=za")
+            setData(response.data.result)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const onClick = (id) => {
+        navigate(`product/${id}`)
+    }
+    useEffect(() => {
+        getData()
+    },[])
     return (
         <Flex direction="column" px={{base: "20px", lg: "50px"}} py="30px" maxW="100vw">
             <Heading fontSize="22px">Top Selling Products</Heading>
             <Flex gap={3} mt="20px" overflowX="scroll" pb="20px" maxW="1400px">
-                <ProductCardUser data={data} />
-                {/* <ProductCard data={data} /> */}
+                {data?.map((item) => (
+                    <ProductCardUser 
+                        name={item.name}
+                        price={item.price}
+                        image={item.productImg}
+                        category={item.category.name}
+                        onClick={() => onClick(item.id)}
+                    />
+                ))}
             </Flex>
         </Flex>
     )
