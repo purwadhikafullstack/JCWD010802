@@ -21,6 +21,8 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { PaginationAddress } from "../pagination";
 import { BsSearch } from "react-icons/bs";
+import { useSelector } from 'react-redux';
+
 
 export const StockHistory = () => {
   const [history, setHistory] = useState();
@@ -33,11 +35,15 @@ export const StockHistory = () => {
   const warehouseId = params.get("warehouseId") || "";
   const monthly = params.get("monthly") || "";
   const currentPage = Number(params.get("page")) || 1;
+  const user = useSelector(state => state.user.value)
 
   const getStockHistory = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/report?search=${search}&warehouseId=${warehouseId}&monthly=${monthly}&page=${currentPage}`
+        `http://localhost:8000/api/report?search=${search}&warehouseId=${warehouseId}&monthly=${monthly}&page=${currentPage}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
       );
       setHistory(response.data.result);
       setPage(response.data.totalpage);
@@ -51,7 +57,6 @@ export const StockHistory = () => {
       const response = await axios.get(
         `http://localhost:8000/api/warehouse/list`
       );
-      // console.log(response.data);
       setWarehouse(response.data);
     } catch (error) {
       console.log(error);
@@ -85,20 +90,22 @@ export const StockHistory = () => {
         alignItems={"center"}
       >
         <Flex maxW={"50vw"} gap={5} mt={6}>
+          {user.roleId === 3 ? 
           <Select
-            id="warehouseSelect"
-            value={warehouseId}
-            onChange={handleWarehouseChange}
-            maxWidth="200px"
-            borderColor={"2px solid black"}
-          >
-            <option value="">Select a warehouse</option>
-            {warehouse?.map((warehouse) => (
-              <option key={warehouse.id} value={warehouse.id}>
-                {warehouse.name}
-              </option>
-            ))}
-          </Select>
+          id="warehouseSelect"
+          value={warehouseId}
+          onChange={handleWarehouseChange}
+          maxWidth="200px"
+          borderColor={"2px solid black"}
+        >
+          <option value="">Select a warehouse</option>
+          {warehouse?.map((warehouse) => (
+            <option key={warehouse.id} value={warehouse.id}>
+              {warehouse.name}
+            </option>
+          ))}
+        </Select> : null
+        }
           <InputGroup>
             <Input
               variant="outline"
