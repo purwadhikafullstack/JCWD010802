@@ -1,8 +1,8 @@
 import { Flex, Heading } from "@chakra-ui/react"
-import { ProductCardUser } from "../../../components/product/ProductCardUser"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
+import { ProductCard } from "../../../components/product/ProductCard"
 
 export const NewProduct = () => {
     const [data, setData] = useState()
@@ -10,7 +10,7 @@ export const NewProduct = () => {
 
     const getData = async () => {
         try {
-            const response = await axios.get("http://localhost:8000/api/product")
+            const response = await axios.get("http://localhost:8000/api/product?limit=8")
             setData(response.data.result)
         } catch (error) {
             console.log(error);
@@ -27,7 +27,7 @@ export const NewProduct = () => {
             <Heading fontSize="22px">Top Selling Products</Heading>
             <Flex gap={3} mt="20px" overflowX="scroll" pb="20px" maxW="1400px">
                 {data?.map((item) => (
-                    <ProductCardUser 
+                    <ProductCard 
                         name={item.name}
                         price={item.price}
                         image={item.productImg}

@@ -1,4 +1,4 @@
-import { Box, Container, Grid, GridItem, useMediaQuery } from "@chakra-ui/react";
+import { Box, Container, Flex, Grid, GridItem, useMediaQuery } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -48,16 +48,10 @@ export const AllProduct = () => {
     <Box minH={"100vh"} bgColor={"#edf3f8"} w={"full"} pb="20px">
       <Container maxW="container.lg" pt={"100px"}>
         <DrawerSorting />
-        <Grid
-          templateColumns={{
-            base: "1fr",
-            sm: "1fr 1fr",
-            md: "repeat(3, 1fr)",
-            lg: "repeat(5, 1fr)",
-          }}
-        >
+        <Flex wrap="wrap" justifyContent="center"
+        gap={3}>
           {product.map((item, index) => (
-            <GridItem key={index}>
+            <Flex key={index}>
               <ProductCardUser
                 onClick={() => handleClick(item.id)}
                 name={item.name}
@@ -67,9 +61,9 @@ export const AllProduct = () => {
                 reload={reload}
                 setReload={setReload}
               />
-            </GridItem>
+            </Flex>
           ))}
-        </Grid>
+        </Flex>
       </Container>
       <Pagination totalpage={page} />
     </Box>

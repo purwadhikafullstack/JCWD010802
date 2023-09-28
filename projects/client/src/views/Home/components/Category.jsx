@@ -11,7 +11,7 @@ export const Category = () => {
 
     const getCategory = async () => {
         try {
-            const response = await axios.get("http://localhost:8000/api/category")
+            const response = await axios.get("http://localhost:8000/api/category?limit=7")
             setData(response.data.result)
         } catch (error) {
             console.log(error);
