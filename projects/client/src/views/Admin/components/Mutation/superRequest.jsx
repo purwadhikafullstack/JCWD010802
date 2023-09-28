@@ -17,7 +17,7 @@ import {
 import convertToUppercase from '../../../../helpers/upperCase';
 import { PaginationAddress } from '../pagination';
 
-export const AllRequests = ({
+export const SuperRequests = ({
   data,
   totalpage,
   filterStatus,
@@ -37,6 +37,7 @@ export const AllRequests = ({
 
   const [filteredAndSortedData, setFilteredAndSortedData] = useState([]);
 
+  
   const filterData = () => {
     let filteredData = data;
 
@@ -69,15 +70,14 @@ export const AllRequests = ({
   
       setFilteredAndSortedData(sortedData);
     }, [data, filterStatus, sortDirection, currentPage, filterProduct]);
-  
-  return (
+    return (
     <Box p={4}>
       <Heading fontSize="xl" mb={4}>
         Request History
       </Heading>
       <Flex justifyContent={"flex-end"}>
-      <HStack  p={5} w={"40%"} gap={2}>
-      <Select
+        <HStack p={5} w={"40%"} gap={2}>
+        <Select
             placeholder="Product"
             value={filterProduct}
             borderWidth={"2px"}
@@ -93,29 +93,30 @@ export const AllRequests = ({
               </option>
             ))}
           </Select>
-        <Select
-          placeholder="Status"
-          value={filterStatus}
-          borderWidth={"2px"}
-          borderColor={"gray.400"}
-          onChange={(e) => onFilterStatus(e.target.value)}
+          <Select
+            placeholder="Status"
+            value={filterStatus}
+            borderWidth={"2px"}
+            borderColor={"gray.400"}
+            onChange={(e) => onFilterStatus(e.target.value)}
           >
-          <option value="">All</option>
-          <option value="accepted">Accepted</option>
-          <option value="rejected">Rejected</option>
-          <option value="requested">Requested</option>
-        </Select>
-        <Select
-          placeholder="Sort by Date"
-          value={sortDirection}
-          borderWidth={"2px"}
-          borderColor={"gray.400"}
-          onChange={(e) => onSortDirection(e.target.value)}
+            <option value="">All</option>
+            <option value="accepted">Accepted</option>
+            <option value="rejected">Rejected</option>
+            <option value="requested">Requested</option>
+          </Select>
+         
+          <Select
+            placeholder="Sort by Date"
+            value={sortDirection}
+            borderWidth={"2px"}
+            borderColor={"gray.400"}
+            onChange={(e) => onSortDirection(e.target.value)}
           >
-          <option value="asc">Oldest</option>
-          <option value="desc">Newest</option>
-        </Select>
-      </HStack>
+            <option value="asc">Oldest</option>
+            <option value="desc">Newest</option>
+          </Select>
+        </HStack>
       </Flex>
       {filteredAndSortedData.length === 0 ? (
         <Center>
@@ -123,7 +124,7 @@ export const AllRequests = ({
         </Center>
       ) : (
         <Table variant="simple">
-            <Thead>
+          <Thead>
             <Tr>
               <Th>Product</Th>
               <Th>Quantity</Th>
@@ -149,7 +150,7 @@ export const AllRequests = ({
           ))}
         </Table>
       )}
-      <PaginationAddress totalpage={totalpage}/>
+      <PaginationAddress totalpage={totalpage} />
     </Box>
   );
 };

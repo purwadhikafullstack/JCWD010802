@@ -57,7 +57,67 @@ module.exports = {
     } catch (error) {
       console.log(error);
     }
+  },allSuperRequest : async (req, res) => {
+    try {
+      const page = +req.query.page || 1;
+      const limit = +req.query.limit || 5;
+      const offset = (page - 1) * limit;
+      const status = req.query.status || '';
+      const sortDir = req.query.sortDir || 'asc';
+      const productName = req.query.productName || '';
+  
+      const whereClause = {}
+  
+      if (status) {
+        whereClause.status = status;
+      }
+      if (productName) {
+        whereClause.stock.product.name = productName;
+      }
+  
+      const order = [['createdAt', sortDir]]; 
+  
+      const manualRequests = await requestHistory.findAll({
+        where: whereClause,
+        include: [{ model: stock, include: { model: product } }],
+        offset,
+        limit, 
+        order,
+      });
+  
+      const total = await requestHistory.count({
+        where: whereClause,
+      });
+  
+      res.status(200).send({
+        totalpage: Math.ceil(total / limit),
+        currentpage: page,
+        total_requests: total,
+        result: manualRequests,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send('Internal Server Error');
+    }
   },
+    rejectRequest: async(req,res)=>{
+      try {
+        const { id } = req.params;
+  
+        const request = await requestHistory.findOne({ where: { id: id } });
+  
+        if (!request) {
+          return res.status(404).send('Request not found.');
+        }
+  
+        await request.update({ status: 'rejected' });
+  
+        res.status(200).send({ message: 'Manual request rejected successfully' });
+      } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal server error');
+      }
+    },
   incomingRequest : async(req,res) =>{
     try {
       const {id} = req.params
@@ -76,6 +136,8 @@ allRequest : async (req, res) => {
     const { id } = req.params;
     const status = req.query.status || '';
     const sortDir = req.query.sortDir || 'asc';
+    const productName = req.query.productName || '';
+
 
     const whereClause = {
       [Op.or]: [{ to: id }, { from: id }],
@@ -83,6 +145,9 @@ allRequest : async (req, res) => {
 
     if (status) {
       whereClause.status = status;
+    }
+    if (productName) {
+      whereClause.stock.product.name = productName;
     }
 
     const order = [['createdAt', sortDir]]; 
