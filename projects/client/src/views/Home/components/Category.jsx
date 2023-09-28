@@ -19,6 +19,7 @@ export const Category = () => {
     }
     const onClick = (id) => {
         navigate(`product?search=&sort=&category=${id}`)
+        window.scrollTo(0, 0);
     }
     useEffect(() => {
         getCategory()
