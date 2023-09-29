@@ -1,11 +1,11 @@
-const { Op } = require("sequelize");
 const { order, orderItem, user, status, product, stock, warehouse, requestHistory,journal ,address} = require("../models")
 const calculateDistance = require("../utils/calculateDistance")
+
 module.exports = {
     confirmPayment: async (req, res) => {
         try {
             const { id } = req.params
-            
+
             const isAdmin = await user.findOne({ where: { id: req.user.id } })
             if (isAdmin.roleId === 1) throw { message: "Only admin can access this features"}
             const isOrderExist = await order.findOne({
@@ -68,7 +68,6 @@ module.exports = {
                         let shortestDistance = Infinity;
                         warehouses.forEach((warehouse) => {
                             if (warehouse.id === sourceWarehouse.id) {
-                                // Skip the source warehouse
                                 return;
                             }
                         
@@ -134,8 +133,6 @@ module.exports = {
                     // journal.update({ quantity: stockJournal.quantity + quantity });
                   }
             }
-
-            
             const result = await order.update({ statusId: 3 }, {
                 where: { id }
             })
@@ -144,23 +141,20 @@ module.exports = {
                 
                 status: true,
             })
-        }}catch (error) {
+        }} catch (error) {
             console.log(error);
         }
     },
     rejectPayment: async (req, res) => {
         try {
             const { id } = req.params
-
             const isAdmin = await user.findOne({ where: { id: req.user.id } })
             if (isAdmin.roleId === 1) throw { message: "Only admin can access this features"}
             const isOrderExist = await order.findOne({ where: { id }})
             if (!isOrderExist) throw { message: "Order not found" }
             if (isOrderExist.statusId !== 2) throw { message: "Invalid Order Status" }
 
-            const result = await order.update({ statusId: 1 }, {
-                where: { id }
-            })
+            const result = await order.update({ statusId: 1 }, { where: { id } })
             res.status(200).send({
                 result,
                 status: true,
@@ -180,7 +174,6 @@ module.exports = {
         })
         if (!isOrderExist) throw { message: "Order not found" }
         if (isOrderExist.statusId === 4 || isOrderExist.statusId === 5) throw { message: "Invalid Order Status" }
-
         isOrderExist.orderItems.forEach(async (item) => {
           const findStock = await stock.findOne({
             where: {
@@ -201,9 +194,26 @@ module.exports = {
         })
 
         await order.update({ statusId: 6 }, { where: { id } })
-        
         res.status(200).send({
             message: "Order cancelled",
+            status: true,
+        })
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    sendOrder: async (req, res) => {
+      try {
+        const { id } = req.params
+        const isAdmin = await user.findOne({ where: { id: req.user.id } })
+        if (isAdmin.roleId === 1) throw { message: "Only admin can access this features"}
+        const isOrderExist = await order.findOne({ where: { id }})
+        if (!isOrderExist) throw { message: "Order not found" }
+        if (isOrderExist.statusId !== 3) throw { message: "Invalid Order Status" }
+
+        const result = await order.update({ statusId: 4 }, { where: { id } })
+        res.status(200).send({
+            result,
             status: true,
         })
       } catch (error) {
