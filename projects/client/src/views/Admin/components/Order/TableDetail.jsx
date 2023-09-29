@@ -13,7 +13,7 @@ export const TableDetail = ({ id }) => {
     }
     const handleConfirm = async () => {
         try {
-            const response = await axios.patch(`http://localhost:8000/api/adminOrder/${id}`, {}, {headers})
+            const response = await axios.patch(`http://localhost:8000/api/adminOrder/${id}`, {}, { headers })
             console.log(response);
         } catch (error) {
             console.log(error);
@@ -21,8 +21,15 @@ export const TableDetail = ({ id }) => {
     }
     const handleReject = async () => {
         try {
-            const response = await axios.put(`http://localhost:8000/api/adminOrder/${id}`, {}, {headers})
+            const response = await axios.put(`http://localhost:8000/api/adminOrder/${id}`, {}, { headers })
             console.log(response);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const handleCancel = async () => {
+        try {
+           const response = await axios.put(`http://localhost:8000/api/adminOrder/cancel/${id}`, {}, { headers }) 
         } catch (error) {
             console.log(error);
         }
@@ -75,7 +82,9 @@ export const TableDetail = ({ id }) => {
                     <Th className="left-header">Status</Th>
                     <Td className="right-data">
                         <Flex direction={{ base: "column", lg: "row"}} gap={1}>
-                            <Button bg="red" color="white">Cancel</Button>
+                            <Button bg="red" color="white" onClick={handleCancel}>
+                                Cancel
+                            </Button>
                             <Button bg="orange" color="black" onClick={handleReject}>
                                 Reject
                             </Button>

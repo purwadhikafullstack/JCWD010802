@@ -169,4 +169,45 @@ module.exports = {
             console.log(error);
         }
     },
+    cancelOrder: async (req, res) => {
+      try {
+        const { id } = req.params
+        const isAdmin = await user.findOne({ where: { id: req.user.id } })
+        if (isAdmin.roleId === 1) throw { message: "Only admin can access this features"}
+        const isOrderExist = await order.findOne({
+          where: { id },
+          include: [{ model: orderItem }]
+        })
+        if (!isOrderExist) throw { message: "Order not found" }
+        if (isOrderExist.statusId === 4 || isOrderExist.statusId === 5) throw { message: "Invalid Order Status" }
+
+        isOrderExist.orderItems.forEach(async (item) => {
+          const findStock = await stock.findOne({
+            where: {
+              productId: item.productId,
+              warehouseId: isOrderExist.warehouseId,
+            },
+          })
+          await stock.update(
+            { quantity: findStock.quantity + item.quantity },
+            { where: { id: findStock.id } }
+          )
+          await journal.create({
+            description: "add",
+            quantity: item.quantity,
+            stockId: findStock.id,
+            orderId: id
+          })
+        })
+
+        await order.update({ statusId: 6 }, { where: { id } })
+        
+        res.status(200).send({
+            message: "Order cancelled",
+            status: true,
+        })
+      } catch (error) {
+        console.log(error);
+      }
+    }
 }
