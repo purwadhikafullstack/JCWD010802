@@ -12,7 +12,7 @@ export const ManageProduct = ({ data, isOpen, onClose, triggerReload }) => {
     const token = localStorage.getItem("token")
     const initialValues = {
         description: "",
-        quantity: data.quantity,
+        quantity: "",
         productId: data.productId,
         warehouseId: data.warehouseId,
         stockId: data.id
@@ -22,6 +22,7 @@ export const ManageProduct = ({ data, isOpen, onClose, triggerReload }) => {
         quantity: Yup.number().required("Please enter product's price"),
     })
     const handleSubmit = async (value) => {
+        console.log(value);
         try {
             const response = await axios.patch('http://localhost:8000/api/stock', value, {
                 headers: {
@@ -55,7 +56,7 @@ export const ManageProduct = ({ data, isOpen, onClose, triggerReload }) => {
                                 <ProductCardModal data={data} />
                                 <InputField name="description" id="description" className="description" type="text"
                                 label="Description" />
-                                <InputField name="stock" id="stock" className="stock" type="number"
+                                <InputField name="quantity" id="quantity" className="quantity" type="number"
                                 label="Add / Reduce Stock" />
                                 <Flex gap={3} justifyContent="flex-end">
                                     <Button  onClick={onClose} mt={4} bg={"red.500"} color={"white"} _hover={{ bg: "red.700" }}>

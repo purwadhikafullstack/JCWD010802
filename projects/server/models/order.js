@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       order.belongsTo(models.address)
       order.belongsTo(models.cart)
       order.hasMany(models.orderItem)
+      order.belongsTo(models.warehouse)
 
     }
   }

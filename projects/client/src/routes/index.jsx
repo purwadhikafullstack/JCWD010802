@@ -21,6 +21,9 @@ import { StockView } from "../views/Admin/Stock";
 import { DetailStockWarehouse } from "../views/Admin/components/Stock/WarehouseDetailStok";
 import { Cart } from "../pages/Cart";
 import { Checkout } from "../pages/CheckOut";
+import { OrderDetailView } from "../views/Admin/components/Order/OrderDetail";
+
+
 
 const Routes = (
   <>
@@ -50,6 +53,7 @@ const Routes = (
       <Route path="product-list" element={<AdminProducts />} />
       <Route path="warehouse-stock" element={<StockView />} />
       <Route path="warehouse-stock/:id" element={<DetailStockWarehouse />} />
+      <Route path="detail-order" element={<OrderDetailView />} />
     </Route>
   </>
 );
