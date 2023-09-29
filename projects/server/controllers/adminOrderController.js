@@ -5,6 +5,7 @@ module.exports = {
     confirmPayment: async (req, res) => {
         try {
             const { id } = req.params
+
             const isAdmin = await user.findOne({ where: { id: req.user.id } })
             if (isAdmin.roleId === 1) throw { message: "Only admin can access this features"}
             const isOrderExist = await order.findOne({
@@ -135,10 +136,8 @@ module.exports = {
             const result = await order.update({ statusId: 3 }, {
                 where: { id }
             })
-
             res.status(200).send({
                 result,
-                
                 status: true,
             })
         }} catch (error) {
