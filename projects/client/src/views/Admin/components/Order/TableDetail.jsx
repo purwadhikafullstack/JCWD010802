@@ -1,4 +1,4 @@
-import { Button, Flex, Table, Td, Text, Th, Tr, useDisclosure } from "@chakra-ui/react"
+import { Badge, Button, Flex, Table, Td, Text, Th, Tr, useDisclosure } from "@chakra-ui/react"
 import formatIDR from "../../../../helpers/formatIDR"
 import axios from "axios"
 import "./style.css"
@@ -90,17 +90,23 @@ export const TableDetail = ({ id }) => {
                 <Tr>
                     <Th className="left-header">Status</Th>
                     <Td className="right-data">
+                        <Badge colorScheme="orange">Menunggu Konfirmasi Pembayaran</Badge>
+                    </Td>
+                </Tr>
+                <Tr>
+                    <Th className="left-header">Action</Th>
+                    <Td className="right-data">
                         <Flex direction={{ base: "column", lg: "row"}} gap={1}>
-                            <Button bg="red" color="white" onClick={handleCancel}>
+                            <Button bg="red" color="white" onClick={handleCancel} _hover={{ bg: "red.600"}}>
                                 Cancel
                             </Button>
-                            <Button bg="orange" color="black" onClick={handleReject}>
+                            <Button bg="orange" color="black" onClick={handleReject} _hover={{ bg: "orange.600"}}>
                                 Reject
                             </Button>
-                            <Button bg="green" color="white" onClick={handleConfirm}>
+                            <Button bg="green" color="white" onClick={handleConfirm} _hover={{ bg: "green.800"}}>
                                 Confirm
                             </Button>
-                            <Button bg="green" color="white" onClick={handleSend}>
+                            <Button bg="green" color="white" onClick={handleSend} _hover={{ bg: "green.800"}}>
                                 Send Order
                             </Button>
                         </Flex>
