@@ -63,7 +63,8 @@ module.exports = {
                 const currentQuantityToSubtract = productQuantityToSubtract.get(sproduct.id) || 0;
                 productQuantityToSubtract.set(sproduct.id, currentQuantityToSubtract + item.quantity);
             }
-            
+            const expireDate = new Date()
+            expireDate.setDate(expireDate.getDate() + 1)
             const response = await order.create({
                 userId:req.user.id,
                 totalPrice:findCart.totalPrice,
@@ -72,7 +73,8 @@ module.exports = {
                 addressId,
                 cartId,
                 statusId:1,
-                warehouseId: nearestWarehouse
+                warehouseId: nearestWarehouse,
+                expiredAt: expireDate
             })
 
             await orderItem.update({

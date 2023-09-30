@@ -48,8 +48,8 @@ app.use("/api/ship", shippingRouter)
 app.use("/api/adminOrder", adminOrderRouter)
 
 // Scheduler
-schedule.scheduleJob('0 0 * * *', runAutoCancel)
-schedule.scheduleJob('0 0 * * *', runAutoConfirm)
+schedule.scheduleJob('* * * * *', runAutoCancel)
+schedule.scheduleJob('* * * * *', runAutoConfirm)
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);

@@ -73,12 +73,12 @@ export const Navbar = () => {
           Products
         </Button>
       </HStack>
-      <InputGroup maxW="500px">
+      <InputGroup maxW="700px">
         <InputLeftElement color="gray.500">
           <Icon as={BiSearchAlt2} boxSize={5} />
         </InputLeftElement>
         <Input
-          maxW="500px"
+          maxW="700px"
           h="40px"
           bg="white"
           color="#517664"

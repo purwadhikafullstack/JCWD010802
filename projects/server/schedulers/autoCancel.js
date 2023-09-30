@@ -1,38 +1,43 @@
-const moment = require("moment");
-const { order, status } = require('../models');
+const { order, stock, orderItem, journal } = require('../models');
 const { Op } = require('sequelize');
 
 const runAutoCancel = async () => {
   try {
-    const threeDaysAgoStart = moment().subtract(3, 'days').startOf('day').toDate();
-    const threeDaysAgoEnd = moment().subtract(3, 'days').endOf('day').toDate();
+    const expireDate = new Date()
+    expireDate.setDate(expireDate.getDate() - 1)
 
     const orders = await order.findAll({
-      attributes: { exclude: ['updatedAt'] },
-      include: [
-        {
-          model: orderItem,
-          attributes: { exclude: ['createdAt', 'updatedAt'] },
-          include: [{ model: product, attributes: { exclude: ['createdAt', 'updatedAt', 'isDeleted', 'isActive'] } }]
-        },
-        { model: status }
-      ],
       where: {
-        createdAt: {
-            [Op.and]: {
-                [Op.gte]: threeDaysAgoStart,
-                [Op.lte]: threeDaysAgoEnd
-            }
-        },
-        paymentProof: null
-      }
+        paymentExpiredAt: { [Op.lte]: expireDate },
+        paymentProof: null,
+        statusId: 1
+      },
+      include: [{ model: orderItem }]
     });
 
-    for (const orderItem of orders) {
+    for (const orderList of orders) {
         const result = await order.update({ statusId: 6 }, {
             where: {
-                id: orderItem.id
+                id: orderList.id
             }
+        })
+        orderList.orderItems.forEach( async (item) => {
+          const findStock = await stock.findOne({
+            where: {
+              productId: item.productId,
+              warehouseId: orderList.warehouseId
+            }
+          })
+          await stock.update(
+            { quantity: findStock.quantity + item.quantity},
+            { where: { id: findStock.id }}
+          )
+          await journal.create({
+            description: "add",
+            quantity: item.quantity,
+            stockId: findStock.id,
+            orderId: orderList.id
+          })
         })
         console.log(result);
     }
