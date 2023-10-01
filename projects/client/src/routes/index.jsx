@@ -23,8 +23,6 @@ import { Cart } from "../pages/Cart";
 import { Checkout } from "../pages/CheckOut";
 import { OrderDetailView } from "../views/Admin/components/Order/OrderDetail";
 
-
-
 const Routes = (
   <>
     <Route path="/" element={<Homepage />}>
