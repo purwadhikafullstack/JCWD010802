@@ -4,7 +4,6 @@ const { Op } = require('sequelize');
 const runAutoCancel = async () => {
   try {
     const expireDate = new Date()
-    expireDate.setDate(expireDate.getDate() - 1)
 
     const orders = await order.findAll({
       where: {
