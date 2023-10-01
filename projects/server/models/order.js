@@ -15,13 +15,15 @@ module.exports = (sequelize, DataTypes) => {
       order.belongsTo(models.user)
       order.belongsTo(models.address)
       order.belongsTo(models.cart)
+      order.hasMany(models.orderItem)
+      order.belongsTo(models.warehouse)
     }
   }
   order.init({
     totalPrice: DataTypes.INTEGER,
     paymentProof: DataTypes.STRING,
     shippingMethod: DataTypes.STRING,
-    shippingCost: DataTypes.INTEGER
+    shippingCost: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'order',

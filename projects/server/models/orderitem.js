@@ -11,10 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      orderItem.belongsTo(models.order)
+      orderItem.belongsTo(models.product)
     }
   }
   orderItem.init({
-    quantity: DataTypes.STRING
+    quantity: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'orderItem',

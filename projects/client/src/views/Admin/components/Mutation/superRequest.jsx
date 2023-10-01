@@ -35,41 +35,7 @@ export const SuperRequests = ({
     requested: { color: 'orange' },
   };
 
-  const [filteredAndSortedData, setFilteredAndSortedData] = useState([]);
-
   
-  const filterData = () => {
-    let filteredData = data;
-
-    if (filterStatus) {
-      filteredData = filteredData.filter(
-          (request) => request.status === filterStatus
-      );
-    }
-    
-    if (filterProduct) {
-        filteredData = filteredData.filter(
-            (request) => request.stock.product.name === filterProduct
-            );
-        }
-        
-        return filteredData;
-    };
-    
-    useEffect(() => {
-      const filteredData = filterData();
-  
-      const sortedData =
-        sortDirection === 'asc'
-          ? filteredData.sort((a, b) =>
-              a.createdAt.localeCompare(b.createdAt)
-            )
-          : filteredData.sort((a, b) =>
-              b.createdAt.localeCompare(a.createdAt)
-            );
-  
-      setFilteredAndSortedData(sortedData);
-    }, [data, filterStatus, sortDirection, currentPage, filterProduct]);
     return (
     <Box p={4}>
       <Heading fontSize="xl" mb={4}>
@@ -88,7 +54,7 @@ export const SuperRequests = ({
           >
             <option value="">All Products</option>
             {product.map((productName) => (
-              <option key={productName.id} value={productName.name}>
+              <option key={productName.id} value={productName.id}>
                 {productName.name}
               </option>
             ))}
@@ -118,7 +84,7 @@ export const SuperRequests = ({
           </Select>
         </HStack>
       </Flex>
-      {filteredAndSortedData.length === 0 ? (
+      {data.length === 0 ? (
         <Center>
           <Heading>No request</Heading>
         </Center>
@@ -133,9 +99,9 @@ export const SuperRequests = ({
               <Th>Status</Th>
             </Tr>
           </Thead>
-          {filteredAndSortedData.map((request) => (
+          {data.map((request) => (
             <Tr key={request.id}>
-              <Td>{request.stock.product.name}</Td>
+              <Td>{request.stock?.product?.name}</Td>
               <Td>{request.quantity}</Td>
               <Td>{request.from_name}</Td>
               <Td>{request.to_name}</Td>

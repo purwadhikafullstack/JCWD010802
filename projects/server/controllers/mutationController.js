@@ -67,25 +67,26 @@ module.exports = {
       const productName = req.query.productName || '';
   
       const whereClause = {}
+      const productFilter = {}
   
       if (status) {
         whereClause.status = status;
       }
       if (productName) {
-        whereClause.stock.product.name = productName;
+        productFilter.productId= productName;
       }
-  
       const order = [['createdAt', sortDir]]; 
   
       const manualRequests = await requestHistory.findAll({
-        where: whereClause,
-        include: [{ model: stock, include: { model: product } }],
+        include: [{ model: stock ,where : productFilter, include: { model: product  } }],
         offset,
         limit, 
         order,
+        where: whereClause,
       });
   
       const total = await requestHistory.count({
+        include: [{ model: stock ,where : productFilter, include: { model: product  } }],
         where: whereClause,
       });
   
@@ -146,24 +147,28 @@ allRequest : async (req, res) => {
     if (status) {
       whereClause.status = status;
     }
-    if (productName) {
-      whereClause.stock.product.name = productName;
-    }
-
-    const order = [['createdAt', sortDir]]; 
-
-    const manualRequests = await requestHistory.findAll({
-      where: whereClause,
-      include: [{ model: stock, include: { model: product } }],
-      offset,
-      limit,
-      order,
-    });
-
-    const total = await requestHistory.count({
-      where: whereClause,
-    });
-
+    const productFilter = {}
+  
+      if (status) {
+        whereClause.status = status;
+      }
+      if (productName) {
+        productFilter.productId= productName;
+      }
+      const order = [['createdAt', sortDir]]; 
+  
+      const manualRequests = await requestHistory.findAll({
+        include: [{ model: stock ,where : productFilter, include: { model: product  } }],
+        offset,
+        limit, 
+        order,
+        where: whereClause,
+      });
+  
+      const total = await requestHistory.count({
+        include: [{ model: stock ,where : productFilter, include: { model: product  } }],
+        where: whereClause,
+      });
     res.status(200).send({
       totalpage: Math.ceil(total / limit),
       currentpage: page,

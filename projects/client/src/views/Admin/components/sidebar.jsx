@@ -17,7 +17,7 @@ import {
 import { FiMenu, FiSearch, FiBell } from "react-icons/fi";
 import { MdHome } from "react-icons/md";
 import { FaRss, FaClipboardCheck, FaWarehouse, FaUsers } from "react-icons/fa";
-import { HiCollection, HiCode } from "react-icons/hi";
+import { PiPackageFill} from "react-icons/pi";
 import { AiFillGift } from "react-icons/ai";
 import { BsGearFill } from "react-icons/bs";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
@@ -96,6 +96,11 @@ export const Sidebar = () => {
         <NavLink to="/">
           <NavItem icon={MdHome} to="/">
             Home
+          </NavItem>
+        </NavLink>
+        <NavLink to="order">
+          <NavItem icon={PiPackageFill} to="/admin/order">
+            Order
           </NavItem>
         </NavLink>
         <NavLink to="list-user">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Flex, Heading } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading,Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { IncomingRequests } from "../components/Mutation/mutationRequest";
@@ -121,8 +121,17 @@ console.log(data);
       </Flex>
       {data.roleId === 2 ? (
         <>
-          <IncomingRequests data={request} reload={reload} setReload={setReload} />
-          <AllRequests
+        <Tabs variant='enclosed'>
+  <TabList>
+    <Tab>Incoming Request</Tab>
+    <Tab>Request History</Tab>
+  </TabList>
+  <TabPanels>
+    <TabPanel>
+    <IncomingRequests data={request} reload={reload} setReload={setReload} />
+    </TabPanel>
+    <TabPanel>
+    <AllRequests
             data={allRequest}
             totalpage={pageAllRequests} 
             filterStatus={filterStatus}
@@ -134,6 +143,9 @@ console.log(data);
             currentPage={currentPage}
             product={product}
           />
+    </TabPanel>
+  </TabPanels>
+</Tabs>
         </>
       ) : (
         <SuperRequests

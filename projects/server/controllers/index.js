@@ -13,6 +13,7 @@ const cartController = require("./cartController")
 const orderController = require("./orderController")
 const shippingController = require("./shippingController")
 const mutationController = require("./mutationController")
+const dashboardController = require("./dashboardController")
 
 module.exports = {
     userControllers,
@@ -29,5 +30,6 @@ module.exports = {
     cartController,
     orderController,
     shippingController,
-    mutationController
+    mutationController,
+    dashboardController
 }

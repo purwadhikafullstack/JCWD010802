@@ -1,10 +1,11 @@
 import { Box, Button, Divider, HStack, Heading, Text, VStack } from "@chakra-ui/react";
 import formatIDR from "../../../helpers/formatIDR";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import convertToUppercase from "../../../helpers/upperCase";
+import { setCartOut } from "../../../redux/cartSlice";
 
 export const ConfirmCheckout = ({addressId}) => {
   const cartId = useSelector((state) => state.cart.id);
@@ -14,6 +15,7 @@ export const ConfirmCheckout = ({addressId}) => {
   const ship = useSelector((state) => state.cost.ship)
   const token = localStorage.getItem("token")
   const chekoutPrice = total+cost
+  const dispatch = useDispatch()
   const handleBuyClick = async () => {
     try {
       const dataToSend = {
@@ -35,11 +37,12 @@ export const ConfirmCheckout = ({addressId}) => {
       position: 'top-right', 
       autoClose: 3000, 
     });
+    dispatch(setCartOut())
     } catch (error) {
       console.error('Checkout failed:', error);
     }
   };
-
+console.log(cartId);
   return (
     <>
       <Box
