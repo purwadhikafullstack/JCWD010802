@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import convertToUppercase from "../../../helpers/upperCase";
 import { setCartOut } from "../../../redux/cartSlice";
 
+
 export const ConfirmCheckout = ({addressId}) => {
   const cartId = useSelector((state) => state.cart.id);
   const cart = useSelector((state) => state.cart.value);
@@ -16,6 +17,7 @@ export const ConfirmCheckout = ({addressId}) => {
   const token = localStorage.getItem("token")
   const chekoutPrice = total+cost
   const dispatch = useDispatch()
+
   const handleBuyClick = async () => {
     try {
       const dataToSend = {
@@ -25,7 +27,8 @@ export const ConfirmCheckout = ({addressId}) => {
         shippingCost: cost,
       };
 
-      const response = await axios.post('http://localhost:8000/api/order', dataToSend,{
+
+      const response = await axios.post('http://localhost:8000/api/userOrder', dataToSend,{
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -38,11 +41,11 @@ export const ConfirmCheckout = ({addressId}) => {
       autoClose: 3000, 
     });
     dispatch(setCartOut())
+
     } catch (error) {
       console.error('Checkout failed:', error);
     }
   };
-console.log(cartId);
   return (
     <>
       <Box
@@ -87,6 +90,7 @@ console.log(cartId);
                   </HStack>
                   <HStack  justifyContent={"space-between"} >
                     <Text   color={"gray.500"} fontSize={"18px"}>
+
                     Shipping Cost
                     </Text>
                     <Text   color={"gray.500"} fontSize={"18px"}>

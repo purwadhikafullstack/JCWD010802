@@ -36,6 +36,7 @@ function App() {
       dispatch(setCart(response.data.result))
       dispatch(setCartId(response.data.Cart.id))
       dispatch(setPrice(response.data.Cart.totalPrice))
+
     } catch (error) {
       console.error(error);
     }

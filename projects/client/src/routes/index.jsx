@@ -26,6 +26,9 @@ import { MutationView } from "../views/Admin/Mutation";
 import { Mutation } from "../pages/Mutation";
 import { Order } from "../pages/Order";
 import {Dashboard} from "../views/Admin/Dashboard";
+import { OrderDetailView } from "../views/Admin/components/Order/OrderDetail";
+
+
 
 const Routes = (
   <>
@@ -58,6 +61,8 @@ const Routes = (
       <Route path="warehouse-stock/:id" element={<DetailStockWarehouse />} />
       <Route path="mutation" element={<Mutation />} />
       <Route path="order" element={<Order />} />
+      <Route path="detail-order" element={<OrderDetailView />} />
+
     </Route>
   </>
 );

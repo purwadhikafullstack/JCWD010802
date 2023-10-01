@@ -11,15 +11,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      status.hasMany(models.order)
+
+      status.hasOne(models.order)
     }
   }
   status.init({
-    status: DataTypes.STRING
+    name: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'status',
-    timestamps:false
+    timestamps: false
   });
   return status;
 };

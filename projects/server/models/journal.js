@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       journal.belongsTo(models.stock)
       journal.belongsTo(models.order)
       journal.belongsTo(models.requestHistory)
+
     }
   }
   journal.init({

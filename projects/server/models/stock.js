@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       stock.hasMany(models.requestHistory)
       stock.hasMany(models.stockMutation)
 
+
     }
   }
   stock.init({

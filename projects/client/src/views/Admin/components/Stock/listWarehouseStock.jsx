@@ -83,7 +83,7 @@ export const WarehouseStockList = () => {
                       {item.name}
                     </Heading>
                     <Text color="gray.500">
-                        {`${item.address.address}, ${cities[item.address.kota - 1]?.city_name}, ${province[item.address.provinsi - 1]?.province}`}
+                        {`${item.address.address}, ${item.address.nama_kota}, ${item.address.nama_provinsi}`}
                     </Text>
                   </Box>
                 </Flex>

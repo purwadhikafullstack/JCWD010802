@@ -2,6 +2,7 @@ const {  cart, address, user, journal, stock, product, warehouse, cartItem,order
 const calculateDistance = require('../utils/calculateDistance');
 const db = require("../models")
 const orders = db.order
+
 module.exports = {
     checkout: async (req, res) => {
         try {
@@ -16,6 +17,9 @@ module.exports = {
             const findCart = await cart.findOne({where:{userId:req.user.id, isCheckOut:false}})
             const warehouses = await warehouse.findAll({ include: { model: address } });
             
+
+            let orderItemId
+
             if (warehouses.length === 0) {
                 return res.status(404).send({ error: 'No warehouses found.' });
             }
@@ -54,11 +58,20 @@ module.exports = {
                     },
                 });
 
+
+                const items = await orderItem.create({
+                    productId: item.productId,
+                    quantity: item.quantity
+                })
+
+                orderItemId = items.id
+
                 const currentQuantityToSubtract = productQuantityToSubtract.get(sproduct.id) || 0;
                 productQuantityToSubtract.set(sproduct.id, currentQuantityToSubtract + item.quantity);
             }
             
             const response = await orders.create({
+
                 userId:req.user.id,
                 totalPrice:findCart.totalPrice,
                 shippingCost,
@@ -68,6 +81,12 @@ module.exports = {
                 statusId:1,
                 warehouseId: nearestWarehouse
 
+            })
+
+            await orderItem.update({
+                orderId: response.id
+            },{
+                where: { id: orderItemId }
             })
 
             for (const [productId, totalQuantity] of productQuantityToSubtract.entries()) {
@@ -233,3 +252,118 @@ module.exports = {
         }
     }
 };
+    allOrder: async (req, res) => {
+        try {
+            const page = +req.query.page || 1;
+            const limit = +req.query.limit || 10;
+            const offset = (page - 1) * limit;
+            const search = req.query.search || "";
+            const sort = req.query.sort || "asc";
+
+            const filter = {};
+            if (search) {
+                filter[Op.or] = [
+                    { name: { [Op.like]: `%${search}%`, }, },];
+            }
+            const isUserExist = await user.findOne({
+                where: { id: req.user.id }
+            })
+            if (!isUserExist) throw { message: "User not found!" }
+            const result = await order.findAll({
+                where: { userId: req.user.id },
+                attributes: { exclude: ['updatedAt'] },
+                include: [
+                    { model: orderItem, attributes: { exclude: ['createdAt', 'updatedAt'] }, 
+                    include: [ { model: product, attributes: { exclude: ['createdAt', 'updatedAt', 'isDeleted', 'isActive']}, where: filter}] },
+                    { model: status }
+                ],
+                limit,
+                offset,
+                sort
+            })
+            const total = await order.count({ where: { userId: req.user.id }})
+            
+            res.status(200).send({
+                totalpage: Math.ceil(total / limit),
+                currentpage: page,
+                total_order: total,
+                result,
+                status: true,
+            })
+        } catch (error) {
+            res.status(400).send({
+                status: false,
+                message: error.message
+            })
+        }
+    },
+    uploadPayment: async (req, res) => {
+        try {
+            const paymentImg = req.file.filename
+            console.log(paymentImg);
+            const { id } = req.params
+
+            const isOrderExist = await order.findOne({ where: { id } })
+            if (!isOrderExist) throw { message: "Order not found!" }
+            if (isOrderExist.userId !== req.user.id) throw { message: "Invalid account" }
+            if (isOrderExist.paymentProof) throw { message: "Order already paid" }
+            const result = await order.update({ paymentProof: paymentImg, statusId: 2 }, {
+                where: { id, userId: req.user.id }
+            })
+            res.status(200).send({
+                result,
+                status: true,
+            })
+        } catch (error) {
+            res.status(400).send({
+                status: false,
+                message: error.message
+            })
+        }
+    },
+    cancelOrder: async (req, res) => {
+        try {
+            const { id } = req.params
+            const isOrderExist = await order.findOne({ where: { id }})
+            if (!isOrderExist) throw { message: "Order not found!" }
+            if (isOrderExist.userId !== req.user.id) throw { message: "Invalid account" }
+            if (isOrderExist.paymentProof) throw { message: "Cannot cancel your order" }
+            const result = await order.update({ statusId: 6 }, {
+                where: { id }
+            })
+            res.status(200).send({
+                status: true,
+                message: "Order canceled!",
+                result,
+            })
+        } catch (error) {
+            res.status(400).send({
+                status: false,
+                message: error.message
+            })
+        }
+    },
+    confirmOrder: async (req, res) => {
+        try {
+            const { id } = req.params
+            const isOrderExist = await order.findOne({ where: { id }})
+            if (!isOrderExist) throw { message: "Order not found!" }
+            if (isOrderExist.userId !== req.user.id) throw { message: "Invalid account" }
+            if (isOrderExist.statusId < 4) throw { message: "Your order still in process"}
+            if (isOrderExist.statusId === 6) throw { message: "Your order is canceled"}
+            const result = await order.update({ statusId: 5 }, {
+                where: { id, userId: req.user.id }
+            })
+            res.status(200).send({
+                status: true,
+                message: "Your order is completed!",
+                result,
+            })
+        } catch (error) {
+            res.status(400).send({
+                status: false,
+                message: error.message
+            })
+        }
+    },
+}

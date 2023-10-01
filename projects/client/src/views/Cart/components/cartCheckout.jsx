@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { setCartId } from "../../../redux/cartSlice";
 
+
+
 export const CartCheckout = ({ cartId }) => {
   const cart = useSelector((state) => state.cart.value);
   const total = useSelector((state) => state.total.value);
@@ -61,5 +63,6 @@ export const CartCheckout = ({ cartId }) => {
         </Button>
       </NavLink>
     </Box>
+
   );
 };

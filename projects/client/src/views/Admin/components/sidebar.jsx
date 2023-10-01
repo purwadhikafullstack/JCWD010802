@@ -19,7 +19,7 @@ import { MdHome } from "react-icons/md";
 import { FaRss, FaClipboardCheck, FaWarehouse, FaUsers } from "react-icons/fa";
 import { PiPackageFill} from "react-icons/pi";
 import { AiFillGift } from "react-icons/ai";
-import { BsGearFill } from "react-icons/bs";
+import { BsGearFill, BsFillCartFill } from "react-icons/bs";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { BiSolidCategoryAlt, BiTransfer } from "react-icons/bi";
 export const Sidebar = () => {
