@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { FiMenu, FiSearch, FiBell } from "react-icons/fi";
 import { MdHome } from "react-icons/md";
-import { FaRss, FaClipboardCheck, FaWarehouse, FaUsers } from "react-icons/fa";
+import { FaRss, FaClipboardCheck, FaWarehouse, FaUsers, FaChartLine } from "react-icons/fa";
 import { HiCollection, HiCode } from "react-icons/hi";
 import { AiFillGift } from "react-icons/ai";
 import { BsGearFill } from "react-icons/bs";
@@ -127,8 +127,11 @@ export const Sidebar = () => {
               Stock
             </NavItem>
           </NavLink>
-          <NavLink to="report">
-            <NavItem icon={HiCode}>Report</NavItem>
+          <NavLink to="product-report">
+            <NavItem icon={HiCode}>Product report</NavItem>
+          </NavLink>
+          <NavLink to="sales-report">
+            <NavItem icon={FaChartLine}>Sales report</NavItem>
           </NavLink>
           <NavItem icon={BsGearFill}>Settings</NavItem>
         </NavLink>

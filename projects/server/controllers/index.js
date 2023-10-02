@@ -12,6 +12,7 @@ const categoryController = require("./categoryController")
 const cartController = require("./cartController")
 const shippingController = require("./shippingController")
 const productReportController = require("./productReportController")
+const salesReportController = require("./salesReportController")
 
 module.exports = {
     userControllers,
@@ -27,5 +28,6 @@ module.exports = {
     categoryController,
     cartController,
     shippingController,
-    productReportController
+    productReportController,
+    salesReportController
 }

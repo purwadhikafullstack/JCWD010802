@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       warehouse.belongsTo(models.address)
       warehouse.hasOne(models.stock)
+      warehouse.hasMany(models.order)
     }
   }
   warehouse.init({

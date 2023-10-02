@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Tabs, TabList, TabPanel, TabPanels, Tab } from "@chakra-ui/react";
-import { ProductWarehouse } from "../components/Report/productWarehouse";
-import { StockHistory } from "../components/Report/stockHistory";
+import { ProductWarehouse } from "../components/ProductReport/productWarehouse";
+import { StockHistory } from "../components/ProductReport/stockHistory";
 
-export const Report = () => {
+export const ProductReport = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState(0);

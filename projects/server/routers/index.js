@@ -12,6 +12,7 @@ const authRouters = require('./authRouters')
 const cartRouter = require('./cartRouter')
 const shippingRouter = require('./shippingRouter')
 const productReportRouter = require('./productReportRouter')
+const salesReportRouter = require('./salesReportRouter')
 
 
 
@@ -30,5 +31,6 @@ module.exports= {
     categoryRouter,
     cartRouter,
     shippingRouter,
-    productReportRouter
+    productReportRouter,
+    salesReportRouter
 }
