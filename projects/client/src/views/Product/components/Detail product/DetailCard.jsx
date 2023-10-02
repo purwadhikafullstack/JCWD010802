@@ -68,13 +68,14 @@ export const DetailCard = () => {
       </Flex>
 
       <Flex
+        direction={{base:"column", lg:"row"}}
         w={{ base: "100%", md: "50%" }} 
         pt={{ base: "20px", md: "60px" }} 
-        pl={{ base: "20px", md: "0" }} 
+        // pl={{ base: "20px", md: "0" }} 
       >
 
-        <Stack spacing={4}>
-          <Heading fontSize={"6xl"}>{detail.name}</Heading>
+        <Stack spacing={4}  pl={{ base: "20px", md: "0" }} >
+          <Heading fontSize={"5xl"}>{detail.name}</Heading>
           <Text color={"gray.500"} fontSize={"xl"}>
             Description :
           </Text>

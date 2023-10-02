@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { ModalLogout } from "./ModalLogOut";
 import { setLogOut } from "../../redux/userSlice";
+import { setCartOut } from "../../redux/cartSlice";
+import { setPriceOut } from "../../redux/totalPrice";
+import { AiFillHeart } from "react-icons/ai";
 import { CartNotif } from "./cartNotif";
 import { WishlistNav } from "./WishlistNav";
 import { BiSearchAlt2 } from "react-icons/bi";
@@ -18,7 +21,10 @@ export const Navbar = () => {
 
   const onLogOut = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("warehouseId");
     dispatch(setLogOut());
+    dispatch(setCartOut());
+    dispatch(setPriceOut());
     toast({
       title: "Sign Out Success",
       description: "See you next time!",
