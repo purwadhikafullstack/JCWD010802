@@ -1,4 +1,4 @@
-import { Box, Container, Grid, GridItem, useMediaQuery } from "@chakra-ui/react";
+import { Box, Container, Flex } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -15,22 +15,16 @@ export const AllProduct = () => {
   const minPrice = params.get("minPrice") || "";
   const maxPrice = params.get("maxPrice") || "";
   const currentPage = Number(params.get("page")) || 1;
-  const token = localStorage.getItem("token");
   const [page, setPage] = useState([]);
   const [product, setProduct] = useState([]);
   const [reload, setReload] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const navigate = useNavigate()
   
   const getProduct = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/product?search=${search}&sort=${sort}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&page=${currentPage}`
-        // {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`,
-        //   },
-        // }
-      );
+        `http://localhost:8000/api/product?search=${search}&sort=${sort}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&page=${currentPage}`);
       setProduct(response.data.result);
       setPage(response.data.totalpage);
     } catch (error) {
@@ -44,20 +38,20 @@ export const AllProduct = () => {
     getProduct();
   }, [search, sort, category, minPrice, maxPrice, currentPage, reload]);
 
+  useEffect(() => {
+    if (product?.length > 0) {
+      setIsLoaded(true)
+    }
+  }, [product])
+
   return (
     <Box minH={"100vh"} bgColor={"#edf3f8"} w={"full"} pb="20px">
       <Container maxW="container.lg" pt={"100px"}>
         <DrawerSorting />
-        <Grid
-          templateColumns={{
-            base: "1fr",
-            sm: "1fr 1fr",
-            md: "repeat(3, 1fr)",
-            lg: "repeat(5, 1fr)",
-          }}
-        >
+        <Flex wrap="wrap" justifyContent="center"
+        gap={3}>
           {product.map((item, index) => (
-            <GridItem key={index}>
+            <Flex key={index}>
               <ProductCardUser
                 onClick={() => handleClick(item.id)}
                 name={item.name}
@@ -66,10 +60,11 @@ export const AllProduct = () => {
                 category={item.category.name}
                 reload={reload}
                 setReload={setReload}
+                isLoaded={isLoaded}
               />
-            </GridItem>
+            </Flex>
           ))}
-        </Grid>
+        </Flex>
       </Container>
       <Pagination totalpage={page} />
     </Box>
