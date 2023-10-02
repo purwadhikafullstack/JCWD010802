@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       cart.belongsTo(models.user)
+      cart.hasOne(models.order)
     }
   }
   cart.init({

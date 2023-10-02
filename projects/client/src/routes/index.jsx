@@ -28,8 +28,6 @@ import { Order } from "../pages/Order";
 import {Dashboard} from "../views/Admin/Dashboard";
 import { OrderDetailView } from "../views/Admin/components/Order/OrderDetail";
 
-
-
 const Routes = (
   <>
     <Route path="/" element={<Homepage />}>

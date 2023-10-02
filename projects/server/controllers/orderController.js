@@ -328,6 +328,26 @@ module.exports = {
             if (!isOrderExist) throw { message: "Order not found!" }
             if (isOrderExist.userId !== req.user.id) throw { message: "Invalid account" }
             if (isOrderExist.paymentProof) throw { message: "Cannot cancel your order" }
+
+            if (isOrderExist.statusId === 4 || isOrderExist.statusId === 5) throw { message: "Invalid Order Status" }
+            isOrderExist.orderItems.forEach(async (item) => {
+            const findStock = await stock.findOne({
+                where: {
+                productId: item.productId,
+                warehouseId: isOrderExist.warehouseId,
+                },
+            })
+            await stock.update(
+                { quantity: findStock.quantity + item.quantity },
+                { where: { id: findStock.id } }
+            )
+            await journal.create({
+                description: "add",
+                quantity: item.quantity,
+                stockId: findStock.id,
+                orderId: id
+            })
+            })
             const result = await order.update({ statusId: 6 }, {
                 where: { id }
             })
