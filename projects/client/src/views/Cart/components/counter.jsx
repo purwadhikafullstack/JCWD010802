@@ -7,15 +7,13 @@ import { Link } from 'react-router-dom';
 import { setCart } from '../../../redux/cartSlice';
 import { setPrice } from '../../../redux/totalPrice';
 
-
-export const CartCounter = ({ initialCount, onCountChange, productId,cartId }) => {
+export const CartCounter = ({ initialCount, onCountChange, productId, cartId }) => {
   const [count, setCount] = useState(initialCount || 0);
   const [stock, setStock] = useState(null);
   const [inputError, setInputError] = useState(false);
-  const dispatch = useDispatch()
-  const token = localStorage.getItem("token")
+  const dispatch = useDispatch();
+  const token = localStorage.getItem("token");
   const [reload, setReload] = useState(0);
-
 
   const getStock = async () => {
     try {
@@ -62,8 +60,8 @@ export const CartCounter = ({ initialCount, onCountChange, productId,cartId }) =
       });
       console.log(cartResponse);
       setReload(!reload);
-      dispatch(setCart(cartResponse.data.result))
-      dispatch(setPrice(cartResponse.data.totalPrice))
+      dispatch(setCart(cartResponse.data.result));
+      dispatch(setPrice(cartResponse.data.totalPrice));
     } catch (error) {
       console.log(error);
     }
@@ -84,13 +82,13 @@ export const CartCounter = ({ initialCount, onCountChange, productId,cartId }) =
 
   return (
     <Box>
-      <Flex align="center" border={"1px"} borderRadius={"lg"} borderColor={"gray.200"} minW={"120px"} justifyContent={"center"}>
+      <Flex align="center" border="1px" borderRadius="lg" borderColor="gray.200" minW="120px" justifyContent="center">
         <IconButton
           aria-label="Decrement"
           icon={<MinusIcon />}
           onClick={handleDecrement}
           color={count > 0 ? "#517664" : "gray.500"}
-          bg={"transparent"}
+          bg="transparent"
           size="sm"
           isDisabled={count === 1}
         />
@@ -106,14 +104,14 @@ export const CartCounter = ({ initialCount, onCountChange, productId,cartId }) =
             backgroundColor="transparent"
             border="none"
             pattern="[0-9]*"
-            w={"75px"}
+            w={{ base: "50px", md: "75px" }}
             _focus={{ boxShadow: "none" }}
           />
         </Box>
         <IconButton
           aria-label="Increment"
-          bg={'transparent'}
-          color={"#517664"}
+          bg="transparent"
+          color="#517664"
           icon={<AddIcon />}
           onClick={handleIncrement}
           size="sm"
@@ -121,7 +119,7 @@ export const CartCounter = ({ initialCount, onCountChange, productId,cartId }) =
         />
       </Flex>
       {inputError && (
-        <Text color="red" fontSize="sm" ml={1}>
+        <Text color="red" fontSize="sm" mt={1}>
           Please enter a valid quantity.
         </Text>
       )}

@@ -12,11 +12,15 @@ export const PaginationAddress = ({ totalpage }) => {
   const roleId = params.get("roleId") || "";
   const warehouseId = params.get("warehouseId") || "";
   const currentpage = Number(params.get("page")) || 1;
+  const status = params.get("filterStatus") || '';
+  const sortDir = params.get("sortDirection") || 'asc';
+  const productName = params.get("productName") || '';
+  const shipping = params.get("shipping") || '';
 
   function handlePage(newPage) {
     if (newPage >= 1 && newPage <= totalpage) {
       params.set("page", newPage);
-      navigate(`?search=${search}&sort=${sort}&page=${newPage}&roleId=${roleId}&warehouseId=${warehouseId}`);
+      navigate(`?search=${search}&sort=${sort}&page=${newPage}&roleId=${roleId}&warehouseId=${warehouseId}&filterStatus=${status}&sortDirection=${sortDir}&productName=${productName}&shipping=${shipping}`);
     }
   }
   return (
