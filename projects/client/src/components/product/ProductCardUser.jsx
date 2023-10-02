@@ -5,14 +5,15 @@ export const ProductCardUser = ({ name, price, image, category, reload, setReloa
   return (
     <Flex m={3} onClick={onClick}>
       <Box
-        w="100px"
+        // w="100px"
         bg="white"
         alignItems="center"
         p="10px"
-        minW="180px"
+        minW="150px"
         borderRadius="10px"
         shadow="md"
         key={name}
+        h="300px"
       >
         <Box>
           <Image
@@ -25,7 +26,7 @@ export const ProductCardUser = ({ name, price, image, category, reload, setReloa
         </Box>
         <Box>
             <Badge variant='outline' colorScheme='whatsapp' mb={2}>{category}</Badge>
-          <Text fontSize="14px">{name}</Text>
+          <Text fontSize="14px" overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis" maxW="150px">{name}</Text>
           <Text fontSize="16px" fontWeight="bold">
             {formatIDR(price)}
           </Text>

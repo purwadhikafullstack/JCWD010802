@@ -12,7 +12,10 @@ const totalPriceSlice = createSlice({
         setPrice: (state, action) => {
             state.value = action.payload
         },
+        setPriceOut:(state, action)=>{
+            state.value = 0
+        }
 }})
 
-export const { setPrice  } = totalPriceSlice.actions
+export const { setPrice, setPriceOut } = totalPriceSlice.actions
 export default totalPriceSlice.reducer

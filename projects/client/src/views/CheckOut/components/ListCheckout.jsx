@@ -64,7 +64,7 @@ export const CheckoutList = ({ selectedAddress }) => {
     }
     setSubtotal(newSubtotal);
   };
-  
+    
   const allWeight = cartItems.reduce((total, item) => {
     return total + item.product.weight;
   }, 0);
@@ -78,6 +78,7 @@ export const CheckoutList = ({ selectedAddress }) => {
             <Image
               src={`http://localhost:8000/productImg/${item.product.productImg}`}
               h="100px" w="100px" objectFit={"cover"}
+              maxW={{ base: "50px", sm: "100px" }}
               mr={5}
             />
             <Stack>
@@ -129,4 +130,4 @@ export const CheckoutList = ({ selectedAddress }) => {
       </Flex>
     </Flex>
   );
-};
+}

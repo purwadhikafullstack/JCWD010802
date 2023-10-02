@@ -1,6 +1,7 @@
 import { Flex, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 import { ProfileCard } from "./components/Profile";
 import { AddressCard } from "./components/Address";
+import { OrderList } from "./components/OrderList";
 
 export const ProfileView = () => {
   return (
@@ -9,6 +10,7 @@ export const ProfileView = () => {
       <TabList >
         <Tab bgColor={"white"}>Profile</Tab>
         <Tab bgColor={"white"}>Address</Tab>
+        <Tab bgColor={"white"}>My Order</Tab>
       </TabList>
       <TabPanels>
         <TabPanel width={{base: "auto",lg: "1000px"}}>
@@ -16,6 +18,9 @@ export const ProfileView = () => {
         </TabPanel>
         <TabPanel width={{base: "auto",lg: "1000px"}}>
           <AddressCard/>
+        </TabPanel>
+        <TabPanel width={{base: "auto",lg: "1000px"}}>
+          <OrderList />
         </TabPanel>
       </TabPanels>
     </Tabs>

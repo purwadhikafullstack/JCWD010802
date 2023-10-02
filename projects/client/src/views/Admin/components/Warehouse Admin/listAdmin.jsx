@@ -27,6 +27,7 @@ export const ListAdmin = () => {
   const currentPage = Number(params.get("page")) || 1;
   const [page, setPage] = useState([]);
   const navigate = useNavigate()
+  const defaultAvatar = "https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png"
   const getAdmin = async () => {
     try {
       const response = await axios.get(
@@ -136,8 +137,21 @@ export const ListAdmin = () => {
               key={item.id}
               p={4} width={["100%", "100%", "100%", "100%"]} shadow="md" borderWidth="1px" mx={"auto"} position="relative" display="flex" flexDirection="column">
               <Flex alignItems="center">
-                <Image
-                  objectFit="cover" src={'https://images.unsplash.com/photo-1520810627419-35e362c5dc07?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ'} alt="#" boxSize="100px"/>
+              {item.profileImg ? (
+      <Image
+        objectFit="cover"
+        src={`http://localhost:8000/profileImg/${item.profileImg}`}
+        alt="profile image"
+        boxSize="100px"
+      />
+    ) : (
+      <Image
+        objectFit="cover"
+        src={defaultAvatar}
+        alt="default avatar"
+        boxSize="100px"
+      />
+    )}
                 <Box ml={4}>
                   <Heading as="h2" size="md">
                     {item.user?.name}

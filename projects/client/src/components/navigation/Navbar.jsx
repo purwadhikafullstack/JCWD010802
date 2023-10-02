@@ -1,12 +1,12 @@
-import { Avatar, Button, Flex, HStack, Heading, Image, Input, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Modal, Text, useToast } from "@chakra-ui/react"
-import { AiOutlineShoppingCart } from "react-icons/ai";
+import { Avatar, Box, Button, Flex, HStack, Heading, Image, Input, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, useToast } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { ModalLogout } from "./ModalLogOut";
 import { setLogOut } from "../../redux/userSlice";
+import { setCartOut } from "../../redux/cartSlice";
+import { setPriceOut } from "../../redux/totalPrice";
 import { AiFillHeart } from "react-icons/ai";
 import { CartNotif } from "./cartNotif";
-import { useEffect, useState } from "react";
 
 export const Navbar = () => {
   const data = useSelector((state) => state.user.value);
@@ -19,7 +19,10 @@ export const Navbar = () => {
 
   const onLogOut = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("warehouseId");
     dispatch(setLogOut());
+    dispatch(setCartOut());
+    dispatch(setPriceOut());
     toast({
       title: "Sign Out Success",
       description: "See you next time!",
@@ -53,7 +56,9 @@ export const Navbar = () => {
       zIndex={999}
     >
       <HStack spacing={3} mr={1} display={{ base: "none", lg: "flex" }}>
-        <Image src="https://i.postimg.cc/rs836p0m/web-logo.png" h="140px" />
+        <Box as={Link} to="/" >
+          <Image src="https://i.postimg.cc/rs836p0m/web-logo.png" h="140px" />
+        </Box>
         <Button
           variant="ghost"
           color="white"

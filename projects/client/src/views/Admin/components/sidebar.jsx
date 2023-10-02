@@ -17,11 +17,11 @@ import {
 import { FiMenu, FiSearch, FiBell } from "react-icons/fi";
 import { MdHome } from "react-icons/md";
 import { FaRss, FaClipboardCheck, FaWarehouse, FaUsers } from "react-icons/fa";
-import { HiCollection, HiCode } from "react-icons/hi";
+import { PiPackageFill} from "react-icons/pi";
 import { AiFillGift } from "react-icons/ai";
-import { BsGearFill } from "react-icons/bs";
+import { BsGearFill, BsFillCartFill } from "react-icons/bs";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { BiSolidCategoryAlt } from "react-icons/bi";
+import { BiSolidCategoryAlt, BiTransfer } from "react-icons/bi";
 export const Sidebar = () => {
   const sidebar = useDisclosure();
   const location = useLocation();
@@ -37,6 +37,7 @@ export const Sidebar = () => {
         mx="2"
         rounded="md"
         py="3"
+        mt={2}
         cursor="pointer"
         color={isActive ? "#9fd8cb" : "#2d3319"}
         _hover={{
@@ -89,13 +90,17 @@ export const Sidebar = () => {
       <Flex
         direction="column"
         as="nav"
-        gap={2}
         fontSize="sm"
         aria-label="Main Navigation"
       >
         <NavLink to="/">
           <NavItem icon={MdHome} to="/">
             Home
+          </NavItem>
+        </NavLink>
+        <NavLink to="order">
+          <NavItem icon={PiPackageFill} to="/admin/order">
+            Order
           </NavItem>
         </NavLink>
         <NavLink to="list-user">
@@ -117,20 +122,16 @@ export const Sidebar = () => {
               Warehouse
             </NavItem>
           </NavLink>
-          <NavLink to="product-list">
-            <NavItem icon={AiFillGift} to="/admin/product-list">
-              Products
-            </NavItem>
-          </NavLink>
-          <NavLink to="warehouse-stock">
-            <NavItem to="/admin/warehouse-stock" icon={FaClipboardCheck}>
-              Stock
-            </NavItem>
-          </NavLink>
-          <NavLink to="report">
-            <NavItem icon={HiCode}>Report</NavItem>
-          </NavLink>
-          <NavItem icon={BsGearFill}>Settings</NavItem>
+        <NavLink to="product-list">
+          <NavItem icon={AiFillGift} to="/admin/product-list">Products</NavItem>
+        </NavLink>
+        <NavLink to="warehouse-stock">
+          <NavItem to="/admin/warehouse-stock" icon={FaClipboardCheck}>Stock</NavItem>
+        </NavLink>
+        <NavLink to="mutation">
+          <NavItem to="/admin/mutation" icon={BiTransfer}>Request Stock</NavItem>
+        </NavLink>
+        <NavItem icon={BsGearFill}>Settings</NavItem>
         </NavLink>
       </Flex>
     </Box>

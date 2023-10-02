@@ -2,7 +2,9 @@ import { createSlice } from "@reduxjs/toolkit"
 
 
 const initialState = {
-    value: 0
+
+    value: 0,
+    ship:""
 }
 
 const costSlice = createSlice({
@@ -12,7 +14,10 @@ const costSlice = createSlice({
         setCost: (state, action) => {
             state.value = action.payload
         },
+        setShip: (state, action) => {
+            state.ship = action.payload
+        },
 }})
 
-export const { setCost  } = costSlice.actions
+export const { setCost,setShip  } = costSlice.actions
 export default costSlice.reducer

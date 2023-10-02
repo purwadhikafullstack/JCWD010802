@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { setValue } from "../../../redux/userSlice"
 import {  setCart} from "../../../redux/cartSlice"
+import {  setPrice} from "../../../redux/totalPrice"
 
 
 
@@ -48,6 +49,7 @@ export const LoginCard = () => {
                     navigate("/admin"); 
                   }              }, 2000)
             localStorage.setItem("token", response.data.token)
+            localStorage.setItem("warehouseId",response.data.result.warehouseAdmin.warehouseId||"")
             const cartResponse = await axios.get("http://localhost:8000/api/cart", {
             headers: {
                 Authorization: `Bearer ${response.data.token}`,
@@ -55,6 +57,8 @@ export const LoginCard = () => {
         });
         const userCart = cartResponse.data.result;
         dispatch(setCart(userCart))
+        dispatch(setPrice(cartResponse.data.totalPrice))
+
         console.log(userCart);
         } catch (error) {
             toast({
@@ -106,7 +110,7 @@ export const LoginCard = () => {
                     placeholder="Enter your password here"
                     bg="white"
                 />
-                <Text as={Link} to="/forgotpassword" fontSize="14px" mt="5px">Forgot password?</Text>
+                <Text as={Link} to="/forgot-password" fontSize="14px" mt="5px">Forgot password?</Text>
                 <Button type="submit" mt="15px" bg="#517664" color="white"
                 _hover={{color: "#517664", bg: "white"}}>
                     Submit

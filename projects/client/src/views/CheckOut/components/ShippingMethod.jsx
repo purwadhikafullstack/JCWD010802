@@ -2,7 +2,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Box, Flex, Select, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { setCost } from "../../../redux/costSlice";
+
+import { setCost,setShip } from "../../../redux/costSlice";
 import formatIDR from "../../../helpers/formatIDR";
 
 export const ShippingMethod = ({ selectedAddress, totalWeight }) => {
@@ -68,6 +69,7 @@ export const ShippingMethod = ({ selectedAddress, totalWeight }) => {
     setSelectedCourier(e.target.value);
     setSelectedService("");
     dispatch(setCost(0));
+    dispatch(setShip(e.target.value));
     setCourierSelected(true);
   };
 
@@ -75,6 +77,7 @@ export const ShippingMethod = ({ selectedAddress, totalWeight }) => {
     setSelectedCourier("");
     setSelectedService("");
     dispatch(setCost(0));
+    dispatch(setShip(""));
     setCourierSelected(false);
   };
 

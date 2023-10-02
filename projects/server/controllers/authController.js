@@ -47,9 +47,12 @@ module.exports = {
     login: async (req, res) => {
         try {
             const { email, password } = req.body
-            const result = await user.findOne({ where: { email },include: [{model:warehouseAdmin}]})
-            if (!result) throw { message: "Email or Password Incorrect" }
 
+            const result = await user.findOne({ 
+                where: { email },
+                include: [{ model: warehouseAdmin }]
+        })
+            if (!result) throw { message: "Email or Password Incorrect" }
             if (password !== result.password) throw { message: "Email or Password Incorrect" }
             // const isValid = await bcrypt.compare(password, result.password)
             // if (!isValid) throw { message: "Email or Password Incorrect" }
@@ -72,9 +75,10 @@ module.exports = {
     keepLogin: async (req, res) => {
         try {
             const { id } = req.user
-
-            const result = await user.findOne({ where: { id }, include: [{model:warehouseAdmin}]})
-
+            const result = await user.findOne({ 
+                where: { id },
+                include: [{ model: warehouseAdmin }]
+            })
             res.status(200).send({
                 status: true,
                 result
@@ -120,7 +124,7 @@ module.exports = {
             })
         }
     },
-  verified : async (req, res) => {
+    verified : async (req, res) => {
         try {
             const {
                 name,

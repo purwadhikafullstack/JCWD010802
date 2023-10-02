@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       address.hasOne(models.userAddress)
+      address.hasOne(models.order)
     }
   }
   address.init({
