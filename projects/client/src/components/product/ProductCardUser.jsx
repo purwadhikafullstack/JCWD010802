@@ -1,36 +1,36 @@
-import { Badge, Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Badge, Box, Flex, Image, Skeleton, Text } from "@chakra-ui/react";
 import formatIDR from "../../helpers/formatIDR";
 
-export const ProductCardUser = ({ name, price, image, category, reload, setReload, onClick }) => {
+export const ProductCardUser = ({ name, price, image, category, reload, setReload, onClick, isLoaded }) => {
   return (
-    <Flex m={3} onClick={onClick}>
-      <Box
-        // w="100px"
-        bg="white"
-        alignItems="center"
-        p="10px"
-        minW="150px"
-        borderRadius="10px"
-        shadow="md"
-        key={name}
-        h="300px"
-      >
-        <Box>
-          <Image
-            src={`http://localhost:8000/productImg/${image}`}
-            w="full"
-            h="200px"
-            objectFit="contain"
-          />
+    <Skeleton isLoaded={isLoaded}>
+      <Flex onClick={onClick}>
+        <Box
+          bg="white"
+          alignItems="center"
+          p="10px"
+          maxW={{ base: "140px", lg: "180px"}}
+          borderRadius="10px"
+          shadow="md"
+          key={name}
+          >
+          <Box>
+            <Image
+              src={`http://localhost:8000/productImg/${image}`}
+              w="full"
+              h={{ base: "120px", lg: "200px"}}
+              objectFit="contain"
+              />
+          </Box>
+          <Box>
+              <Badge variant='outline' colorScheme='whatsapp' mb={2}>{category}</Badge>
+            <Text fontSize="12px">{name}</Text>
+            <Text fontSize={{base: "14px", lg: "16px"}} fontWeight="bold">
+              {formatIDR(price)}
+            </Text>
+          </Box>
         </Box>
-        <Box>
-            <Badge variant='outline' colorScheme='whatsapp' mb={2}>{category}</Badge>
-          <Text fontSize="14px" overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis" maxW="150px">{name}</Text>
-          <Text fontSize="16px" fontWeight="bold">
-            {formatIDR(price)}
-          </Text>
-        </Box>
-      </Box>
-    </Flex>
+      </Flex>
+    </Skeleton>
   );
 };

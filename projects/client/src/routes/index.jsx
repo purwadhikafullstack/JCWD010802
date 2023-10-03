@@ -96,7 +96,6 @@ const LoginGuardedRoute = ({ element }) => {
   }
 };
 
-
 const Routes = (
   <>
     <Route path="/" element={<Homepage />}>
