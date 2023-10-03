@@ -3,7 +3,7 @@ const { orderController } = require("../controllers")
 const { verifyToken } = require('../middlewares/auth')
 const { multerUpload } = require("../middlewares/multer")
 
-router.get("/",orderController.userOrder)
+router.get("/admin",orderController.userOrder)
 router.get("/status",orderController.getStatus)
 router.get("/", verifyToken, orderController.allOrder)
 router.post("/",verifyToken,orderController.checkout)

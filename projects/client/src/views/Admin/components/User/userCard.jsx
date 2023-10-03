@@ -33,7 +33,7 @@ export const UserCard = () => {
   const currentPage = Number(params.get("page")) || 1;
   const [page, setPage] = useState([]);
   const navigate = useNavigate();
-
+  const defaultAvatar = "https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png"
   const getUser = async () => {
     try {
       const response = await axios.get(
@@ -105,15 +105,21 @@ export const UserCard = () => {
             boxShadow={"2xl"}
             padding={4}
           >
-            <Flex bg="blue.200">
-              <Image
-                objectFit="cover"
-                boxSize="100%"
-                src={
-                  "https://images.unsplash.com/photo-1520810627419-35e362c5dc07?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
-                }
-                alt="#"
-              />
+            <Flex >
+            {item.profileImg ? (
+      <Image
+      objectFit="cover"
+      boxSize="100%"        
+      src={`http://localhost:8000/profileImg/${item.profileImg}`}
+        alt="profile image"
+      />
+    ) : (
+      <Image
+        src={defaultAvatar}
+        alt="default avatar"
+        objectFit="cover"
+        boxSize="100%"      />
+    )}
             </Flex>
             <Box>
               <Heading fontSize={"xl"} fontFamily={"body"}>

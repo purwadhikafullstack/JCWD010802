@@ -28,7 +28,7 @@ const shipping = params.get("shipping") || '';
 
     const getSuperOrder = async()=>{
         try {
-            const response = await axios.get(`http://localhost:8000/api/order/?page=${currentPage}&statuses=${status}&warehouseId=${warehouseId}&sortDir=${sortDir}&shipping=${shipping}`)
+            const response = await axios.get(`http://localhost:8000/api/userOrder/admin/?page=${currentPage}&statuses=${status}&warehouseId=${warehouseId}&sortDir=${sortDir}&shipping=${shipping}`)
             setSuperOrder(response.data.result)
             setPageSuperOrders(response.data.totalpage); 
         } catch (error) {
@@ -37,7 +37,7 @@ const shipping = params.get("shipping") || '';
     }
     const getOrder = async()=>{
         try {
-            const response = await axios.get(`http://localhost:8000/api/order/warehouse/${id}?page=${currentPage}&statuses=${status}&warehouseId=${warehouseId}&sortDir=${sortDir}&shipping=${shipping}`)
+            const response = await axios.get(`http://localhost:8000/api/userOrder/warehouse/${id}?page=${currentPage}&statuses=${status}&warehouseId=${warehouseId}&sortDir=${sortDir}&shipping=${shipping}`)
             setOrder(response.data.result)
             setPageAllOrders(response.data.totalpage); 
         } catch (error) {
@@ -54,7 +54,7 @@ const shipping = params.get("shipping") || '';
       };
     const getStatus = async () => {
         try {
-          const response = await axios.get(`http://localhost:8000/api/order/status`);
+          const response = await axios.get(`http://localhost:8000/api/userOrder/status`);
           setStatusList(response.data.result);
         } catch (error) {
           console.log(error);

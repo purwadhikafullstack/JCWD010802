@@ -21,6 +21,7 @@ function App() {
           Authorization: `Bearer ${token}`
         }
       })
+      console.log(response);
       dispatch(setValue(response.data.result))
     } else {
       

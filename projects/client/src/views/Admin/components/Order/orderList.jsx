@@ -135,9 +135,9 @@ export const OrderList = ({
             </Td>
             <Td>
               <Badge
-                colorScheme={getStatusBadgeColor(order.status.status)}
+                colorScheme={getStatusBadgeColor(order.status.name)}
               >
-                {order.status.status}
+                {order.status.name}
               </Badge>
             </Td>
           </Tr>

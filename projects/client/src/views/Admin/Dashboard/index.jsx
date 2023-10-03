@@ -3,11 +3,10 @@ import {
   Box,
   Heading,
   Text,
-  Stat,
-  StatLabel,
-  StatNumber,
   SimpleGrid,
   GridItem,
+  Flex,
+  HStack,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
@@ -20,6 +19,8 @@ export const Dashboard = () => {
     totalWarehouse: 0,
     totalProduct: 0,
     totalCategory: 0,
+    totalVerifiedUsers: 0,
+    totalUnverifiedUsers: 0,
     categoriesWithProductCount: [],
   });
 
@@ -36,24 +37,22 @@ export const Dashboard = () => {
     getData();
   }, []);
 
-  const pieData = data.categoriesWithProductCount.map((category) => ({
+  const COLORS = ['#0088FE', '#FFBB28', '#00C49F', '#FF8042', '#8884d8', '#ffcc00'];
+
+  const categoryPieData = data.categoriesWithProductCount.map((category) => ({
     name: category.name,
     value: category.productCount,
   }));
 
-  const COLORS = [
-    '#0088FE',
-    '#00C49F',
-    '#FFBB28',
-    '#FF8042',
-    '#8884d8',
-    '#ffcc00',
+  const userVerificationPieData = [
+    { name: 'Verified Users', value: data.totalVerifiedUsers },
+    { name: 'Unverified Users', value: data.totalUnverifiedUsers },
   ];
 
   return (
     <Box p={4}>
       <Heading as="h1" size="xl" mb={4}>
-         Dashboard
+        Dashboard
       </Heading>
       <SimpleGrid columns={[1, 2, 3]} spacing={6}>
         <GridItem>
@@ -71,20 +70,24 @@ export const Dashboard = () => {
         <GridItem>
           <StatCard label="Total Category" value={data.totalCategory} />
         </GridItem>
-        <Box gridColumn="span 3">
+        </SimpleGrid>
+        <HStack>
           <Box>
-            {pieData.length > 0 ? (
+            {userVerificationPieData.length > 0 ? (
               <PieChart width={400} height={400}>
                 <Pie
                   dataKey="value"
                   isAnimationActive={false}
-                  data={pieData}
+                  data={userVerificationPieData}
                   outerRadius={80}
                   fill="#8884d8"
                   label
                 >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  {userVerificationPieData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -94,10 +97,32 @@ export const Dashboard = () => {
               <Text>Loading...</Text>
             )}
           </Box>
-        </Box>
-      </SimpleGrid>
+          <Box>
+            {categoryPieData.length > 0 ? (
+              <PieChart width={450} height={400}>
+                <Pie
+                  dataKey="value"
+                  isAnimationActive={false}
+                  data={categoryPieData}
+                  outerRadius={80}
+                  fill="#FFBB28"
+                  label
+                >
+                  {categoryPieData.map((entry, index) => (
+                    <Cell
+                    key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                      />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            ) : (
+              <Text>Loading...</Text>
+              )}
+          </Box>
+              </HStack>
     </Box>
   );
 };
-
-    

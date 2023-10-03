@@ -23,7 +23,7 @@ export const ForgotPasswordForm = ({ onSubmit }) => {
             )}
           </Field>
 
-          <Button type="submit" bg={"#9fd8cb"} color={"white"}_hover={{bg:"#517664"}}  isLoading={false}>
+          <Button type="submit" bg={"#517664"} color={"white"}_hover={{bg:"#9fd8cb",color:"#2d3319"}}  isLoading={false}>
             Submit
           </Button>
         </VStack>

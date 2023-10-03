@@ -250,8 +250,7 @@ module.exports = {
         } catch (error) {
             console.log(error);
         }
-    }
-};
+    },
     allOrder: async (req, res) => {
         try {
             const page = +req.query.page || 1;
