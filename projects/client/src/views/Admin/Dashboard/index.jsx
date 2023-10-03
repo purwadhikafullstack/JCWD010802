@@ -37,7 +37,27 @@ export const Dashboard = () => {
     getData();
   }, []);
 
-  const COLORS = ['#0088FE', '#FFBB28', '#00C49F', '#FF8042', '#8884d8', '#ffcc00'];
+  const COLORS = [
+    "#0088FE",
+    "#00C49F",
+    "#FFBB28",
+    "#FF8042",
+    "#8884d8",
+    "#ffcc00",
+    "#FF6B6B",
+    "#A3A1FB",
+    "#64C4ED",
+    "#FFD166",
+    "#FF8C42",
+    "#A0E7E5",
+    "#3A506B",
+    "#EF476F",
+    "#F7F7FF",
+    "#21313E",
+    "#FDE74C",
+    "#DBEDF3",
+    "#F6F6F6",
+    "#023047",];
 
   const categoryPieData = data.categoriesWithProductCount.map((category) => ({
     name: category.name,
@@ -48,7 +68,19 @@ export const Dashboard = () => {
     { name: 'Verified Users', value: data.totalVerifiedUsers },
     { name: 'Unverified Users', value: data.totalUnverifiedUsers },
   ];
+  const RADIAN = Math.PI / 180;
 
+  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+  
+    return (
+      <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
+    );
+  };
   return (
     <Box p={4}>
       <Heading as="h1" size="xl" mb={4}>
@@ -81,7 +113,8 @@ export const Dashboard = () => {
                   data={userVerificationPieData}
                   outerRadius={80}
                   fill="#8884d8"
-                  label
+                  label={renderCustomizedLabel}
+                  labelLine={false}
                 >
                   {userVerificationPieData.map((entry, index) => (
                     <Cell
@@ -106,7 +139,9 @@ export const Dashboard = () => {
                   data={categoryPieData}
                   outerRadius={80}
                   fill="#FFBB28"
-                  label
+                  label={renderCustomizedLabel}
+                  labelLine={false}
+
                 >
                   {categoryPieData.map((entry, index) => (
                     <Cell
