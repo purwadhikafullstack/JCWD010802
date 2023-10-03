@@ -138,7 +138,6 @@ module.exports = {
             })
             res.status(200).send({
                 result,
-                
                 status: true,
             })
         }} catch (error) {
@@ -192,7 +191,6 @@ module.exports = {
             orderId: id
           })
         })
-
         await order.update({ statusId: 6 }, { where: { id } })
         res.status(200).send({
             message: "Order cancelled",

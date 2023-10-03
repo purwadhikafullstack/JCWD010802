@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Flex, HStack, Heading, Image, Input, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, useToast } from "@chakra-ui/react"
+import { Avatar, Box, Button, Flex, HStack, Heading, Icon, Image, Input, InputGroup, InputLeftElement, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, useToast } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { ModalLogout } from "./ModalLogOut";
@@ -7,6 +7,8 @@ import { setCartOut } from "../../redux/cartSlice";
 import { setPriceOut } from "../../redux/totalPrice";
 import { AiFillHeart } from "react-icons/ai";
 import { CartNotif } from "./cartNotif";
+import { WishlistNav } from "./WishlistNav";
+import { BiSearchAlt2 } from "react-icons/bi";
 
 export const Navbar = () => {
   const data = useSelector((state) => state.user.value);
@@ -41,7 +43,16 @@ export const Navbar = () => {
     } else {
       navigate(`/product?search=${selectedSort}`);
     }
+    window.scrollTo(0, 0);
   };
+  const onClickProduct = () => {
+    navigate("/product")
+    window.scrollTo(0, 0);
+  }
+  const onClickHome = () => {
+    navigate("/")
+    window.scrollTo(0, 0);
+  }
   return (
     <Flex
       minW="full"
@@ -56,30 +67,34 @@ export const Navbar = () => {
       zIndex={999}
     >
       <HStack spacing={3} mr={1} display={{ base: "none", lg: "flex" }}>
-        <Box as={Link} to="/" >
+        <Box onClick={onClickHome} >
           <Image src="https://i.postimg.cc/rs836p0m/web-logo.png" h="140px" />
         </Box>
         <Button
           variant="ghost"
           color="white"
-          as={Link}
-          to="/product"
+          onClick={onClickProduct}
           _hover={{ color: "#517664", bg: "white" }}
         >
           Products
         </Button>
       </HStack>
-      <Input
-        maxW="500px"
-        h="40px"
-        bg="white"
-        color="#517664"
-        placeholder="Find your desired items"
-        onChange={(e) => handleSort(e.target.value)}
-      />
-      <HStack spacing={3} display={{ base: "none", lg: "flex" }}>
+      <InputGroup maxW="500px">
+        <InputLeftElement color="gray.500">
+          <Icon as={BiSearchAlt2} boxSize={5} />
+        </InputLeftElement>
+        <Input
+          maxW="500px"
+          h="40px"
+          bg="white"
+          color="#517664"
+          placeholder="Find your desired items"
+          onChange={(e) => handleSort(e.target.value)}
+        />
+      </InputGroup>
+      <Flex gap={3} align="center" display={{ base: "none", lg: "flex" }}>
         <NavLink to={"cart"}>
-        <CartNotif/>
+          <CartNotif/>
         </NavLink>
         <Text>|</Text>
         {!data.name ? (
@@ -104,44 +119,40 @@ export const Navbar = () => {
             </Button>
           </Flex>
         ) : (
-          <Flex align="center" justifyContent="center">
-            <Button
-              variant="ghost"
-              color="white"
-              _hover={{ color: "#517664", bg: "white" }}
-            >
-              <AiFillHeart />
-            </Button>
+          <Flex align="center" justifyContent="center" gap={3}>
+            <NavLink to="wishlist">
+              <WishlistNav />
+            </NavLink>
             {data.roleId === 1?
-                    <Menu>
-                        <MenuButton as={Button} variant="ghost" _active={{ bg: "#517664"}} mr="10px">
-                            <Avatar size="sm" />
-                        </MenuButton>
-                        <MenuList color="#517664">
-                            <MenuItem as={Link} to={"/profile"}>Profile</MenuItem>
-                            <MenuDivider />
-                            <MenuItem as={ModalLogout} onLogout={onLogOut}>Sign Out</MenuItem>
-                        </MenuList>
-                    </Menu> :
-                    <Menu>
-                    <MenuButton as={Button} variant="ghost" _active={{ bg: "#517664"}} mr="10px">
-                        <Avatar size="sm" />
-                    </MenuButton>
-                    <MenuList color="#517664">
-                      <NavLink to={"/profile"}>
-                        <MenuItem>Profile</MenuItem>
-                      </NavLink>
-                        <NavLink to={"/admin"}>
-                        <MenuItem>Admin</MenuItem>
-                        </NavLink>
-                        <MenuDivider />
-                        <MenuItem as={ModalLogout} onLogout={onLogOut}>Sign Out</MenuItem>
-                    </MenuList>
-                </Menu>
-                    }  
+            <Menu>
+              <MenuButton as={Button} variant="ghost" _active={{ bg: "#517664"}} mr="10px">
+                <Avatar size="sm" />
+              </MenuButton>
+              <MenuList color="#517664">
+                <MenuItem as={Link} to={"/profile"}>Profile</MenuItem>
+                <MenuDivider />
+                <MenuItem as={ModalLogout} onLogout={onLogOut}>Sign Out</MenuItem>
+              </MenuList>
+            </Menu> :
+            <Menu>
+              <MenuButton as={Button} variant="ghost" _active={{ bg: "#517664"}} mr="10px" _hover={{ bg: " #517664"}}>
+                <Avatar size="md" src={`http://localhost:8000/profileImg/${data.profileImg}`}/>
+              </MenuButton>
+              <MenuList color="#517664">
+                <NavLink to={"/profile"}>
+                  <MenuItem>Profile</MenuItem>
+                </NavLink>
+                <NavLink to={"/admin"}>
+                  <MenuItem>Admin</MenuItem>
+                </NavLink>
+                <MenuDivider />
+                <MenuItem as={ModalLogout} onLogout={onLogOut}>Sign Out</MenuItem>
+              </MenuList>
+            </Menu>
+          }  
           </Flex>
         )}
-      </HStack>
+      </Flex>
     </Flex>
   );
 };
