@@ -28,7 +28,7 @@ export const ProductCardModal = ({ data }) => {
                             </Heading>
                         </Flex>
                         <Text color="gray.500" fontSize="14px">
-                            Stock: {data.quantity}
+                            Stock: {data.totalQuantity}
                         </Text>
                     </Box>
                 </Flex>
