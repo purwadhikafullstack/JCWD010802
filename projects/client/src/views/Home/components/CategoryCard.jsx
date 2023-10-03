@@ -1,11 +1,12 @@
-import { Box, Flex, Image, Text } from "@chakra-ui/react"
+import { Box, Flex, Image, Skeleton, Text } from "@chakra-ui/react"
 
 
-export const CategoryCard = ({ data, onClick }) => {
+export const CategoryCard = ({ data, onClick, isLoaded }) => {
     return (
         <>
             {data?.map(item => (
-                <Flex direction="column" bg="white" alignItems="center" p="20px" minW="150px"
+                <Skeleton isLoaded={isLoaded}>
+                <Flex direction="column" bg="white" alignItems="center" p="10px" minW="161px"
                 borderRadius="10px" shadow="md" key={item.name} onClick={() => onClick(item.id)}>
                     <Box>
                         <Image src={`http://localhost:8000/categoryImg/${item.categoryImg}`} w="full" h="100px" objectFit="contain" />
@@ -14,6 +15,7 @@ export const CategoryCard = ({ data, onClick }) => {
                         <Text fontSize="14px" fontWeight="bold">{item.name}</Text>
                     </Box>
                 </Flex>
+                </Skeleton>
             ))}
         </>
     )

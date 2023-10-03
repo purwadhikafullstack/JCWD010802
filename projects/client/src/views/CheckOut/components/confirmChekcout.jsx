@@ -1,11 +1,12 @@
 import { Box, Button, Divider, HStack, Heading, Text, VStack } from "@chakra-ui/react";
 import formatIDR from "../../../helpers/formatIDR";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useLocation } from 'react-router-dom';
-import { TbReload } from "react-icons/tb";
+import convertToUppercase from "../../../helpers/upperCase";
+import { setCartOut } from "../../../redux/cartSlice";
+
 
 export const ConfirmCheckout = ({addressId}) => {
   const cartId = useSelector((state) => state.cart.id);
@@ -15,8 +16,8 @@ export const ConfirmCheckout = ({addressId}) => {
   const ship = useSelector((state) => state.cost.ship)
   const token = localStorage.getItem("token")
   const chekoutPrice = total+cost
-  const location = useLocation();
-console.log(cartId);
+  const dispatch = useDispatch()
+
   const handleBuyClick = async () => {
     try {
       const dataToSend = {
@@ -25,6 +26,7 @@ console.log(cartId);
         shippingMethod: ship, 
         shippingCost: cost,
       };
+
 
       const response = await axios.post('http://localhost:8000/api/userOrder', dataToSend,{
         headers: {
@@ -38,11 +40,12 @@ console.log(cartId);
       position: 'top-right', 
       autoClose: 3000, 
     });
+    dispatch(setCartOut())
+
     } catch (error) {
       console.error('Checkout failed:', error);
     }
   };
-
   return (
     <>
       <Box
@@ -79,6 +82,15 @@ console.log(cartId);
           )}
                   <HStack  justifyContent={"space-between"} >
                     <Text   color={"gray.500"} fontSize={"18px"}>
+                    Shipping Method
+                    </Text>
+                    <Text   color={"gray.500"} fontSize={"18px"}>
+                      {convertToUppercase(ship)}
+                    </Text>
+                  </HStack>
+                  <HStack  justifyContent={"space-between"} >
+                    <Text   color={"gray.500"} fontSize={"18px"}>
+
                     Shipping Cost
                     </Text>
                     <Text   color={"gray.500"} fontSize={"18px"}>
