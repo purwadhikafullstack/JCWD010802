@@ -10,7 +10,8 @@ module.exports = {
             const result = await user.create({
               name,
               email,
-              roleId:2
+              roleId:2,
+              isVerified: 1
             });
             const {warehouse} = req.body
             const gudang = await warehouseAdmin.create({

@@ -1,16 +1,16 @@
-const { category, product, warehouseAdmin, warehouse, user,sequelize,order } = require("../models");
+const { category, product, warehouseAdmin, warehouse, user,sequelize } = require("../models");
 const { Op } = require("sequelize");
 
 module.exports = {
   basicInfo: async (req, res) => {
     try {
-      const totalUser = await user.count();
-      const totalAdmin = await warehouseAdmin.count();
-      const totalWarehouse = await warehouse.count();
-      const totalProduct = await product.count();
-      const totalCategory = await category.count();
-      const totalOrder = await order.count()
+      const totalVerifiedUsers = await user.count({
+        where: { roleId: 1 ,isVerified: true },
+      });
 
+      const totalUnverifiedUsers = await user.count({
+        where: { roleId:1, isVerified: false },
+      });
       const categoriesWithProductCount = await category.findAll({
         attributes: [
           "id",
@@ -29,18 +29,25 @@ module.exports = {
         ],
         group: ["category.id", "category.name"],
       });
+      const totalProduct = await product.count({});
+      const totalCategory = await category.count({});
+      const totalWarehouse = await warehouse.count({});
+      const totalAdmin = await warehouseAdmin.count({});
+      const totalUser = await user.count();
 
       res.status(200).send({
-        totalUser,
-        totalAdmin,
-        totalWarehouse,
-        totalProduct,
-        totalCategory,
-        categoriesWithProductCount,
+        totalUser:totalUser,
+        totalVerifiedUsers: totalVerifiedUsers,
+        totalUnverifiedUsers: totalUnverifiedUsers,
+        totalProduct: totalProduct,
+        totalCategory: totalCategory,
+        totalWarehouse: totalWarehouse,
+        totalAdmin: totalAdmin,
+        categoriesWithProductCount:categoriesWithProductCount
       });
     } catch (error) {
       console.log(error);
-      res.status(500).send("Internal server error");
+      res.status(500).send("Internal Server Error");
     }
   },
 };

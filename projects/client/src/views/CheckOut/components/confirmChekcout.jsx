@@ -34,7 +34,7 @@ export const ConfirmCheckout = ({addressId}) => {
         },
       });
       setTimeout(() => {
-        window.location.href = '/'; 
+        window.location.href = '/profile'; 
       }, 3000)
  toast.success('Order placed successfully!', {
       position: 'top-right', 
