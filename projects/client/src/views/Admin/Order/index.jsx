@@ -28,7 +28,7 @@ const shipping = params.get("shipping") || '';
 
     const getSuperOrder = async()=>{
         try {
-            const response = await axios.get(`http://localhost:8000/api/userOrder/?page=${currentPage}&statuses=${status}&warehouseId=${warehouseId}&sortDir=${sortDir}&shipping=${shipping}`)
+            const response = await axios.get(`http://localhost:8000/api/userOrder/admin/?page=${currentPage}&statuses=${status}&warehouseId=${warehouseId}&sortDir=${sortDir}&shipping=${shipping}`)
             setSuperOrder(response.data.result)
             setPageSuperOrders(response.data.totalpage); 
         } catch (error) {

@@ -15,13 +15,15 @@ import { ButtonQuantity } from "./Button/ButtonQuantity";
 import { FiShoppingCart, FiHeart, FiCheckCircle } from "react-icons/fi";
 import formatIDR from "../../../../helpers/formatIDR";
 import { AddToCart } from "../addToCart";
+import { ProfileCard } from "../../../Profile/components/Profile";
+import { useSelector } from "react-redux";
 
 export const DetailCard = () => {
   const { id } = useParams();
   const [detail, setDetail] = useState([]);
   const [stock, setStock] = useState([])
   const [wish, setWish] = useState(false);
-
+  const profile = useSelector(state=>state.user.value)
   const getDetail = async () => {
     try {
       const response = await axios.get(`http://localhost:8000/api/product/${id}`);
@@ -107,7 +109,12 @@ export const DetailCard = () => {
            
           </Stack>
         </Stack>
-          <AddToCart detail={detail} stock={stock}/>
+        {profile.roleId===2 ||profile.roleId===3?(
+          null
+          ):(
+            <AddToCart detail={detail} stock={stock}/>
+            
+        )}
       </Flex>
     </Flex>
   );
