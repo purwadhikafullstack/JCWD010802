@@ -14,7 +14,7 @@ export const OrderList = () => {
 
     const getOrderList = async () => {
         try {
-            const response = await axios.get("http://localhost:8000/api/userOrder", { headers })
+            const response = await axios.get("http://localhost:8000/api/userOrder?sort=DESC", { headers })
             console.log(response.data.result);
             setOrder(response.data.result)
         } catch (error) {

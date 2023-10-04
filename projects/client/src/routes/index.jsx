@@ -57,7 +57,7 @@ const Routes = (
       <Route path="warehouse-stock" element={<StockView />} />
       <Route path="mutation" element={<Mutation />} />
       <Route path="order" element={<Order />} />
-      <Route path="detail-order" element={<OrderDetailView />} />
+      <Route path="order/detail-order/:id" element={<OrderDetailView />} />
     </Route>
   </>
 );

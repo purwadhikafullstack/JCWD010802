@@ -257,7 +257,7 @@ module.exports = {
             const limit = +req.query.limit || 10;
             const offset = (page - 1) * limit;
             const search = req.query.search || "";
-            const sort = req.query.sort || "asc";
+            const sort = req.query.sort || "desc";
 
             const filter = {};
             if (search) {
@@ -268,7 +268,7 @@ module.exports = {
                 where: { id: req.user.id }
             })
             if (!isUserExist) throw { message: "User not found!" }
-            const result = await order.findAll({
+            const result = await orders.findAll({
                 where: { userId: req.user.id },
                 attributes: { exclude: ['updatedAt'] },
                 include: [
@@ -278,9 +278,11 @@ module.exports = {
                 ],
                 limit,
                 offset,
-                sort
+                order: [
+                    ['createdAt', sort]
+                ]
             })
-            const total = await order.count({ where: { userId: req.user.id }})
+            const total = await orders.count({ where: { userId: req.user.id }})
             
             res.status(200).send({
                 totalpage: Math.ceil(total / limit),
@@ -385,4 +387,30 @@ module.exports = {
             })
         }
     },
+    orderById: async (req, res) => {
+        try {
+            const { id } = req.params
+            console.log(id);
+            const result = await orders.findOne({
+                where: {
+                    id: id
+                },
+                include: [
+                    { model: orderItem, include: [{ model: product }] },
+                    { model: status },
+                    { model: user, attributes: ['name']}
+                ]
+            })
+
+            res.status(200).send({
+                status: true,
+                result
+            })
+        } catch (error) {
+            res.status(400).send({
+                status: false,
+                message: error.message
+            })
+        }
+    }
 }

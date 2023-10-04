@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react"
+import { Flex, Heading } from "@chakra-ui/react"
 import { AddProductButton } from "../components/Products/addProductButton"
 import { ProductList } from "../components/Products/listProduct"
 import { useEffect, useState } from "react"
@@ -7,10 +7,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { SearchProductAdmin } from "../components/Products/searchProductAdmin";
 import { CategorySort } from "../components/Products/categorySort";
 import { Pagination } from "../../../components/pagination/pagination";
+import { useSelector } from "react-redux";
 
 
 
 export const AdminProducts = () => {
+    const user = useSelector((state) => state.user.value)
     const location = useLocation();
     const navigate = useNavigate()
     const params = new URLSearchParams(location.search);
@@ -34,7 +36,7 @@ export const AdminProducts = () => {
 
     const getCategories = async () => {
         try {
-            const response = await axios.get("http://localhost:8000/api/category")
+            const response = await axios.get("http://localhost:8000/api/category?limit=9999")
             setCategory(response.data.result)
         } catch (error) {
             console.log(error);
@@ -50,7 +52,7 @@ export const AdminProducts = () => {
         if (selectedSort === sort) {
           navigate(`?search=${search}&category=`);
         } else {
-          navigate(`?search=${search}&categoty=${selectedSort}`);
+          navigate(`?search=${search}&category=${selectedSort}`);
         }
     }
     
@@ -60,12 +62,17 @@ export const AdminProducts = () => {
     },[reload, currentPage, search, sort])
     return (
         <Flex direction="column" align="center">
-            <Flex align="center" justifyContent={{base: "center", md: "space-between"}} w="full" p="10px">
-                <SearchProductAdmin search={search} handleSearch={handleSearch} />
-                {/* <CategorySort category={category} handleSort={handleSort} /> */}
-                <AddProductButton category={category} reload={triggerReload} />
+            <Flex w="full" justify="flex-start" p="10px">
+                <Heading fontSize="22px">Products</Heading>
             </Flex>
-            <Flex mx="5">
+            <Flex align="center" gap={2} justifyContent={{base: "center", md: "space-between"}} w="full" p="10px">
+                <Flex gap={2}>
+                    <SearchProductAdmin search={search} handleSearch={handleSearch} />
+                    <CategorySort category={category} handleSort={handleSort} />
+                </Flex>
+                {user?.roleId === 3 ? <AddProductButton category={category} reload={triggerReload} /> : null}
+            </Flex>
+            <Flex mx="5" w="full">
                 <ProductList reload={triggerReload}  product={product} category={category} />
             </Flex>
             <Pagination totalpage={totalPage}/>

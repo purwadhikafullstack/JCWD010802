@@ -2,11 +2,12 @@ import { Select } from "@chakra-ui/react"
 
 
 export const CategorySort = ({ handleSort, category }) => {
+    console.log(category);
     return (
-        <Select placeholder="Category" onChange={handleSort}>
+        <Select placeholder="Category" onChange={(e) => handleSort(e.target.value)} borderColor="black">
             {category?.map((item) => (
                 <option color={"black"} key={item.id} value={item.id}>
-                    {category.name}
+                    {item.name}
                 </option>
             ))}
         </Select>

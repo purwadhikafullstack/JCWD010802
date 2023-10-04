@@ -3,9 +3,10 @@ import formatIDR from "../../../../helpers/formatIDR"
 import axios from "axios"
 import "./style.css"
 import { ModalPayment } from "./ModalPayment"
+import dateFormater from "../../../../helpers/dateFormater"
 
 
-export const TableDetail = ({ id }) => {
+export const TableDetail = ({ id, data }) => {
     const {isOpen, onOpen, onClose} = useDisclosure()
     const token = localStorage.getItem("token")
     const headers = {
@@ -43,77 +44,98 @@ export const TableDetail = ({ id }) => {
             console.log(error);
         }
     }
+    const getStatusBadgeColor = (status) => {
+        switch (status) {
+          case 'Menunggu Pembayaran':
+            return 'yellow';
+          case 'Menunggu Konfirmasi Pembayaran':
+            return 'yellow';
+          case 'Diproses':
+            return 'blue';
+          case 'Dikirim':
+            return 'green';
+          case 'Pesanan Dikonfirmasi':
+            return 'teal';
+          case 'Dibatalkan':
+            return 'red';
+          default:
+            return 'gray';
+        }
+      };
     return (
         <Flex direction="column" w="full">
             <Table variant="simple" size="sm">
                 <Tr>
-                    <Th className="left-header">Invoice</Th>
-                    <Td className="right-data">INV/123/27092023</Td>
-                </Tr>
-                <Tr>
                     <Th className="left-header">Total</Th>
-                    <Td className="right-data">{formatIDR(1200000)}</Td>
-                </Tr>
-                <Tr>
-                    <Th className="left-header">Quantity</Th>
-                    <Td className="right-data">1</Td>
+                    <Td className="right-data">{formatIDR(data?.totalPrice)}</Td>
                 </Tr>
                 <Tr>
                     <Th className="left-header">Shipping Cost</Th>
-                    <Td className="right-data">{formatIDR(10000)}</Td>
+                    <Td className="right-data">{formatIDR(data?.shippingCost)}</Td>
                 </Tr>
                 <Tr>
                     <Th className="left-header">Shipping Method</Th>
-                    <Td className="right-data">JNE</Td>
+                    <Td className="right-data">{data?.shippingMethod}</Td>
                 </Tr>
                 <Tr>
                     <Th className="left-header">Order Date</Th>
-                    <Td className="right-data">27 September 2023</Td>
+                    <Td className="right-data">{dateFormater(data?.createdAt)}</Td>
                 </Tr>
                 <Tr>
                     <Th className="left-header">Customer ID</Th>
-                    <Td className="right-data">69</Td>
+                    <Td className="right-data">{data?.userId}</Td>
                 </Tr>
                 <Tr>
                     <Th className="left-header">Customer Name</Th>
-                    <Td className="right-data">Fathir Suryadi</Td>
+                    <Td className="right-data">{data?.user?.name}</Td>
                 </Tr>
                 <Tr>
                     <Th className="left-header">Payment Proof</Th>
                     <Td className="right-data">
                         <Flex align={{base: "flex-start", lg: "center"}} direction={{ base: "column", lg: "row"}} gap={1}>
-                            <Text>paymentImg-169526178821187630.jpeg</Text>
-                            <Button mt={{ base: "10px", lg: "0"}} onClick={onOpen}>Detail</Button>
+                            <Text>{data?.paymentProof}</Text>
+                            <Button mt={{ base: "10px", lg: "0"}} onClick={onOpen} display={data?.paymentProof ? "block" : "none"}>
+                                Detail
+                            </Button>
                         </Flex>
                     </Td>
                 </Tr>
                 <Tr>
                     <Th className="left-header">Status</Th>
                     <Td className="right-data">
-                        <Badge colorScheme="orange">Menunggu Konfirmasi Pembayaran</Badge>
+                        <Badge colorScheme={getStatusBadgeColor(data?.status?.name)}>
+                            {data?.status?.name}
+                        </Badge>
                     </Td>
                 </Tr>
                 <Tr>
                     <Th className="left-header">Action</Th>
                     <Td className="right-data">
                         <Flex direction={{ base: "column", lg: "row"}} gap={1}>
-                            <Button bg="red" color="white" onClick={handleCancel} _hover={{ bg: "red.600"}}>
+                            {data?.statusId < 4 ? 
+                                <Button bg="red" color="white" onClick={handleCancel} _hover={{ bg: "red.600"}}>
                                 Cancel
-                            </Button>
+                                </Button> : null
+                            }
+                            {data?.statusId === 2 ? 
+                            <>
                             <Button bg="orange" color="black" onClick={handleReject} _hover={{ bg: "orange.600"}}>
                                 Reject
                             </Button>
                             <Button bg="green" color="white" onClick={handleConfirm} _hover={{ bg: "green.800"}}>
                                 Confirm
                             </Button>
+                            </> : null}
+                            {data?.statusId === 3 ? 
                             <Button bg="green" color="white" onClick={handleSend} _hover={{ bg: "green.800"}}>
                                 Send Order
-                            </Button>
+                            </Button> : null
+                            }
                         </Flex>
                     </Td>
                 </Tr>
             </Table>
-            <ModalPayment isOpen={isOpen} onClose={onClose} />
+            <ModalPayment isOpen={isOpen} onClose={onClose} image={data?.paymentProof} />
         </Flex>
     )
 }

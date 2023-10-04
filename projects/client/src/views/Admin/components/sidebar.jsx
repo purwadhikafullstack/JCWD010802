@@ -135,9 +135,6 @@ export const Sidebar = () => {
         <NavLink to={`warehouse-stock?warehouseId=${user.warehouseAdmin?.warehouseId}`}>
           <NavItem to={`warehouse-stock?warehouseId=${user.warehouseAdmin?.warehouseId}`} icon={FaClipboardCheck}>Stock</NavItem>
         </NavLink>}
-        <NavLink to="">
-          <NavItem to="/admin/" icon={BsFillCartFill}>Order</NavItem>
-        </NavLink>
         <NavLink to="mutation">
           <NavItem to="/admin/mutation" icon={BiTransfer}>Request Stock</NavItem>
         </NavLink>
