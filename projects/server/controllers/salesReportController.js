@@ -1,243 +1,279 @@
 const { order, orderItem, warehouseAdmin, product, category } = require("../models")
 
 module.exports = {
-    getSalesReport: async (req, res) => {
-        try {
-            const id = req.params.id
-            const result = await order.findAll(
+  getSalesReport: async (req, res) => {
+    try {
+      const id = req.params.id
+      const result = await order.findAll({
+        include: [{
+          model: orderItem,
+          include: [{
+            model: product,
+            include: [{
+              model: category,
+            }, ],
+          }, ],
+        }, ],
+      });
+      res.status(200).send({
+        status: true,
+        message: 'Detail of sales',
+        result,
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(400).send({
+        status: false,
+        message: err.message
+      });
+    }
+  },
+  chartReport: async (req, res) => {
+    const warehouseId = +req.query.warehouseId || null;
+    const condition = {};
+    if (req.query.categoryId) {
+      condition.categoryId = req.query.categoryId;
+    }
+    const date = req.query.date ? new Date(req.query.date) : null;
+    try {
+      const isAdmin = await warehouseAdmin.findOne({
+        where: {
+          userId: req.user.id,
+        },
+      });
+  
+      let result;
+      if (isAdmin) {
+        result = await order.findAll({
+          include: [
+            {
+              model: orderItem,
+              include: [
                 {
-                    include: [{
-                        model: orderItem
-                    }]
-                }
-            );
-            res.status(200).send({
-                status: true,
-                message: 'Detail of sales',
-                result,
-            });
-        } catch (err) {
-            console.error(err);
-            res.status(400).send({
-                status: false,
-                message: err.message
-            });
-        }
-    },
-    monthReport: async (req, res) => {
-        const warehouseId = +req.query.warehouseId || null;
-        const monthly = req.query.monthly || null;
-    
-        try {
-            const isAdmin = await warehouseAdmin.findOne({
-                where: {
-                    userId: req.user.id,
+                  model: product,
+                  where: condition,
+                  include: [
+                    {
+                      model: category,
+                    },
+                  ],
                 },
-            });
-            let result;
-            if (isAdmin) {
-                result = await order.findAll({
-                    include: [{
-                        model: orderItem
-                    }], where: {warehouseId: isAdmin.warehouseId}
-                });
-            } else {
-                result = await order.findAll({
-                    include: [{
-                        model: orderItem
-                    }]
-                });
-            }
-            const monthlyTotal = {};
-            result.forEach((order) => {
-                const updatedAt = new Date(order.updatedAt);
-                const monthYearKey = `${updatedAt.getFullYear()}-${(updatedAt.getMonth() + 1)
-                    .toString()
-                    .padStart(2, '0')}`;
-    
-                if ((warehouseId === null || order.warehouseId === warehouseId) && order.statusId === 5) {
-                    if (monthly === null || monthYearKey === monthly) {
-                        if (!monthlyTotal[monthYearKey]) {
-                            monthlyTotal[monthYearKey] = parseFloat(order.totalPrice);
-                        } else {
-                            monthlyTotal[monthYearKey] += parseFloat(order.totalPrice);
-                        }
-                    }
-                }
-            });
-    
-            res.status(200).send({
-                status: true,
-                message: 'Report by month',
-                result: monthlyTotal,
-            });
-        } catch (err) {
-            console.error(err);
-            res.status(400).send({
-                status: false,
-                message: err.message
-            });
+              ],
+            },
+          ],
+          where: {
+            warehouseId: isAdmin.warehouseId,
+          },
+        });
+      } else {
+        result = await order.findAll({
+          include: [
+            {
+              model: orderItem,
+              include: [
+                {
+                  model: product,
+                  where: condition,
+                  include: [
+                    {
+                      model: category,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        });
+      }
+  
+      const monthlySalesByCategory = {};
+      for (let month = 1; month <= 12; month++) {
+        monthlySalesByCategory[month] = {};
+      }
+  
+      result.forEach((order) => {
+        const updatedAt = new Date(order.updatedAt);
+        if (
+          (warehouseId === null || order.warehouseId === warehouseId) &&
+          order.statusId === 5 &&
+          (!date || updatedAt.toDateString() === date.toDateString())
+        ) {
+          const month = updatedAt.getMonth() + 1;
+          const totalPrice = parseFloat(order.totalPrice);
+  
+          order.orderItems.forEach((orderItem) => {
+            const productId = orderItem.product.id;
+            monthlySalesByCategory[month][productId] = 0;
+          });
+  
+          order.orderItems.forEach((orderItem) => {
+            const productId = orderItem.product.id;
+            monthlySalesByCategory[month][productId] += totalPrice;
+          });
         }
-    },
+      });
+  
+      const monthlyTotal = [];
+      for (let month = 1; month <= 12; month++) {
+        const monthSales = {
+          month,
+          categorySales: monthlySalesByCategory[month],
+        };
+        monthlyTotal.push(monthSales);
+      }
+      for (const monthSales of monthlyTotal) {
+        for (const productId in monthSales.categorySales) {
+          const categoryInfo = await product.findByPk(productId);
+          monthSales.categorySales[productId] = {
+            productName: categoryInfo.name,
+            totalSales: monthSales.categorySales[productId],
+          };
+        }
+      }
+      res.status(200).send({
+        status: true,
+        message: 'Report by category',
+        monthlyTotal,
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(400).send({
+        status: false,
+        message: err.message,
+      });
+    }
+  },
+  tableSalesReport: async (req, res) => {
+    try {
+      const userId = req.user ? req.user.id : null;
+      const warehouseId = +req.query.warehouseId || null;
+      const condition = {};
+      if (req.query.categoryId) {
+        condition.categoryId = req.query.categoryId;
+      }
+      const date = req.query.date ? new Date(req.query.date) : null;
+  
+      const isAdmin = await warehouseAdmin.findOne({
+        where: {
+          userId: userId,
+        },
+      });
+  
+      let orders;
+      if (isAdmin && isAdmin.warehouseId !== null) {
+        orders = await order.findAll({
+          where: {
+            warehouseId: isAdmin.warehouseId,
+          },
+          include: [
+            {
+              model: orderItem,
+              include: [
+                {
+                  model: product,
+                  where: condition,
+                  include: [
+                    {
+                      model: category,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        });
+      } else {
+        if (warehouseId !== null) {
+          orders = await order.findAll({
+            where: {
+              warehouseId: warehouseId,
+            },
+            include: [
+              {
+                model: orderItem,
+                include: [
+                  {
+                    model: product,
+                    where: condition,
+                    include: [
+                      {
+                        model: category,
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          });
+        } else {
+          orders = await order.findAll({
+            include: [
+              {
+                model: orderItem,
+                include: [
+                  {
+                    model: product,
+                    where: condition,
+                    include: [
+                      {
+                        model: category,
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          });
+        }
+      }
+      const productMap = new Map();
+      orders.forEach((order) => {
+  const { updatedAt, orderItems, warehouseId } = order;
+  if (date) {
+    const productDate = new Date(updatedAt);
+    if (productDate.toDateString() !== date.toDateString()) {
+      return;
+    }
+  }
 
-    categoryMonthReport: async (req, res) => {
-        const warehouseId = +req.query.warehouseId || null;
-        const monthly = req.query.monthly || null;
-        const condition = {};
-        if (req.query.categoryId) {
-          condition["id"] = req.query.categoryId;
+  orderItems.forEach((orderItem) => {
+    const { id, name, categoryId, category } = orderItem.product || {};
+    if (!productMap.has(id)) {
+      productMap.set(id, {
+        id: id,
+        name: name,
+        totalPrice: 0,
+        quantity: 0,
+        categoryId: categoryId,
+        category: category ? category.name : null,
+        warehouseId,
+        updatedAt,
+      });
+    }
+    const productInfo = productMap.get(id);
+    productInfo.totalPrice += +order.totalPrice;
+    productInfo.quantity += orderItem.quantity;
+  });
+});
+      const result = Array.from(productMap.values()).filter((productInfo) => {
+        if (date) {
+          const productDate = new Date(productInfo.updatedAt);
+          return productDate.toDateString() === date.toDateString();
         }
-      
-        try {
-          const isAdmin = await warehouseAdmin.findOne({
-            where: { userId: req.user.id },
-          });
-      
-          let result;
-          if (isAdmin) {
-            result = await order.findAll({
-              include: [
-                {
-                  model: orderItem,
-                  include: [
-                    {
-                      model: product,
-                      include: [
-                        {
-                          model: category,
-                          where: condition,
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-              where: { warehouseId: isAdmin.warehouseId },
-            });
-          } else {
-            result = await order.findAll({
-              include: [
-                {
-                  model: orderItem,
-                  include: [
-                    {
-                      model: product,
-                      include: [
-                        {
-                          model: category,
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            });
-          }
-      
-          const monthlyTotal = Array.from({ length: 12 }, (_, month) => ({
-            month: month + 1,
-            total: 0,
-          }));
-      
-          result.forEach((order) => {
-            const updatedAt = new Date(order.updatedAt);
-            const month = updatedAt.getMonth() + 1;
-            const totalPrice = parseFloat(order.totalPrice);
-      
-            if (
-              (warehouseId === null || order.warehouseId === warehouseId) &&
-              order.statusId === 5
-            ) {
-              if (monthly === null) {
-                monthlyTotal[month - 1].total += totalPrice;
-              } else {
-                if (monthlyTotal[month - 1]) {
-                  monthlyTotal[month - 1].total += totalPrice;
-                }
-              }
-            }
-          });
-      
-          res.status(200).send({
-            status: true,
-            message: 'Report by category',
-            monthlyTotal,
-          });
-        } catch (err) {
-          console.error(err);
-          res.status(400).send({ status: false, message: err.message });
-        }
-      },
-      productMonthReport: async (req, res) => {
-        const warehouseId = +req.query.warehouseId || null;
-        const monthly = req.query.monthly || null;
-        const condition = {}
-        if (req.query.productId) {
-            condition["productId"] = req.query.productId
-        }
-        try {
-            const isAdmin = await warehouseAdmin.findOne({
-                where: {
-                    userId: req.user.id,
-                },
-            });
-            let result;
-            if (isAdmin) {
-                result = await order.findAll({
-                    include: [{
-                        model: orderItem, include: [{
-                            model: product,
-                        }], where: condition
-                    }], where: { warehouseId: isAdmin.warehouseId }
-                });
-            } else {
-                result = await order.findAll({
-                    include: [{
-                        model: orderItem, include: [{
-                            model: product,
-                        }], where: condition
-                    }]
-                });
-            }
-    
-            const monthlyTotal = [];
-                for (let year = new Date().getFullYear(); year <= new Date().getFullYear(); year++) {
-                for (let month = 1; month <= 12; month++) {
-                    const monthYearKey = `${year}-${month.toString().padStart(2, '0')}`;
-                    monthlyTotal.push({
-                        monthYear: monthYearKey,
-                        total: 0,
-                    });
-                }
-            }
-    
-            result.forEach((order) => {
-                const updatedAt = new Date(order.updatedAt);
-                const monthYearKey = `${updatedAt.getFullYear()}-${(updatedAt.getMonth() + 1)
-                    .toString()
-                    .padStart(2, '0')}`;
-    
-                if ((warehouseId === null || order.warehouseId === warehouseId) && order.statusId === 5) {
-                    if (monthly === null || monthYearKey === monthly) {
-                        const index = monthlyTotal.findIndex(item => item.monthYear === monthYearKey);
-                        if (index !== -1) {
-                            monthlyTotal[index].total += parseFloat(order.totalPrice);
-                        }
-                    }
-                }
-            });
-            res.status(200).send({
-                status: true,
-                message: 'Report by product',
-                monthlyTotal,
-            });
-        } catch (err) {
-            console.error(err);
-            res.status(400).send({
-                status: false,
-                message: err.message
-            });
-        }
-    },
-    
+        return true;
+      });
+  
+      res.status(200).send({
+        status: true,
+        message: 'Detail of sales',
+        result,
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(400).send({
+        status: false,
+        message: err.message,
+      });
+    }
+  },
 }
