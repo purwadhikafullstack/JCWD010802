@@ -55,7 +55,6 @@ const Routes = (
       <Route path="warehouse" element={<WarehousePageView />} />
       <Route path="product-list" element={<AdminProducts />} />
       <Route path="warehouse-stock" element={<StockView />} />
-      <Route path="warehouse-stock/:id" element={<DetailStockWarehouse />} />
       <Route path="mutation" element={<Mutation />} />
       <Route path="order" element={<Order />} />
       <Route path="detail-order" element={<OrderDetailView />} />

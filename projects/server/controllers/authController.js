@@ -51,7 +51,7 @@ module.exports = {
             const result = await user.findOne({ 
                 where: { email },
                 include: [{ model: warehouseAdmin }]
-  
+            })
             if (!result) throw { message: "Email or Password Incorrect" }
 
             if (password !== result.password) throw { message: "Email or Password Incorrect" }
