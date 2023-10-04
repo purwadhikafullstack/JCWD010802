@@ -13,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       journal.belongsTo(models.stock)
       journal.belongsTo(models.order)
+      journal.belongsTo(models.requestHistory)
+
     }
   }
   journal.init({

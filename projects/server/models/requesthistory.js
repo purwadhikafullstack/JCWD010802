@@ -12,12 +12,15 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       requestHistory.belongsTo(models.stock)
+
     }
   }
   requestHistory.init({
     status: DataTypes.STRING,
     from: DataTypes.STRING,
+    from_name: DataTypes.STRING,
     to: DataTypes.STRING,
+    to_name: DataTypes.STRING,
     quantity: DataTypes.INTEGER
   }, {
     sequelize,

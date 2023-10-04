@@ -47,6 +47,7 @@ module.exports = {
     login: async (req, res) => {
         try {
             const { email, password } = req.body
+
             const result = await user.findOne({ 
                 where: { email },
                 include: [{ model: warehouseAdmin }]
@@ -75,6 +76,7 @@ module.exports = {
     keepLogin: async (req, res) => {
         try {
             const { id } = req.user
+
 
             const result = await user.findOne({ 
                 where: { id },

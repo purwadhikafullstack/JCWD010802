@@ -1,7 +1,7 @@
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Skeleton, Text } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 
-export const Carousel = () => {
+export const Carousel = ({ isLoaded }) => {
   const arrowStyles = {
     cursor: "pointer",
     pos: "absolute",
@@ -56,53 +56,55 @@ export const Carousel = () => {
 
   return (
     <Flex
-      w="full"
-      bg="#edf3f8"
-      alignItems="center"
-      justifyContent="center"
-      px={{ base: "20px", lg: "50px" }}
-      py="20px"
-      pos="relative"
+    w="full"
+    bg="#edf3f8"
+    alignItems="center"
+    justifyContent="center"
+    px={{ base: "20px", lg: "50px" }}
+    py="20px"
+    pos="relative"
     >
-      <Flex
-        w="full"
-        maxW="1400px"
-        borderRadius="10px"
-        shadow="md"
-        h={{ base: "200px", lg: "400px" }}
-        fontSize="0"
-        overflow="hidden"
-        pos="relative"
-      >
+        <Skeleton isLoaded={isLoaded}>
         <Flex
-          transform={`translateX(-${currentSlide * 100}%)`}
-          transition="transform 0.5s ease"
-          w={`${slidesCount * 100}%`}
+          w="full"
+          maxW="1200px"
+          borderRadius="10px"
+          shadow="md"
+          h={{ base: "200px", lg: "400px" }}
+          fontSize="0"
+          overflow="hidden"
+          pos="relative"
         >
-          {slides.map((slide, sid) => (
-            <Box
-              key={`slide-${sid}`}
-              boxSize="full"
-              shadow="md"
-              flex="none"
-              w="100%"
-            >
-              <Image
-                src={slide.img}
-                alt="carousel image"
+          <Flex
+            transform={`translateX(-${currentSlide * 100}%)`}
+            transition="transform 0.5s ease"
+            w={`${slidesCount * 100}%`}
+          >
+            {slides.map((slide, sid) => (
+              <Box
+                key={`slide-${sid}`}
                 boxSize="full"
-                objectFit="cover"
-              />
-            </Box>
-          ))}
+                shadow="md"
+                flex="none"
+                w="100%"
+              >
+                <Image
+                  src={slide.img}
+                  alt="carousel image"
+                  boxSize="full"
+                  objectFit="cover"
+                />
+              </Box>
+            ))}
+          </Flex>
+          <Text {...arrowStyles} left="0" onClick={prevSlide}>
+            &#10094;
+          </Text>
+          <Text {...arrowStyles} right="0" onClick={nextSlide}>
+            &#10095;
+          </Text>
         </Flex>
-        <Text {...arrowStyles} left="0" onClick={prevSlide}>
-          &#10094;
-        </Text>
-        <Text {...arrowStyles} right="0" onClick={nextSlide}>
-          &#10095;
-        </Text>
-      </Flex>
+      </Skeleton>
     </Flex>
   );
 };

@@ -12,7 +12,11 @@ const categoryController = require("./categoryController")
 const cartController = require("./cartController")
 const orderController = require("./orderController")
 const shippingController = require("./shippingController")
+
+const mutationController = require("./mutationController")
+const dashboardController = require("./dashboardController")
 const adminOrderController = require("./adminOrderController")
+
 
 module.exports = {
     userControllers,
@@ -29,5 +33,8 @@ module.exports = {
     cartController,
     orderController,
     shippingController,
+    mutationController,
+    dashboardController,
     adminOrderController,
+
 }
