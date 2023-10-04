@@ -17,10 +17,9 @@ import { AllProduct } from "../views/Product/components/AllProduct";
 import { DetailProduct } from "../pages/ProductDetail";
 import { CategoryView } from "../views/Admin/Category";
 import { AdminProducts } from "../views/Admin/Products";
-import { StockView } from "../views/Admin/Stock";
-import { DetailStockWarehouse } from "../views/Admin/components/Stock/WarehouseDetailStok";
 import { Cart } from "../pages/Cart";
 import { Checkout } from "../pages/CheckOut";
+import { StockView } from "../views/Admin/Stock";
 import ManualStockMutationForm from "../views/Admin/components/Mutation/stockMutationForm";
 import { MutationView } from "../views/Admin/Mutation";
 import { Mutation } from "../pages/Mutation";
@@ -124,11 +123,9 @@ const Routes = (
       <Route path="warehouse" element={<WarehousePageView />} />
       <Route path="product-list" element={<AdminProducts />} />
       <Route path="warehouse-stock" element={<StockView />} />
-      <Route path="warehouse-stock/:id" element={<DetailStockWarehouse />} />
       <Route path="mutation" element={<Mutation />} />
       <Route path="order" element={<Order />} />
       <Route path="detail-order" element={<OrderDetailView />} />
-
     </Route>
     <Route path="*" element={<NotFound/>}/>
   </>

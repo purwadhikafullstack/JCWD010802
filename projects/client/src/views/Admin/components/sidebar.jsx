@@ -33,10 +33,11 @@ import { ModalLogout } from "../../../components/navigation/ModalLogOut";
 export const Sidebar = () => {
   const sidebar = useDisclosure();
   const location = useLocation();
-  const data = useSelector(state=>state.user.value)
+  const user = useSelector(state=>state.user.value)
   const dispatch = useDispatch();
   const toast = useToast();
   const navigate = useNavigate();
+
 
   const onLogOut = () => {
     localStorage.removeItem("token");
@@ -133,7 +134,7 @@ export const Sidebar = () => {
             Order
           </NavItem>
         </NavLink>
-        {data.roleId===3?(
+        {user.roleId===3?(
           <>
         <NavLink to="list-user">
           <NavItem icon={FaUsers} to="/admin/list-user">
@@ -162,8 +163,15 @@ export const Sidebar = () => {
         <NavLink to="product-list">
           <NavItem icon={AiFillGift} to="/admin/product-list">Products</NavItem>
         </NavLink>
+        {user.roleId === 3 ? 
         <NavLink to="warehouse-stock">
           <NavItem to="/admin/warehouse-stock" icon={FaClipboardCheck}>Stock</NavItem>
+        </NavLink> : 
+        <NavLink to={`warehouse-stock?warehouseId=${user.warehouseAdmin?.warehouseId}`}>
+          <NavItem to={`warehouse-stock?warehouseId=${user.warehouseAdmin?.warehouseId}`} icon={FaClipboardCheck}>Stock</NavItem>
+        </NavLink>}
+        <NavLink to="">
+          <NavItem to="/admin/" icon={BsFillCartFill}>Order</NavItem>
         </NavLink>
         <NavLink to="mutation">
           <NavItem to="/admin/mutation" icon={BiTransfer}>Request Stock</NavItem>

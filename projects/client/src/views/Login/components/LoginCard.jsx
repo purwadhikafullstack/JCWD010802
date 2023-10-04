@@ -67,6 +67,7 @@ export const LoginCard = () => {
             toast({
                 title: "Login Failed!",
                 description: error?.response?.data?.message,
+
                 status: "error",
                 duration: 1500,
                 isClosable: true,

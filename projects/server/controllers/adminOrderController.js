@@ -203,13 +203,17 @@ module.exports = {
     sendOrder: async (req, res) => {
       try {
         const { id } = req.params
+        
+        const completeDate = new Date()
+        completeDate.setDate(completeDate.getDate() + 7)
+
         const isAdmin = await user.findOne({ where: { id: req.user.id } })
         if (isAdmin.roleId === 1) throw { message: "Only admin can access this features"}
         const isOrderExist = await order.findOne({ where: { id }})
         if (!isOrderExist) throw { message: "Order not found" }
         if (isOrderExist.statusId !== 3) throw { message: "Invalid Order Status" }
 
-        const result = await order.update({ statusId: 4 }, { where: { id } })
+        const result = await order.update({ statusId: 4, completeExpiredAt: completeDate }, { where: { id } })
         res.status(200).send({
             result,
             status: true,
