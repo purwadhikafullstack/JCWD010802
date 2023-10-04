@@ -4,7 +4,6 @@ const { Op } = require('sequelize');
 const runAutoConfirm = async () => {
   try {
     const completeDate = new Date()
-    completeDate.setDate(completeDate.getDate() - 7)
 
     const orders = await order.findAll({
       where: {
