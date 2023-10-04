@@ -21,10 +21,13 @@ import { PiPackageFill} from "react-icons/pi";
 import { AiFillGift } from "react-icons/ai";
 import { BsGearFill, BsFillCartFill } from "react-icons/bs";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { BiSolidCategoryAlt, BiTransfer } from "react-icons/bi";
+
 export const Sidebar = () => {
   const sidebar = useDisclosure();
   const location = useLocation();
+  const user = useSelector((state) => state.user.value)
 
   const NavItem = (props) => {
     const { icon, children, to, ...rest } = props;
@@ -125,8 +128,15 @@ export const Sidebar = () => {
         <NavLink to="product-list">
           <NavItem icon={AiFillGift} to="/admin/product-list">Products</NavItem>
         </NavLink>
+        {user.roleId === 3 ? 
         <NavLink to="warehouse-stock">
           <NavItem to="/admin/warehouse-stock" icon={FaClipboardCheck}>Stock</NavItem>
+        </NavLink> : 
+        <NavLink to={`warehouse-stock?warehouseId=${user.warehouseAdmin?.warehouseId}`}>
+          <NavItem to={`warehouse-stock?warehouseId=${user.warehouseAdmin?.warehouseId}`} icon={FaClipboardCheck}>Stock</NavItem>
+        </NavLink>}
+        <NavLink to="">
+          <NavItem to="/admin/" icon={BsFillCartFill}>Order</NavItem>
         </NavLink>
         <NavLink to="mutation">
           <NavItem to="/admin/mutation" icon={BiTransfer}>Request Stock</NavItem>
