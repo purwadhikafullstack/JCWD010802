@@ -1,6 +1,7 @@
 const {  cart, address, user, journal, stock, product, warehouse, cartItem,orderItem,status } = require("../models");
 const calculateDistance = require('../utils/calculateDistance');
-const db = require("../models")
+const db = require("../models");
+const { Op } = require("sequelize");
 const orders = db.order
 
 module.exports = {
@@ -71,7 +72,7 @@ module.exports = {
             }
             const expireDate = new Date()
             expireDate.setDate(expireDate.getDate() + 1)
-            const response = await order.create({
+            const response = await orders.create({
                 userId:req.user.id,
                 totalPrice:findCart.totalPrice,
                 shippingCost,
@@ -80,7 +81,7 @@ module.exports = {
                 cartId,
                 statusId:1,
                 warehouseId: nearestWarehouse,
-                expiredAt: expireDate
+                paymentExpiredAt: expireDate
             })
 
             await orderItem.update({
@@ -258,6 +259,12 @@ module.exports = {
             const offset = (page - 1) * limit;
             const search = req.query.search || "";
             const sort = req.query.sort || "desc";
+            const statusId = req.query.statusId 
+
+            const statusFilter = {}
+            if (statusId) {
+                statusFilter["id"] = +statusId
+            }
 
             const filter = {};
             if (search) {
@@ -274,7 +281,7 @@ module.exports = {
                 include: [
                     { model: orderItem, attributes: { exclude: ['createdAt', 'updatedAt'] }, 
                     include: [ { model: product, attributes: { exclude: ['createdAt', 'updatedAt', 'isDeleted', 'isActive']}, where: filter}] },
-                    { model: status }
+                    { model: status, where: statusFilter }
                 ],
                 limit,
                 offset,
@@ -282,7 +289,15 @@ module.exports = {
                     ['createdAt', sort]
                 ]
             })
-            const total = await orders.count({ where: { userId: req.user.id }})
+            const total = await orders.count({
+                where: { userId: req.user.id },
+                attributes: { exclude: ['updatedAt'] },
+                include: [
+                    { model: orderItem, attributes: { exclude: ['createdAt', 'updatedAt'] }, 
+                    include: [ { model: product, attributes: { exclude: ['createdAt', 'updatedAt', 'isDeleted', 'isActive']}, where: filter}] },
+                    { model: status, where: statusFilter }
+                ]
+            })
             
             res.status(200).send({
                 totalpage: Math.ceil(total / limit),
@@ -292,6 +307,7 @@ module.exports = {
                 status: true,
             })
         } catch (error) {
+            console.log(error);
             res.status(400).send({
                 status: false,
                 message: error.message
@@ -304,11 +320,11 @@ module.exports = {
             console.log(paymentImg);
             const { id } = req.params
 
-            const isOrderExist = await order.findOne({ where: { id } })
+            const isOrderExist = await orders.findOne({ where: { id } })
             if (!isOrderExist) throw { message: "Order not found!" }
             if (isOrderExist.userId !== req.user.id) throw { message: "Invalid account" }
             if (isOrderExist.paymentProof) throw { message: "Order already paid" }
-            const result = await order.update({ paymentProof: paymentImg, statusId: 2 }, {
+            const result = await orders.update({ paymentProof: paymentImg, statusId: 2 }, {
                 where: { id, userId: req.user.id }
             })
             res.status(200).send({
@@ -325,7 +341,10 @@ module.exports = {
     cancelOrder: async (req, res) => {
         try {
             const { id } = req.params
-            const isOrderExist = await order.findOne({ where: { id }})
+            const isOrderExist = await orders.findOne({ 
+                where: { id },
+                include: [{ model: orderItem }]
+            })
             if (!isOrderExist) throw { message: "Order not found!" }
             if (isOrderExist.userId !== req.user.id) throw { message: "Invalid account" }
             if (isOrderExist.paymentProof) throw { message: "Cannot cancel your order" }
@@ -349,7 +368,7 @@ module.exports = {
                 orderId: id
             })
             })
-            const result = await order.update({ statusId: 6 }, {
+            const result = await orders.update({ statusId: 6 }, {
                 where: { id }
             })
             res.status(200).send({
@@ -358,6 +377,7 @@ module.exports = {
                 result,
             })
         } catch (error) {
+            console.log(error);
             res.status(400).send({
                 status: false,
                 message: error.message
@@ -367,12 +387,12 @@ module.exports = {
     confirmOrder: async (req, res) => {
         try {
             const { id } = req.params
-            const isOrderExist = await order.findOne({ where: { id }})
+            const isOrderExist = await orders.findOne({ where: { id }})
             if (!isOrderExist) throw { message: "Order not found!" }
             if (isOrderExist.userId !== req.user.id) throw { message: "Invalid account" }
             if (isOrderExist.statusId < 4) throw { message: "Your order still in process"}
             if (isOrderExist.statusId === 6) throw { message: "Your order is canceled"}
-            const result = await order.update({ statusId: 5 }, {
+            const result = await orders.update({ statusId: 5 }, {
                 where: { id, userId: req.user.id }
             })
             res.status(200).send({

@@ -11,7 +11,7 @@ export const CancelOrder = ({ isOpen, onClose, id, reload }) => {
     const handleCancel = async () => {
         try {
             const response = await axios.put(`http://localhost:8000/api/userOrder/cancel/${id}`, {}, { headers })
-            toast.success('Your have canceled your order', {
+            toast.success('You have canceled your order', {
                 position: 'top-right',
                 autoClose: 3000, 
             });

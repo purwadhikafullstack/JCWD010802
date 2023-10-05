@@ -18,10 +18,12 @@ export const CartView = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            console.log(response);
-            setCart(response.data.result);
-            setCartId(response.data.Cart.id);
-            setTotal(response.data.totalPrice);
+            if (response.data) {
+                console.log(response);
+                setCart(response.data.result);
+                setCartId(response.data.Cart.id);
+                setTotal(response.data.totalPrice);
+            }
         } catch (error) {
             console.error(error);
         }

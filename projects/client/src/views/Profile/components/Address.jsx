@@ -21,13 +21,9 @@ import { Sort } from "./modal/sortBy/sortBy";
 import { PrimaryAddress } from "./modal/modalAddress/modalPrimaryAddress";
 import { BsSearch } from "react-icons/bs";
 import { Pagination } from "../../../components/pagination/pagination";
+import { PaginationProfile } from "./PaginationProfile";
 
 export const AddressCard = () => {
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const search = params.get("search") || "";
-  const sort = params.get("sort") || "";
-  const currentPage = Number(params.get("page")) || 1;
   const token = localStorage.getItem("token");
   const [address, setAddress] = useState([]);
   const [cities, setCities] = useState([]);
@@ -39,9 +35,11 @@ export const AddressCard = () => {
   const [onOpenModalPrimary, setOnOpenModalPrimary] = useState(false);
   const [onOpenModalEdit, setOnOpenModalEdit] = useState(false);
   const [reload, setReload] = useState(0);
+  const [search, setSearch] = useState("")
+  const [currentPage, setCurrentPage] = useState(1)
+  const [sort, setSort] = useState("DESC")
   const itemsPerPage = 5;
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const navigate = useNavigate();
 
   const AllAdrress = async () => {
     try {
@@ -82,7 +80,7 @@ export const AddressCard = () => {
     }
   };
   const handleSearch = (result) => {
-    navigate(`?search=${result.target.value}`);
+    setSearch(result)
   };
   useEffect(() => {
     AllAdrress();
@@ -105,7 +103,7 @@ export const AddressCard = () => {
             defaultValue={search}
             type={"search"}
             color={"black"}
-            onChange={handleSearch}
+            onChange={(e) => handleSearch(e.target.value)}
             borderColor={"2px solid black"}
           />
           <InputLeftElement>
@@ -119,7 +117,7 @@ export const AddressCard = () => {
             reload={reload}
             setReload={setReload}
           />
-          <Sort />
+          <Sort sort={sort} setSort={setSort} />
         </Flex>
       </Flex>
       {address?.map((item, index) => (
@@ -188,7 +186,7 @@ export const AddressCard = () => {
           </Flex>
         </Box>
       ))}
-      <Pagination totalpage={page} />
+      <PaginationProfile totalpage={page} currentpage={currentPage} setPage={setCurrentPage} />
       <EditAddress
         onOpen={onOpenModalEdit}
         onClose={() => setOnOpenModalEdit(false)}

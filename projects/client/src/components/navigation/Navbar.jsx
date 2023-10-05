@@ -12,6 +12,7 @@ import { BiSearchAlt2 } from "react-icons/bi";
 
 export const Navbar = () => {
   const data = useSelector((state) => state.user.value);
+  console.log(data);
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const search = params.get("search") || "";

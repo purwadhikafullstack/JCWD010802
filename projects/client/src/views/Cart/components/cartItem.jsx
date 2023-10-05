@@ -57,7 +57,7 @@ export const CartItem = ({ cart, reload, setReload }) => {
     <Flex direction="column" w={{ base: '100%', sm: '80%', md: '60%' }}>
      <Heading>Cart</Heading>
       <Divider borderWidth={4} mt={3} />
-      {cart.length === 0 ? (
+      {cart?.length === 0 || !cart ? (
         <Center>
           <Image
             src="https://img.freepik.com/free-vector/add-cart-concept-illustration_114360-1435.jpg?w=740&t=st=1695704262~exp=1695704862~hmac=3b04c76b1390720ab571e66d6ac6ed8b08c68314607cb6f7c70349c5a6bfecd4"

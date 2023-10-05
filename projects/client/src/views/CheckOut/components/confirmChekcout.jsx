@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import convertToUppercase from "../../../helpers/upperCase";
 import { setCartOut } from "../../../redux/cartSlice";
+import { useNavigate } from "react-router-dom";
 
 
 export const ConfirmCheckout = ({addressId}) => {
@@ -17,6 +18,7 @@ export const ConfirmCheckout = ({addressId}) => {
   const token = localStorage.getItem("token")
   const chekoutPrice = total+cost
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const handleBuyClick = async () => {
     try {
@@ -34,7 +36,7 @@ export const ConfirmCheckout = ({addressId}) => {
         },
       });
       setTimeout(() => {
-        window.location.href = '/profile'; 
+        navigate("/profile#myorder"); 
       }, 3000)
  toast.success('Order placed successfully!', {
       position: 'top-right', 
@@ -103,8 +105,7 @@ export const ConfirmCheckout = ({addressId}) => {
           <Heading fontSize={"2xl"}>Total Price</Heading>
           <Heading fontSize={"2xl"}>{formatIDR(chekoutPrice)}</Heading>
         </HStack>
-        <Button colorScheme="green" mt={5} w={"full"} isDisabled={cost===0} onClick={handleBuyClick}
->
+        <Button colorScheme="green" mt={5} w={"full"} isDisabled={cost===0} onClick={handleBuyClick}>
           Buy
         </Button>
       </Box>

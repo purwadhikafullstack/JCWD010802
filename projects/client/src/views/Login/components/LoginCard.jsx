@@ -57,17 +57,16 @@ export const LoginCard = () => {
                 dispatch(setCart(userCart))
                 dispatch(setPrice(cartResponse.data.totalPrice))
                 setTimeout(() => {
-                  if (response.data.result.roleId === 1) {
-                      navigate("/") } else {
-                      navigate("/admin")
-                      }              }, 2000)
-
+                    if (response.data.result.roleId === 1) {
+                        navigate("/") } else {
+                        navigate("/admin")
+                        }
+                }, 2000)
         console.log(userCart);
         } catch (error) {
             toast({
                 title: "Login Failed!",
                 description: error?.response?.data?.message,
-
                 status: "error",
                 duration: 1500,
                 isClosable: true,
