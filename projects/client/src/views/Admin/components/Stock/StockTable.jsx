@@ -37,7 +37,7 @@ export const StockTable = ({ data, handleCat, handleWarehouse, handleSearch, war
                         {data?.map((item, index) => (
                             <Tr key={index}>
                                 <Td>
-                                    <Text>{item.product.name}</Text>
+                                    <Text maxW="200px" whiteSpace="nowrap" textOverflow="ellipsis" overflow="hidden">{item.product.name}</Text>
                                 </Td>
                                 <Td>{item.totalQuantity}</Td>
                                 <Td>
