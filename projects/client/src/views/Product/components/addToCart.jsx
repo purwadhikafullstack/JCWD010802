@@ -17,15 +17,16 @@ import { CartFooter } from './cartFooter';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { setCart } from '../../../redux/cartSlice';
+import { setPrice } from '../../../redux/totalPrice';
 
 export const AddToCart = ({ detail, stock }) => {
   const [count, setCount] = useState(0);
   const [reload, setReload] = useState(0);
   const [subtotal, setSubtotal] = useState(0);
   const dispatch = useDispatch()
-
+  const navigate = useNavigate()
   const getStockColor = () => {
     if (stock < 5) {
       return 'red'; 
@@ -49,23 +50,37 @@ export const AddToCart = ({ detail, stock }) => {
 
   const handleAddToCart = async () => {
     try {
-      const response = await axios.post(`http://localhost:8000/api/cart/${detail.id}`,
+      if(data.isVerified){
+
+        const response = await axios.post(`http://localhost:8000/api/cart/${detail.id}`,
         { quantity: count },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
-      );
-      const cartResponse = await axios.get(`http://localhost:8000/api/cart`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setReload(!reload);
-      dispatch(setCart(cartResponse.data.result))
-      toast.success("Product added to cart", { position: "top-center" });
-    } catch (error) {
+        );
+        const cartResponse = await axios.get(`http://localhost:8000/api/cart`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setReload(!reload);
+        console.log(cartResponse);
+        dispatch(setCart(cartResponse.data.result))
+        dispatch(setPrice(cartResponse.data.Cart.totalPrice))
+        toast.success("Product added to cart", { position: "top-center" });
+      }
+      else{
+        toast.error('You are not verified. Verify your account to access more feature.', {
+          position: toast.POSITION.TOP_CENTER,
+          
+          
+        })
+        setTimeout(() => {
+          navigate("/login");
+        }, 2500);;
+    } }catch (error) {
       console.error(error);
       if (error.response) {
         toast({
@@ -100,7 +115,7 @@ export const AddToCart = ({ detail, stock }) => {
         width="320px"
         bg={'white'}
       >
-        <Image src={`http://localhost:8000/productImg/${detail.productImg}`} alt='#' h="70px" objectFit="cover" />
+        <Image src={`http://localhost:8000/productImg/${detail.productImg}`} alt='#' h="70px" objectFit="fill" w={"70px"} borderRadius={"10%"}/>
         <Text mt={2} fontSize="lg" fontWeight="semibold">
           {detail.name}
         </Text>
@@ -140,9 +155,9 @@ export const AddToCart = ({ detail, stock }) => {
               color={'white'}
               _hover={{ bg: "#2d3319" }}
               w={"120px"}
-              onClick={() => {
-                window.location.href = '/login';
-              }}
+              onClick={
+                handleAddToCart
+              }
             >
               + Cart
             </Button>

@@ -15,13 +15,15 @@ import { ButtonQuantity } from "./Button/ButtonQuantity";
 import { FiShoppingCart, FiHeart, FiCheckCircle } from "react-icons/fi";
 import formatIDR from "../../../../helpers/formatIDR";
 import { AddToCart } from "../addToCart";
+import { ProfileCard } from "../../../Profile/components/Profile";
+import { useSelector } from "react-redux";
 
 export const DetailCard = () => {
   const { id } = useParams();
   const [detail, setDetail] = useState([]);
   const [stock, setStock] = useState([]);
   const [wish, setWish] = useState(false);
-
+  const profile = useSelector(state=>state.user.value)
   const getDetail = async () => {
     try {
       const response = await axios.get(
@@ -75,14 +77,14 @@ export const DetailCard = () => {
       </Flex>
 
       <Flex
-        w={{ base: "100%", md: "50%" }}
-        pt={{ base: "20px", md: "60px" }}
-        pl={{ base: "20px", md: "0" }}
+        direction={{base:"column", lg:"row"}}
+        w={{ base: "100%", md: "50%" }} 
+        pt={{ base: "20px", md: "60px" }} 
+        // pl={{ base: "20px", md: "0" }} 
       >
-        <Stack spacing={4}>
-          <Heading fontSize={"4xl"} maxW={"80%"}>
-            {detail.name}
-          </Heading>
+
+        <Stack spacing={4}  pl={{ base: "20px", md: "0" }} >
+          <Heading fontSize={"5xl"}>{detail.name}</Heading>
           <Text color={"gray.500"} fontSize={"xl"}>
             Description :
           </Text>
@@ -113,7 +115,12 @@ export const DetailCard = () => {
             </Flex>
           </Stack>
         </Stack>
-        <AddToCart detail={detail} stock={stock} />
+        {profile.roleId===2 ||profile.roleId===3?(
+          null
+          ):(
+            <AddToCart detail={detail} stock={stock}/>
+            
+        )}
       </Flex>
     </Flex>
   );

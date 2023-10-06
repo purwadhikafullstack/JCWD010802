@@ -2,7 +2,7 @@ import { Icon, Input, InputGroup, InputLeftElement } from "@chakra-ui/react"
 import { BsSearch } from "react-icons/bs"
 
 
-export const SearchProductAdmin = ({ search, handleSearch}) => {
+export const SearchProductAdmin = ({ search, handleSearch }) => {
     return (
         <InputGroup>
             <Input

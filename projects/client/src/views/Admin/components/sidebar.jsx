@@ -8,24 +8,56 @@ import {
   Flex,
   Icon,
   IconButton,
+  Image,
   Input,
   InputGroup,
   InputLeftElement,
   Text,
+  Toast,
   useDisclosure,
+  useToast, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Button,
 } from "@chakra-ui/react";
 import { FiMenu, FiSearch, FiBell } from "react-icons/fi";
 import { MdHome } from "react-icons/md";
 import { FaRss, FaClipboardCheck, FaWarehouse, FaUsers, FaChartLine } from "react-icons/fa";
 import { HiCollection, HiCode } from "react-icons/hi";
+import { PiPackageFill} from "react-icons/pi";
 import { AiFillGift } from "react-icons/ai";
-import { BsGearFill } from "react-icons/bs";
-import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { BiSolidCategoryAlt } from "react-icons/bi";
+import { BsGearFill, BsFillCartFill } from "react-icons/bs";
+import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { BiSolidCategoryAlt, BiTransfer } from "react-icons/bi";
+import { useDispatch, useSelector } from "react-redux";
+import { setLogOut } from "../../../redux/userSlice";
+import { setCartOut } from "../../../redux/cartSlice";
+import { setPriceOut } from "../../../redux/totalPrice";
+import { ModalLogout } from "../../../components/navigation/ModalLogOut";
 export const Sidebar = () => {
   const sidebar = useDisclosure();
   const location = useLocation();
+  const user = useSelector(state=>state.user.value)
+  const dispatch = useDispatch();
+  const toast = useToast();
+  const navigate = useNavigate();
 
+
+  const onLogOut = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("warehouseId");
+    dispatch(setLogOut());
+    dispatch(setCartOut());
+    dispatch(setPriceOut());
+    toast({
+      title: "Sign Out Success",
+      description: "See you next time!",
+      status: "success",
+      duration: 1200,
+      isClosable: true,
+      position: "top",
+    });
+    setTimeout(() => {
+      navigate("/login");
+    }, 1500);
+  };
   const NavItem = (props) => {
     const { icon, children, to, ...rest } = props;
     const isActive = location.pathname === to;
@@ -37,6 +69,7 @@ export const Sidebar = () => {
         mx="2"
         rounded="md"
         py="3"
+        mt={2}
         cursor="pointer"
         color={isActive ? "#9fd8cb" : "#2d3319"}
         _hover={{
@@ -82,22 +115,28 @@ export const Sidebar = () => {
       {...props}
     >
       <Flex px="4" py="5" align="center">
-        <Text fontSize="2xl" ml="2" color="#2d3319" fontWeight="semibold">
-          BBB
-        </Text>
+      <Box as={Link} to="/" >
+          <Image src="https://i.ibb.co/71gL42Q/TECHTOK-ID-2-removebg-preview.png" alt="TECHTOK-ID-2-removebg-preview" border="0" h="80px" />
+        </Box>
       </Flex>
       <Flex
         direction="column"
         as="nav"
-        gap={2}
         fontSize="sm"
         aria-label="Main Navigation"
       >
-        <NavLink to="/">
-          <NavItem icon={MdHome} to="/">
+        <NavLink to="">
+          <NavItem icon={MdHome} to="/admin">
             Home
           </NavItem>
         </NavLink>
+        <NavLink to="order">
+          <NavItem icon={PiPackageFill} to="/admin/order">
+            Order
+          </NavItem>
+        </NavLink>
+        {user.roleId===3?(
+          <>
         <NavLink to="list-user">
           <NavItem icon={FaUsers} to="/admin/list-user">
             User
@@ -108,32 +147,37 @@ export const Sidebar = () => {
             Warehouse Admin
           </NavItem>
         </NavLink>
+        <NavLink to="warehouse">
+          <NavItem icon={FaWarehouse} to="/admin/warehouse">
+            Warehouse
+          </NavItem>
+          </NavLink>
+          </>
+
+        ):(
+           null
+        )}
         <NavLink to="list-category">
           <NavItem icon={BiSolidCategoryAlt} to="/admin/list-category">
             Category
           </NavItem>
-          <NavLink to="warehouse">
-            <NavItem icon={FaWarehouse} to="/admin/warehouse">
-              Warehouse
-            </NavItem>
-          </NavLink>
-          <NavLink to="product-list">
-            <NavItem icon={AiFillGift} to="/admin/product-list">
-              Products
-            </NavItem>
-          </NavLink>
-          <NavLink to="warehouse-stock">
-            <NavItem to="/admin/warehouse-stock" icon={FaClipboardCheck}>
-              Stock
-            </NavItem>
-          </NavLink>
-          <NavLink to="product-report">
-            <NavItem icon={HiCode}>Product report</NavItem>
-          </NavLink>
-          <NavLink to="sales-report">
-            <NavItem icon={FaChartLine}>Sales report</NavItem>
-          </NavLink>
-          <NavItem icon={BsGearFill}>Settings</NavItem>
+        <NavLink to="product-list">
+          <NavItem icon={AiFillGift} to="/admin/product-list">Products</NavItem>
+        </NavLink>
+        {user.roleId === 3 ? 
+        <NavLink to="warehouse-stock">
+          <NavItem to="/admin/warehouse-stock" icon={FaClipboardCheck}>Stock</NavItem>
+        </NavLink> : 
+        <NavLink to={`warehouse-stock?warehouseId=${user.warehouseAdmin?.warehouseId}`}>
+          <NavItem to={`warehouse-stock?warehouseId=${user.warehouseAdmin?.warehouseId}`} icon={FaClipboardCheck}>Stock</NavItem>
+        </NavLink>}
+        <NavLink to="">
+          <NavItem to="/admin/" icon={BsFillCartFill}>Order</NavItem>
+        </NavLink>
+        <NavLink to="mutation">
+          <NavItem to="/admin/mutation" icon={BiTransfer}>Request Stock</NavItem>
+        </NavLink>
+        <NavItem icon={BsGearFill}>Settings</NavItem>
         </NavLink>
       </Flex>
     </Box>
@@ -203,16 +247,16 @@ export const Sidebar = () => {
             }}
           ></InputGroup>
 
-          <Flex align="center">
-            <Icon color="white" as={FiBell} cursor="pointer" />
-            <Avatar
-              ml="4"
-              size="sm"
-              name="anubra266"
-              src="https://avatars.githubusercontent.com/u/30869823?v=4"
-              cursor="pointer"
-            />
-          </Flex>
+<Menu>
+                        <MenuButton as={Button} variant="ghost" _active={{ bg: "#517664"}} mr="10px">
+                            <Avatar size="sm" />
+                        </MenuButton>
+                        <MenuList color="#517664">
+                            <MenuItem as={Link} to={"/profile"}>Profile</MenuItem>
+                            <MenuDivider />
+                            <MenuItem as={ModalLogout} onLogout={onLogOut}>Sign Out</MenuItem>
+                        </MenuList>
+                    </Menu>
         </Flex>
 
         <Box as="main" p="4" bg={"#edf3f8"}>

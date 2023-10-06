@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { setValue } from "../../../redux/userSlice"
 import {  setCart} from "../../../redux/cartSlice"
+import {  setPrice} from "../../../redux/totalPrice"
 
 
 
@@ -41,30 +42,38 @@ export const LoginCard = () => {
                 position: "top"
               })
               console.log(response);
-              setTimeout(() => {
-                if (response.data.result.roleId === 1) {
-                    navigate("/"); 
-                  } else {
-                    navigate("/admin"); 
-                  }              }, 2000)
-            localStorage.setItem("token", response.data.token)
-            const cartResponse = await axios.get("http://localhost:8000/api/cart", {
-            headers: {
-                Authorization: `Bearer ${response.data.token}`,
-            },
-        });
-        const userCart = cartResponse.data.result;
-        dispatch(setCart(userCart))
+              
+              localStorage.setItem("token", response.data.token)
+              if(response.data.result.roleId === 2){
+                  localStorage.setItem("warehouseId",response.data.result.warehouseAdmin.warehouseId||"")
+              }
+              
+              const cartResponse = await axios.get("http://localhost:8000/api/cart", {
+                  headers: {
+                      Authorization: `Bearer ${response.data.token}`,
+                    },
+                });
+                const userCart = cartResponse.data.result;
+                dispatch(setCart(userCart))
+                dispatch(setPrice(cartResponse.data.totalPrice))
+                setTimeout(() => {
+                  if (response.data.result.roleId === 1) {
+                      navigate("/") } else {
+                      navigate("/admin")
+                      }              }, 2000)
+
         console.log(userCart);
         } catch (error) {
             toast({
                 title: "Login Failed!",
-                description: error.response.data.message,
+                description: error?.response?.data?.message,
+
                 status: "error",
                 duration: 1500,
                 isClosable: true,
                 position: "top"
               })
+              console.log(error);
         }
     }
 
@@ -106,12 +115,13 @@ export const LoginCard = () => {
                     placeholder="Enter your password here"
                     bg="white"
                 />
-                <Text as={Link} to="/forgotpassword" fontSize="14px" mt="5px">Forgot password?</Text>
                 <Button type="submit" mt="15px" bg="#517664" color="white"
                 _hover={{color: "#517664", bg: "white"}}>
                     Submit
                 </Button>
-                <Flex gap={1} mt="5px">
+                <Flex mt="5px" justifyContent={"space-between"}> 
+                    <Flex gap={1}>
+
                     <Text mt="5px" fontSize="14px">
                         Dont have an account?
                     </Text>
@@ -119,6 +129,11 @@ export const LoginCard = () => {
                     fontSize="14px" fontWeight="bold">
                         Sign Up
                     </Text>
+                        </Flex>
+                    <Flex>
+                <Text as={Link} to="/forgot-password" mt="5px" color="#517664"
+                    fontSize="14px" fontWeight="bold">Forgot password?</Text>
+                    </Flex>
                 </Flex>
             </Flex>
             )}

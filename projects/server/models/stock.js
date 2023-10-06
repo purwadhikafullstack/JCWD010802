@@ -14,6 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       stock.belongsTo(models.product)
       stock.belongsTo(models.warehouse)
       stock.hasOne(models.journal)
+      stock.hasMany(models.requestHistory)
+      stock.hasMany(models.stockMutation)
+
 
     }
   }

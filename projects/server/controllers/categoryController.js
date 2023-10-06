@@ -10,7 +10,7 @@ module.exports = {
     allCategory: async (req, res) => {
         try {
             const page = +req.query.page || 1;
-            const limit = +req.query.limit || 999999;
+            const limit = +req.query.limit || 5;
             const offset = (page - 1) * limit;
             const search = req.query.search || "";
             const sort = req.query.sort || "";

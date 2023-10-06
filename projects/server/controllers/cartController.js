@@ -50,7 +50,7 @@ module.exports = {
           message: 'Product not found',
         });
       }
-      const [userCart] = await cart.findOrCreate({where:{userId:req.user.id}})
+      const [userCart] = await cart.findOrCreate({where:{userId:req.user.id, isCheckOut:false}})
       
       const existingCartItem = await cartItem.findOne({
         where: { productId: id, cartId:userCart.id  },
@@ -94,36 +94,11 @@ module.exports = {
       });
     }
   },
-   getUserCart: async (req, res) => {
-    try {
-      const userId = req.user.id;
-      const userCart = await cart.findOne({where:{userId:userId}})
 
-      const cartItems = await cartItem.findAll({
-        where: { cartId:userCart.id  },
-        include: [{ model: product }],
-      });
-  
-  
-      res.status(200).json({
-        status: true,
-        totalPrice: userCart.totalPrice,
-        message: 'User cart retrieved successfully',
-        result: cartItems,
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({
-        status: false,
-        message: 'Error retrieving user cart',
-        error: error.message,
-      });
-    }
-  },
   getUserCart: async (req, res) => {
     try {
       const userId = req.user.id;
-      const userCart = await cart.findOne({where:{userId:userId}})
+      const userCart = await cart.findOne({where:{userId:userId, isCheckOut:false}})
   
       const cartItems = await cartItem.findAll({
         where: { cartId:userCart.id  },
@@ -136,6 +111,7 @@ module.exports = {
         totalPrice: userCart.totalPrice,
         message: 'User cart retrieved successfully',
         result: cartItems,
+        Cart:userCart
       });
     } catch (error) {
       console.error(error);
@@ -161,7 +137,7 @@ module.exports = {
         });
       }
   
-      const userCart = await cart.findOne({ where: { userId } });
+      const userCart = await cart.findOne({ where: { userId, isCheckOut:false} });
   
       if (!userCart) {
         return res.status(404).send({

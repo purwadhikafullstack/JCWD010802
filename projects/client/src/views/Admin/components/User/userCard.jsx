@@ -33,7 +33,7 @@ export const UserCard = () => {
   const currentPage = Number(params.get("page")) || 1;
   const [page, setPage] = useState([]);
   const navigate = useNavigate();
-
+  const defaultAvatar = "https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png"
   const getUser = async () => {
     try {
       const response = await axios.get(
@@ -105,26 +105,20 @@ export const UserCard = () => {
             boxShadow={"2xl"}
             padding={4}
           >
-            <Flex>
+            <Flex >
             {item.profileImg ? (
       <Image
-        w={"170px"}
-        h={"170px"}
-        src={`http://localhost:8000/profileImg/${item.profileImg}`}
-        alt="#"
-        objectFit="cover"
+      objectFit="cover"
+      boxSize="100%"        
+      src={`http://localhost:8000/profileImg/${item.profileImg}`}
+        alt="profile image"
       />
     ) : (
-      <Box
-        w={"170px"}
-        h={"170px"}
-        bg="gray.200"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <FaImage size={40} color="gray" /> {/* Broken image icon */}
-      </Box>
+      <Image
+        src={defaultAvatar}
+        alt="default avatar"
+        objectFit="cover"
+        boxSize="100%"      />
     )}
             </Flex>
             <Box>

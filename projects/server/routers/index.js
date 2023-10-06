@@ -13,8 +13,10 @@ const cartRouter = require('./cartRouter')
 const shippingRouter = require('./shippingRouter')
 const productReportRouter = require('./productReportRouter')
 const salesReportRouter = require('./salesReportRouter')
-
-
+const orderRouter = require('./orderRouter')
+const mutationRouter = require("./mutationRouter")
+const dashboardRouter = require("./dashboardRouter")
+const adminOrderRouter = require("./adminOrderRouter")
 
 
 module.exports= {
@@ -32,5 +34,10 @@ module.exports= {
     cartRouter,
     shippingRouter,
     productReportRouter,
-    salesReportRouter
+    salesReportRouter,
+    orderRouter,
+    mutationRouter,
+    dashboardRouter,
+    adminOrderRouter,
+
 }

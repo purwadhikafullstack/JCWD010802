@@ -69,7 +69,7 @@ export const EditProduct = ({ isOpen, onClose, category, product, reload }) => {
     return (
         <>
         <ToastContainer />
-        <Modal isOpen={isOpen} onClose={onClose} size="md">
+        <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>Add Product</ModalHeader>

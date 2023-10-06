@@ -47,7 +47,12 @@ module.exports = {
     login: async (req, res) => {
         try {
             const { email, password } = req.body
-            const result = await user.findOne({ where: { email },include: [{model:warehouseAdmin}]})
+
+            const result = await user.findOne({ 
+                where: { email },
+                include: [{ model: warehouseAdmin }]
+            })
+
             if (!result) throw { message: "Email or Password Incorrect" }
 
             if (password !== result.password) throw { message: "Email or Password Incorrect" }
@@ -73,7 +78,11 @@ module.exports = {
         try {
             const { id } = req.user
 
-            const result = await user.findOne({ where: { id }, include: [{model:warehouseAdmin}]})
+
+            const result = await user.findOne({ 
+                where: { id },
+                include: [{ model: warehouseAdmin }]
+            })
 
             res.status(200).send({
                 status: true,
