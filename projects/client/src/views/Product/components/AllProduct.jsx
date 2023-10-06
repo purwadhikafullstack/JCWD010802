@@ -1,4 +1,4 @@
-import { Box, Container, Grid, GridItem, useMediaQuery } from "@chakra-ui/react";
+import { Box, Container, Grid, GridItem } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";

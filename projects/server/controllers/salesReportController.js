@@ -1,4 +1,4 @@
-const { order, orderItem, warehouseAdmin, product, category } = require("../models")
+const { order, orderItem, warehouseAdmin, product, category, warehouse } = require("../models")
 
 module.exports = {
   getSalesReport: async (req, res) => {
@@ -29,111 +29,110 @@ module.exports = {
     }
   },
   chartReport: async (req, res) => {
-    const warehouseId = +req.query.warehouseId || null;
-    const condition = {};
-    if (req.query.categoryId) {
-      condition.categoryId = req.query.categoryId;
-    }
-    const date = req.query.date ? new Date(req.query.date) : null;
     try {
+      const userId = req.user ? req.user.id : null;
+      const warehouseId = +req.query.warehouseId || null;
+      const productId = req.query.productId;
+      const categoryId = req.query.categoryId;
+      const date = req.query.date;
+  
+      const condition = {};
+  
       const isAdmin = await warehouseAdmin.findOne({
         where: {
-          userId: req.user.id,
+          userId: userId,
         },
       });
   
-      let result;
-      if (isAdmin) {
-        result = await order.findAll({
-          include: [
-            {
-              model: orderItem,
-              include: [
-                {
-                  model: product,
-                  where: condition,
-                  include: [
-                    {
-                      model: category,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-          where: {
-            warehouseId: isAdmin.warehouseId,
+      let warehouseFilter = {};
+  
+      if (isAdmin && isAdmin.warehouseId !== null) {
+        warehouseFilter = {
+          warehouseId: isAdmin.warehouseId,
+        };
+      } else if (warehouseId !== null) {
+        warehouseFilter = {
+          warehouseId: warehouseId,
+        };
+      }
+  
+      let orders;
+  
+      orders = await order.findAll({
+        where: warehouseFilter,
+        include: [
+          {
+            model: orderItem,
+            include: [
+              {
+                model: product,
+                where: condition,
+                include: [
+                  {
+                    model: category,
+                  },
+                ],
+              },
+            ],
           },
-        });
-      } else {
-        result = await order.findAll({
-          include: [
-            {
-              model: orderItem,
-              include: [
-                {
-                  model: product,
-                  where: condition,
-                  include: [
-                    {
-                      model: category,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        });
-      }
-  
-      const monthlySalesByCategory = {};
-      for (let month = 1; month <= 12; month++) {
-        monthlySalesByCategory[month] = {};
-      }
-  
-      result.forEach((order) => {
-        const updatedAt = new Date(order.updatedAt);
-        if (
-          (warehouseId === null || order.warehouseId === warehouseId) &&
-          order.statusId === 5 &&
-          (!date || updatedAt.toDateString() === date.toDateString())
-        ) {
-          const month = updatedAt.getMonth() + 1;
-          const totalPrice = parseFloat(order.totalPrice);
-  
-          order.orderItems.forEach((orderItem) => {
-            const productId = orderItem.product.id;
-            monthlySalesByCategory[month][productId] = 0;
-          });
-  
-          order.orderItems.forEach((orderItem) => {
-            const productId = orderItem.product.id;
-            monthlySalesByCategory[month][productId] += totalPrice;
-          });
-        }
+        ],
       });
   
-      const monthlyTotal = [];
-      for (let month = 1; month <= 12; month++) {
-        const monthSales = {
-          month,
-          categorySales: monthlySalesByCategory[month],
-        };
-        monthlyTotal.push(monthSales);
-      }
-      for (const monthSales of monthlyTotal) {
-        for (const productId in monthSales.categorySales) {
-          const categoryInfo = await product.findByPk(productId);
-          monthSales.categorySales[productId] = {
-            productName: categoryInfo.name,
-            totalSales: monthSales.categorySales[productId],
-          };
+      const groupedResults = {}; 
+  
+      orders.forEach((order) => {
+        const orderDate = new Date(order.createdAt).toISOString().slice(0, 10);
+        const orderMonth = orderDate.slice(0, 7);
+        if (date && orderMonth !== date) {
+          return;
         }
+  
+        order.orderItems.forEach((item) => {
+          if (
+            (!productId || (productId && item.product.id == productId)) &&
+            (!categoryId || (categoryId && item.product.category.id == categoryId))
+          ) {
+            if (!groupedResults[orderDate]) {
+              groupedResults[orderDate] = [];
+            }
+  
+            const productId = item.product.id;
+            const name = item.product.name;
+            const categoryId = item.product.category.id;
+            const category = item.product.category.name;
+            const totalProductPrice = item.product.price * item.quantity;
+  
+            groupedResults[orderDate].push({
+              productId,
+              name,
+              categoryId,
+              category,
+              price: totalProductPrice,
+            });
+          }
+        });
+      });
+  
+      const groupedResultsArray = [];
+  
+      for (const orderDate in groupedResults) {
+        const products = groupedResults[orderDate];
+        const totalPrice = products.reduce(
+          (total, product) => total + product.price,
+          0
+        );
+  
+        groupedResultsArray.push({
+          orderDate,
+          products,
+          totalPrice,
+        });
       }
+  
       res.status(200).send({
         status: true,
-        message: 'Report by category',
-        monthlyTotal,
+        message: 'Result of chart report',
+        result: groupedResultsArray,
       });
     } catch (err) {
       console.error(err);
@@ -147,11 +146,22 @@ module.exports = {
     try {
       const userId = req.user ? req.user.id : null;
       const warehouseId = +req.query.warehouseId || null;
+      const productId = +req.query.productId || null;
       const condition = {};
       if (req.query.categoryId) {
         condition.categoryId = req.query.categoryId;
       }
-      const date = req.query.date ? new Date(req.query.date) : null;
+  
+      let dateParam = req.query.date || null;
+      let date = null;
+  
+      if (dateParam) {
+        if (/^\d{4}-\d{2}$/.test(dateParam)) {
+          dateParam = dateParam + "-01";
+        }
+  
+        date = new Date(dateParam);
+      }
   
       const isAdmin = await warehouseAdmin.findOne({
         where: {
@@ -180,6 +190,9 @@ module.exports = {
                 },
               ],
             },
+            {
+              model: warehouse, // Include informasi gudang dalam order
+            },
           ],
         });
       } else {
@@ -203,6 +216,9 @@ module.exports = {
                   },
                 ],
               },
+              {
+                model: warehouse, // Include informasi gudang dalam order
+              },
             ],
           });
         } else {
@@ -222,50 +238,73 @@ module.exports = {
                   },
                 ],
               },
+              {
+                model: warehouse, // Include informasi gudang dalam order
+              },
             ],
           });
         }
       }
+  
       const productMap = new Map();
       orders.forEach((order) => {
-  const { updatedAt, orderItems, warehouseId } = order;
-  if (date) {
-    const productDate = new Date(updatedAt);
-    if (productDate.toDateString() !== date.toDateString()) {
-      return;
-    }
-  }
-
-  orderItems.forEach((orderItem) => {
-    const { id, name, categoryId, category } = orderItem.product || {};
-    if (!productMap.has(id)) {
-      productMap.set(id, {
-        id: id,
-        name: name,
-        totalPrice: 0,
-        quantity: 0,
-        categoryId: categoryId,
-        category: category ? category.name : null,
-        warehouseId,
-        updatedAt,
+        const { updatedAt, orderItems, warehouseId, warehouse: { name: warehouseName } } = order; // Mengambil nama gudang
+  
+        if (date) {
+          const productDate = new Date(updatedAt);
+          if (productDate.toISOString().slice(0, 7) !== date.toISOString().slice(0, 7)) {
+            return;
+          }
+        }
+  
+        orderItems.forEach((orderItem) => {
+          const { id, name, categoryId, category } = orderItem.product || {};
+  
+          if (!productMap.has(id)) {
+            productMap.set(id, {
+              id: id,
+              name: name,
+              totalPrice: 0,
+              quantity: 0,
+              categoryId: categoryId,
+              category: category ? category.name : null,
+              warehouseId,
+              warehouseName, // Menyimpan nama gudang
+              updatedAt,
+            });
+          }
+  
+          const productInfo = productMap.get(id);
+          productInfo.totalPrice += +order.totalPrice;
+          productInfo.quantity += orderItem.quantity;
+        });
       });
-    }
-    const productInfo = productMap.get(id);
-    productInfo.totalPrice += +order.totalPrice;
-    productInfo.quantity += orderItem.quantity;
-  });
-});
+      
       const result = Array.from(productMap.values()).filter((productInfo) => {
         if (date) {
           const productDate = new Date(productInfo.updatedAt);
-          return productDate.toDateString() === date.toDateString();
+          const productYear = productDate.getFullYear();
+          const productMonth = productDate.getMonth();
+  
+          const filterDate = new Date(date);
+          const filterYear = filterDate.getFullYear();
+          const filterMonth = filterDate.getMonth();
+  
+          if (productYear !== filterYear || productMonth !== filterMonth) {
+            return false;
+          }
         }
+  
+        if (productId !== null && productInfo.id !== productId) {
+          return false;
+        }
+  
         return true;
       });
   
       res.status(200).send({
         status: true,
-        message: 'Detail of sales',
+        message: 'Result of table sales report',
         result,
       });
     } catch (err) {
@@ -276,4 +315,5 @@ module.exports = {
       });
     }
   },
+
 }

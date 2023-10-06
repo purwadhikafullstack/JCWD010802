@@ -2,70 +2,85 @@ import { Flex } from "@chakra-ui/react";
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 
-export const ChartReport = ({ salesCat }) => {
-  if (!salesCat || salesCat.length === 0) {
+export const ChartReport = ({ chart }) => {
+  if (!chart || chart.length === 0) {
     return <div>No data available.</div>;
   }
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
 
-  const categoryIds = [
+  // Deklarasikan variabel dateParam dari properti yang dikirimkan (jika ada)
+  const dateParam = chart[0].orderDate;
+
+  // Mendapatkan tanggal awal dan tanggal akhir dalam satu bulan
+  const currentDate = new Date(dateParam || new Date()); // Gunakan tanggal dari data pertama atau tanggal sekarang
+  const firstDayOfMonth = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    1
+  );
+  const lastDayOfMonth = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth() + 1,
+    0
+  );
+
+  // Membuat array berisi seluruh tanggal dalam satu bulan
+  const labels = [];
+  const currentDateIter = new Date(firstDayOfMonth);
+  while (currentDateIter <= lastDayOfMonth) {
+    labels.push(currentDateIter.toISOString().split("T")[0]); // Format tanggal menjadi string (YYYY-MM-DD)
+    currentDateIter.setDate(currentDateIter.getDate() + 1); // Pindah ke tanggal berikutnya
+  }
+
+  // Mengumpulkan semua nama produk yang muncul dalam data Anda
+  const productNames = [
     ...new Set(
-      salesCat.flatMap((monthData) => Object.keys(monthData.categorySales))
+      chart.flatMap((data) => data.products.map((product) => product.name))
     ),
   ];
-  const months = salesCat.map((monthData) => monthNames[monthData.month - 1]);
 
-  const datasets = categoryIds.map((categoryId, index) => {
-    const color = getRandomColor();
-
-    let categoryName = `Category ${categoryId}`;
-
-    for (const monthData of salesCat) {
-      const categorySales = monthData?.categorySales[categoryId];
-      if (categorySales) {
-        categoryName = categorySales.productName;
-        break;
-      }
-    }
-
-    const categorySalesData = salesCat.map((monthData) => {
-      const categorySales = monthData?.categorySales[categoryId];
-      return categorySales ? categorySales.totalSales : 0;
+  // Mengelompokkan data berdasarkan tanggal
+  const dataByDate = {};
+  chart.forEach((data) => {
+    const dateStr = data.orderDate;
+    dataByDate[dateStr] = dataByDate[dateStr] || {};
+    data.products.forEach((product) => {
+      dataByDate[dateStr][product.name] = product.price;
     });
+  });
 
+  // Mengisi nilai-nilai yang tidak ada dalam database dengan 0
+  labels.forEach((date) => {
+    if (!dataByDate[date]) {
+      dataByDate[date] = {};
+      productNames.forEach((productName) => {
+        dataByDate[date][productName] = 0;
+      });
+    }
+  });
+
+  // Menghasilkan data untuk chart
+  const productsData = productNames.map((productName) => {
     return {
-      label: categoryName,
-      backgroundColor: color,
-      borderColor: color,
-      data: categorySalesData,
-      tension: 0.2
+      label: productName,
+      data: labels.map((date) => dataByDate[date][productName]),
+      borderColor: getRandomColor(),
+      fill: false,
+      tension: 0.2,
     };
   });
 
   const dataChart = {
-    labels: months,
-    datasets: datasets,
+    labels,
+    datasets: productsData,
   };
 
   return (
-    <Flex w={"50vw"}>
+    <Flex w={"full"}>
       <Line data={dataChart} />
     </Flex>
   );
 };
+
 function getRandomColor() {
   const letters = "0123456789ABCDEF";
   let color = "#";

@@ -10,24 +10,33 @@ export const SalesReportView = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const navigate = useNavigate();
-  const [salesCat, setSalesCat] = useState();
+  const [chart, setChart] = useState();
   const [category, setCategory] = useState();
+  const [product, setProduct] = useState();
   const [table, setTable] = useState();
   const [warehouse, setWarehouse] = useState([]);
   const warehouseId = params.get("warehouseId") || "";
-  const categoryId = params.get("categoryId") || "";
-  const date = params.get("date") || "";
+  const categoryId = params.get("categoryId") || "1";
+  const productId = params.get("productId") || "";
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  let month = currentDate.getMonth() + 1; // Adding 1 because months are zero-indexed
+  if (month < 10) {
+    month = `0${month}`; // Ensure the month has two digits
+  }
+  const todayDate = `${year}-${month}`;
+  const date = params.get("date") || todayDate;
   const user = useSelector((state) => state.user.value);
 
-  const getCategoryReport = async () => {
+  const getChartReport = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/sales/chart?warehouseId=${warehouseId}&categoryId=${categoryId}`,
+        `http://localhost:8000/api/sales/chart?warehouseId=${warehouseId}&categoryId=${categoryId}&productId=${productId}&date=${date}`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-      setSalesCat(response.data.monthlyTotal);
+      setChart(response.data.result);
     } catch (error) {
       console.log(error);
     }
@@ -35,7 +44,7 @@ export const SalesReportView = () => {
   const getTableSales = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/sales/table-sales?warehouseId=${warehouseId}&categoryId=${categoryId}&date=${date}`,
+        `http://localhost:8000/api/sales/table-sales?warehouseId=${warehouseId}&categoryId=${categoryId}&productId=${productId}&date=${date}`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
@@ -65,27 +74,43 @@ export const SalesReportView = () => {
       console.log(err);
     }
   };
+  const getProduct = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/product?limit=9999`
+      );
+      setProduct(response.data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleWarehouseChange = (e) => {
     navigate(
-      `?warehouseId=${e.target.value}&categoryId=${categoryId}&date=${date}`
+      `?warehouseId=${e.target.value}&categoryId=${categoryId}&productId=${productId}&date=${date}`
     );
   };
   const handleCategory = (e) => {
     navigate(
-      `?warehouseId=${warehouseId}&categoryId=${e.target.value}&date=${date}`
+      `?warehouseId=${warehouseId}&categoryId=${e.target.value}&productId=${productId}&date=${date}`
+    );
+  };
+  const handleProduct = (e) => {
+    navigate(
+      `?warehouseId=${warehouseId}&categoryId=${categoryId}&productId=${e.target.value}&date=${date}`
     );
   };
   const handleDate = (e) => {
     navigate(
-      `?warehouseId=${warehouseId}&categoryId=${categoryId}&date=${e.target.value}`
+      `?warehouseId=${warehouseId}&categoryId=${categoryId}&productId=${productId}&date=${e.target.value}`
     );
   };
   useEffect(() => {
-    getCategoryReport();
-    getWarehouse();
+    getChartReport();
     getTableSales();
+    getWarehouse();
     getCategory();
-  }, [warehouseId, categoryId, date]);
+    getProduct();
+  }, [warehouseId, categoryId, productId, date]);
   return (
     <Flex gap={5} w={"full"} direction={"column"}>
       <Flex w={"full"} gap={3} mt={6}>
@@ -107,7 +132,7 @@ export const SalesReportView = () => {
         ) : null}
         <Select
           id="categorySelect"
-          value={categoryId}
+          defaultValuevalue={categoryId}
           onChange={handleCategory}
           maxWidth="200px"
           borderColor={"2px solid black"}
@@ -119,15 +144,29 @@ export const SalesReportView = () => {
             </option>
           ))}
         </Select>
+        <Select
+          id="productSelect"
+          defaultValue={productId}
+          onChange={handleProduct}
+          maxWidth="200px"
+          borderColor={"2px solid black"}
+        >
+          <option value="">Select product</option>
+          {product?.map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.name}
+            </option>
+          ))}
+        </Select>
         <Input
           w={"max-content"}
-          type="date"
+          type="month"
           onChange={handleDate}
           borderColor={"2px solid black"}
         ></Input>
       </Flex>
       <Flex direction={"column"} alignContent={"center"} w={"full"}>
-        <ChartReport salesCat={salesCat} category={category} />
+        <ChartReport category={category} chart={chart} />
         <TableSales table={table} />
       </Flex>
     </Flex>

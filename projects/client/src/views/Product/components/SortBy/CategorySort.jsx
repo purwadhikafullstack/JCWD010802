@@ -9,6 +9,9 @@ export const CategorySort = () => {
   const search = params.get("search") || "";
   const sort = params.get("sort") || "";
   const category = params.get("category") || "";
+  const minPrice = params.get("minPrice") || "";
+  const maxPrice = params.get("maxPrice") || "";
+  const currentPage = Number(params.get("page")) || 1;
   const navigate = useNavigate();
   const [categories, setCategories] = useState()
 
@@ -32,7 +35,7 @@ export const CategorySort = () => {
     }, []);
 
   const handleSort = (selectedSort) => {
-      navigate(`?search=${search}&sort=${sort}&category=${selectedSort}`);
+      navigate(`?search=${search}&sort=${sort}&category=${selectedSort}&minPrice=${minPrice}&maxPrice=${maxPrice}&page=${currentPage}`);
   };
 
   return (
