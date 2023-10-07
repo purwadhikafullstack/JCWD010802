@@ -5,7 +5,6 @@ import {
   Image,
   Button,
   Flex,
-  HStack,
   Heading,
   Divider,
   Center,
@@ -14,11 +13,11 @@ import { CartCounter } from './counter';
 import { DeleteCart } from './deleteCart';
 import formatIDR from '../../../helpers/formatIDR';
 import { BsFillTrash3Fill } from 'react-icons/bs';
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setCart } from '../../../redux/cartSlice';
-import { toast } from 'react-toastify';
 import { setPrice } from '../../../redux/totalPrice';
+import headersGen from '../../../api/headers';
+import axios from '../../../api/axios';
 
 export const CartItem = ({ cart, reload, setReload }) => {
 
@@ -26,20 +25,13 @@ export const CartItem = ({ cart, reload, setReload }) => {
   const [itemToDelete, setItemToDelete] = useState(null);
 
   const token = localStorage.getItem('token');
+  const headers = headersGen(token)
   const dispatch = useDispatch();
 
   const handleDelete = async (itemId) => {
     try {
-      await axios.delete(`http://localhost:8000/api/cart/${itemId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      const cartResponse = await axios.get(`http://localhost:8000/api/cart`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.delete(`/cart/${itemId}`, { headers });
+      const cartResponse = await axios.get(`/cart`, { headers });
 
       setIsModalOpen(false);
       setItemToDelete(null);

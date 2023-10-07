@@ -1,21 +1,16 @@
-import React, { useState } from 'react';
 import {
   Box,
-  Heading,
   Button,
   Select,
-  Textarea,
   FormControl,
   FormLabel,
   Stack,
-  Badge,
   Input,
-  useDisclosure,
 } from '@chakra-ui/react';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import axios from 'axios';
 import { InputField } from '../../../../components/input/InputField';
 import { toast, ToastContainer } from 'react-toastify';
+import axios from '../../../../api/axios';
 
 
 export const AddWarehouse = ({  dataCities, dataProvince,reload,setReload,onClose  }) => {
@@ -28,10 +23,7 @@ export const AddWarehouse = ({  dataCities, dataProvince,reload,setReload,onClos
       formData.append("kota",data.kota)
       formData.append("provinsi",data.provinsi)
       formData.append("kode_pos",data.kode_pos)
-      const response = await axios.post(
-        `http://localhost:8000/api/warehouse`,
-        formData
-      );
+      await axios.post(`/warehouse`, formData);
       toast.success('Warehouse added successfully');
       onClose()
       setReload(!reload)

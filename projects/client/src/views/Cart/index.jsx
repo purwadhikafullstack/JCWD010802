@@ -1,11 +1,13 @@
 import { CartItem } from "./components/cartItem";
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Box, Flex, Heading, Stack, VStack } from "@chakra-ui/react";
 import { CartCheckout } from "./components/cartCheckout";
+import axios from "../../api/axios";
+import headersGen from "../../api/headers";
 
 export const CartView = () => {
     const token = localStorage.getItem("token");
+    const headers = headersGen(token)
     const [cart, setCart] = useState([]);
     const [cartId, setCartId] = useState([]);
     const [total, setTotal] = useState([]);
@@ -13,11 +15,7 @@ export const CartView = () => {
 
     const getCart = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/cart`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const response = await axios.get(`/cart`, { headers });
             if (response.data) {
                 console.log(response);
                 setCart(response.data.result);

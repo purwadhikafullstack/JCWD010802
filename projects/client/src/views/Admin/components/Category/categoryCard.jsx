@@ -13,12 +13,12 @@ import {
 } from "@chakra-ui/react";
 import { ButtonOptionCategory } from "./butttonEditDeleteCategory";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { BsSearch } from "react-icons/bs";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SortCategory } from "./sort/sortCategory";
 import { AddCategory } from "./modal/modalAddCategory";
 import { Pagination } from "../../../../components/pagination/pagination";
+import axios from "../../../../api/axios";
 
 export const CategoryCard = () => {
   const [category, setCategory] = useState();
@@ -33,15 +33,20 @@ export const CategoryCard = () => {
 
   const getCategory = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/category?search=${search}&sort=${sort}&page=${currentPage}`
-      );
+      const CATEGORY_URL = `/category`
+      const params = {
+        search,
+        sort,
+        page: currentPage
+      }
+      const response = await axios.get(CATEGORY_URL, { params })
       setCategory(response.data.result);
       setPage(response.data.totalpage);
     } catch (err) {
       console.log(err);
     }
   };
+  console.log(process.env.BASE_URL);
   const handleSearch = (result) => {
     navigate(`?search=${result.target.value}`);
   };

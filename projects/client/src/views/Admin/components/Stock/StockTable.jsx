@@ -18,7 +18,6 @@ export const StockTable = ({ data, handleCat, handleWarehouse, handleSearch, war
                 <Select placeholder="All Warehouses" w="fit-content"
                 onChange={(e) => handleWarehouse(e.target.value)} borderColor="black"
                 >
-                    <option value="">All Warehouses</option>
                     {warehouse?.map((item) => (
                         <option key={item.id} value={item.id}>{item.name}</option>
                     ))}

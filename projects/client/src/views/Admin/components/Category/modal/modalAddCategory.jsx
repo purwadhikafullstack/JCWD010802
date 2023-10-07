@@ -14,12 +14,12 @@ import {
   ModalOverlay,
   useDisclosure,
 } from "@chakra-ui/react";
-import axios from "axios";
-import * as Yup from "yup";
 import { ErrorMessage, Form, Formik } from "formik";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { InputField } from "../../../../../components/input/InputField";
+import "react-toastify/dist/ReactToastify.css";
+import * as Yup from "yup";
+import axios from "../../../../../api/axios";
 
 export const AddCategory = ({ reload, setReload }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -38,7 +38,7 @@ export const AddCategory = ({ reload, setReload }) => {
       formData.append("name", name);
       formData.append("file", file);
       const response = await axios.post(
-        `http://localhost:8000/api/category`,
+        `/category`,
         formData,
         {
           "Content-Type": "multipart/form-data",
@@ -48,7 +48,7 @@ export const AddCategory = ({ reload, setReload }) => {
       onClose();
       toast.success("Category added successfully");
     } catch (err) {
-      console.log(err.response);
+      console.log(err);
       toast.error("Failed to add category");
     }
   };

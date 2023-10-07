@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import {Button,Flex,Box,Heading,Text,VStack,Card,Image, Select,} from "@chakra-ui/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,6 +8,8 @@ import { PaginationAddress } from "../pagination";
 import { useLocation, useNavigate } from "react-router-dom";
 import { DeleteUserModal } from "./deleteAdmin";
 import { AdminEditForm } from "./editAdmin";
+import axios from "../../../../api/axios";
+
 export const ListAdmin = () => {
   const [admin, setAdmin] = useState([]);
   const [warehouse, setWarehouse] = useState([]);
@@ -30,8 +31,7 @@ export const ListAdmin = () => {
   const defaultAvatar = "https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png"
   const getAdmin = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/admin/profile?&page=${currentPage}&warehouseId=${warehouseId}`);
+      const response = await axios.get(`/admin/profile?&page=${currentPage}&warehouseId=${warehouseId}`);
       setAdmin(response.data.result);
       setPage(response.data.totalPage);
     } catch (error) {
@@ -39,7 +39,7 @@ export const ListAdmin = () => {
     } };
   const getProfile = async (userId) => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/user/${userId}`);
+      const response = await axios.get(`/user/${userId}`);
       setProfile(response.data.result);
     } catch (error) {
       console.log(error);
@@ -60,8 +60,7 @@ export const ListAdmin = () => {
       if (!adminToDelete) {
         console.error("No admin selected for deletion.");
         return;}
-      const response = await axios.delete(
-        `http://localhost:8000/api/admin/${adminToDelete.user.id}`);
+      const response = await axios.delete(`/admin/${adminToDelete.user.id}`);
       if (response.status === 200) {
         toast.success('Admin deleted successfully', {
           position: 'top-right',
@@ -81,9 +80,7 @@ export const ListAdmin = () => {
   };
   const changeWarehouse = async (userId, selectedWarehouse) => {
     try {
-      const response = await axios.patch(
-        `http://localhost:8000/api/admin/warehouse/${userId}`,
-        {warehouse: selectedWarehouse})
+      const response = await axios.patch(`/admin/warehouse/${userId}`, {warehouse: selectedWarehouse})
       if (response.status === 200) {
         toast.success("Warehouse changed successfully", {
           position: "top-right",
@@ -94,7 +91,7 @@ export const ListAdmin = () => {
   }
   const getWarehouse = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/warehouse/list`);
+      const response = await axios.get(`/warehouse/list`);
       setWarehouse(response.data);
     } catch (error) {
       console.log(error);

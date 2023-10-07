@@ -12,8 +12,8 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import {EditWarehouseModal} from './editWarehouseModal';
-import {DeleteWarehouseModal} from './deleteWarehouseModal'; 
-import axios from 'axios';
+import {DeleteWarehouseModal} from './deleteWarehouseModal';
+import axios from '../../../../api/axios';
 
 export const WarehouseCard = ({ data,setReload,reload }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -24,10 +24,7 @@ export const WarehouseCard = ({ data,setReload,reload }) => {
   const [dataProvince, setDataProvince] = useState([]);
   const getCity = async (data) => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/location/city`,
-        data
-      );
+      const response = await axios.get(`/location/city`, data);
       setCities(response.data.city.rajaongkir.results);
     } catch (error) {
       console.log(error);
@@ -35,10 +32,7 @@ export const WarehouseCard = ({ data,setReload,reload }) => {
   };
   const getProvince = async (data) => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/location/province`,
-        data
-      );
+      const response = await axios.get(`/location/province`, data);
       setProvince(response.data.province.rajaongkir.results);
     } catch (error) {
       console.log(error);

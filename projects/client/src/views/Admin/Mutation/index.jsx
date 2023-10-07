@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Flex, Heading,Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
-import axios from "axios";
+import { Box, Button, Flex, Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { IncomingRequests } from "../components/Mutation/mutationRequest";
 import { AllRequests } from "../components/Mutation/allRequest";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ManualStockMutationForm } from '../components/Mutation/stockMutationForm';
 import { SuperRequests } from '../components/Mutation/superRequest';
+import axios from '../../../api/axios';
 
 export const MutationView = () => {
   const [filterStatus, setFilterStatus] = useState('');  
@@ -33,7 +33,7 @@ export const MutationView = () => {
 
   const getWarehouse = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/warehouse/list`);
+      const response = await axios.get(`/warehouse/list`);
       console.log(response);
       setWarehouse(response.data);
     } catch (error) {
@@ -43,7 +43,7 @@ export const MutationView = () => {
 
   const getProduct = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/product?limit=99999999`);
+      const response = await axios.get(`/product?limit=99999999`);
       setProduct(response.data.result);
     } catch (error) {
       console.log(error);
@@ -52,7 +52,7 @@ export const MutationView = () => {
 
   const incomingRequest = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/mutation/incoming/${id}`); 
+      const response = await axios.get(`/mutation/incoming/${id}`); 
       console.log(response);
       setRequest(response.data);
     } catch (error) {
@@ -62,7 +62,7 @@ export const MutationView = () => {
 
   const allRequests = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/mutation/${id}?page=${currentPage}&status=${status}&sortDir=${sortDir}&productName=${productName}`); 
+      const response = await axios.get(`/mutation/${id}?page=${currentPage}&status=${status}&sortDir=${sortDir}&productName=${productName}`); 
       console.log(response);
       setAllRequest(response.data.result);
       setPageAllRequests(response.data.totalpage); 
@@ -73,7 +73,7 @@ export const MutationView = () => {
 
   const superRequests = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/mutation/super/?page=${currentPage}&status=${status}&sortDir=${sortDir}&productName=${productName}`); 
+      const response = await axios.get(`/mutation/super/?page=${currentPage}&status=${status}&sortDir=${sortDir}&productName=${productName}`); 
       console.log(response);
       setSuperRequest(response.data.result);
       setPageSuperRequests(response.data.totalpage); 

@@ -1,47 +1,81 @@
 import { Badge, Button, Flex, Table, Td, Text, Th, Tr, useDisclosure } from "@chakra-ui/react"
-import formatIDR from "../../../../helpers/formatIDR"
-import axios from "axios"
-import "./style.css"
 import { ModalPayment } from "./ModalPayment"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import formatIDR from "../../../../helpers/formatIDR"
 import dateFormater from "../../../../helpers/dateFormater"
+import "./style.css"
+import axios from "../../../../api/axios";
+import headersGen from "../../../../api/headers";
 
 
-export const TableDetail = ({ id, data }) => {
+export const TableDetail = ({ id, data, reload }) => {
     const {isOpen, onOpen, onClose} = useDisclosure()
     const token = localStorage.getItem("token")
-    const headers = {
-        Authorization: `Bearer ${token}`
-    }
+    const headers = headersGen(token)
     const handleConfirm = async () => {
         try {
-            const response = await axios.patch(`http://localhost:8000/api/adminOrder/${id}`, {}, { headers })
+            const response = await axios.patch(`/adminOrder/${id}`, {}, { headers })
+            reload()
+            toast.success('Order confirmed', {
+                position: 'top-right',
+                autoClose: 3000, 
+              });
             console.log(response);
         } catch (error) {
             console.log(error);
+            toast.error("Failed to confirm order", {
+                position: "top-right",
+                autoClose: 3000
+            })
         }
     }
     const handleReject = async () => {
         try {
-            const response = await axios.put(`http://localhost:8000/api/adminOrder/${id}`, {}, { headers })
-            console.log(response);
+            await axios.put(`/adminOrder/${id}`, {}, { headers })
+            reload()
+            toast.success('Order rejected', {
+                position: 'top-right',
+                autoClose: 3000, 
+              });
         } catch (error) {
             console.log(error);
+            toast.error("Failed to reject order", {
+                position: "top-right",
+                autoClose: 3000
+            })
         }
     }
     const handleCancel = async () => {
         try {
-           const response = await axios.put(`http://localhost:8000/api/adminOrder/cancel/${id}`, {}, { headers }) 
-           console.log(response);
+           await axios.put(`/adminOrder/cancel/${id}`, {}, { headers }) 
+           reload()
+           toast.success('Order cancelled', {
+            position: 'top-right',
+            autoClose: 3000, 
+          });
         } catch (error) {
             console.log(error);
+            toast.error("Failed to cancel order", {
+                position: "top-right",
+                autoClose: 3000
+            })
         }
     }
     const handleSend = async () => {
         try {
-           const response = await axios.put(`http://localhost:8000/api/adminOrder/send/${id}`, {}, { headers }) 
-           console.log(response);
+           await axios.patch(`/adminOrder/send/${id}`, {}, { headers }) 
+           reload()
+           toast.success('Order sent', {
+            position: 'top-right',
+            autoClose: 3000, 
+          });
         } catch (error) {
             console.log(error);
+            toast.error("Failed to send order", {
+                position: "top-right",
+                autoClose: 3000
+            })
         }
     }
     const getStatusBadgeColor = (status) => {
@@ -63,6 +97,8 @@ export const TableDetail = ({ id, data }) => {
         }
       };
     return (
+        <>
+        <ToastContainer />  
         <Flex direction="column" w="full">
             <Table variant="simple" size="sm">
                 <Tr>
@@ -137,5 +173,6 @@ export const TableDetail = ({ id, data }) => {
             </Table>
             <ModalPayment isOpen={isOpen} onClose={onClose} image={data?.paymentProof} />
         </Flex>
+        </>
     )
 }

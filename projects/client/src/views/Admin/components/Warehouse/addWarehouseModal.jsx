@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Button,
 } from '@chakra-ui/react';
 import { AddWarehouse } from './addWarehouse';
-import axios from 'axios';
+import axios from '../../../../api/axios';
 
 
 
@@ -21,11 +19,7 @@ export const AddWarehouseModal = ({ isOpen, onClose, setReload, reload }) => {
   const [dataProvince, setDataProvince] = useState([]);
   const getCity = async (data) => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/location/city`,
-        data
-      );
-      console.log(response);
+      const response = await axios.get(`/location/city`, data);
       setCities(response.data.city.rajaongkir.results);
     } catch (error) {
       console.log(error);
@@ -33,11 +27,7 @@ export const AddWarehouseModal = ({ isOpen, onClose, setReload, reload }) => {
   };
   const getProvince = async (data) => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/location/province`,
-        data
-      );
-      console.log(response);
+      const response = await axios.get(`/location/province`, data);
       setProvince(response.data.province.rajaongkir.results);
     } catch (error) {
       console.log(error);
