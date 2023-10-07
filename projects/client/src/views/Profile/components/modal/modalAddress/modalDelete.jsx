@@ -10,24 +10,20 @@ import {
   ModalOverlay,
   useDisclosure,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "../../../../../api/axios";
+import headersGen from "../../../../../api/headers";
 
 export const DeleteAddress = ({ id, reload, setReload }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef(null);
   const token = localStorage.getItem("token");
+  const headers = headersGen(token)
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.patch(
-        `http://localhost:8000/api/address/delete/${id}`,
-        {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.patch(`/address/delete/${id}`, {}, { headers });
       toast.success("Address deleted successfully");
       setReload(!reload);
       onClose();

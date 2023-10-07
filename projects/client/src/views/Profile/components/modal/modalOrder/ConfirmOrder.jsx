@@ -1,16 +1,15 @@
 import { Button, Flex, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from "@chakra-ui/react"
 import { ToastContainer, toast } from 'react-toastify';
-import axios from "axios"
 import 'react-toastify/dist/ReactToastify.css';
+import headersGen from "../../../../../api/headers";
+import axios from "../../../../../api/axios";
 
 export const ConfirmOrder = ({ isOpen, onClose, id, reload }) => {
     const token = localStorage.getItem("token")
-    const headers = {
-        Authorization: `Bearer ${token}`
-    }
+    const headers = headersGen(token)
     const handleConfirm = async () => {
         try {
-            const response = await axios.patch(`http://localhost:8000/api/userOrder/confirm/${id}`, {}, {headers})
+            const response = await axios.patch(`/userOrder/confirm/${id}`, {}, { headers })
             toast.success('Your order have arrived', {
                 position: 'top-right',
                 autoClose: 3000, 

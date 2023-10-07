@@ -11,8 +11,8 @@ import {
 import { ToastContainer, toast } from 'react-toastify';
 import { useRef } from "react";
 import 'react-toastify/dist/ReactToastify.css';
-import axios from "axios";
 import headersGen from "../../../../api/headers";
+import axios from "../../../../api/axios";
 
 export const DeleteProduct = ({ product, isOpen, onClose, reload }) => {
 

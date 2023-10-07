@@ -8,15 +8,17 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { ModalChooseAddress } from "./modal/modalChooseAddress";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CheckoutList } from "./ListCheckout";
 import { ConfirmCheckout } from "./confirmChekcout";
+import headersGen from "../../../api/headers";
+import axios from "../../../api/axios";
 
 export const CardCheckout = () => {
   const token = localStorage.getItem("token");
+  const headers = headersGen(token)
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [onOpenModalChooseAddress, setOnOpenModalChooseAddress] = useState(
@@ -26,11 +28,7 @@ export const CardCheckout = () => {
 
   const AllAddress = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/address/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(`/address/`, { headers });
       const data = response.data.result;
       setAddresses(data);
       const primary = data.find((item) => item.isPrimary);

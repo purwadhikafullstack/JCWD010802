@@ -10,21 +10,21 @@ import {
   InputLeftElement,
   Text,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
 import { AddAddress } from "./modal/modalAddress/modalAddAdddress";
 import { EditAddress } from "./modal/modalAddress/modalEditAddress";
 import { DeleteAddress } from "./modal/modalAddress/modalDelete";
-import { useLocation, useNavigate } from "react-router-dom";
 import { Sort } from "./modal/sortBy/sortBy";
 import { PrimaryAddress } from "./modal/modalAddress/modalPrimaryAddress";
 import { BsSearch } from "react-icons/bs";
-import { Pagination } from "../../../components/pagination/pagination";
 import { PaginationProfile } from "./PaginationProfile";
+import axios from "../../../api/axios";
+import headersGen from "../../../api/headers";
 
 export const AddressCard = () => {
   const token = localStorage.getItem("token");
+  const headers = headersGen(token)
   const [address, setAddress] = useState([]);
   const [cities, setCities] = useState([]);
   const [province, setProvince] = useState([]);
@@ -43,13 +43,8 @@ export const AddressCard = () => {
 
   const AllAdrress = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/address?search=${search}&sort=${sort}&page=${currentPage}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const response = await axios.get(`/address?search=${search}&sort=${sort}&page=${currentPage}`,
+        { headers }
       );
       setAddress(response.data.result);
       setPage(response.data.totalpage);
@@ -59,10 +54,7 @@ export const AddressCard = () => {
   };
   const getCity = async (data) => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/location/city`,
-        data
-      );
+      const response = await axios.get(`/location/city`, data);
       setCities(response.data.city.rajaongkir.results);
     } catch (error) {
       console.log(error);
@@ -70,10 +62,7 @@ export const AddressCard = () => {
   };
   const getProvince = async (data) => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/location/province`,
-        data
-      );
+      const response = await axios.get(`/location/province`, data);
       setProvince(response.data.province.rajaongkir.results);
     } catch (error) {
       console.log(error);

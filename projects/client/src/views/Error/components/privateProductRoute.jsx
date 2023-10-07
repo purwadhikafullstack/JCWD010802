@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import axios from "../../../api/axios";
 
 const useIdValidation = (id) => {
   const [product, setProduct] = useState(null);
@@ -7,7 +7,7 @@ const useIdValidation = (id) => {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/product/${id}`);
+        const response = await axios.get(`/product/${id}`);
         setProduct(response.data.result || null); 
       } catch (error) {
         console.log(error);

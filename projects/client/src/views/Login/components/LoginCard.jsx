@@ -1,5 +1,4 @@
 import * as Yup from "yup"
-import axios from "axios"
 import { Button, Center, Flex, Heading, Text, useToast } from "@chakra-ui/react"
 import { Form, Formik } from "formik"
 import { InputField } from "../../../components/input/InputField"
@@ -7,8 +6,9 @@ import { FcGoogle } from "react-icons/fc"
 import { Link, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { setValue } from "../../../redux/userSlice"
-import {  setCart} from "../../../redux/cartSlice"
-import {  setPrice} from "../../../redux/totalPrice"
+import {  setCart } from "../../../redux/cartSlice"
+import {  setPrice } from "../../../redux/totalPrice"
+import axios from "../../../api/axios"
 
 
 
@@ -31,7 +31,7 @@ export const LoginCard = () => {
 
     const onLogin = async (data) => {
         try {
-            const response = await axios.post("http://localhost:8000/api/auth/login", data)
+            const response = await axios.post("/auth/login", data)
             dispatch(setValue(response.data.result))
             toast({
                 title: "Success",
@@ -48,7 +48,7 @@ export const LoginCard = () => {
                   localStorage.setItem("warehouseId",response.data.result.warehouseAdmin.warehouseId||"")
               }
               
-              const cartResponse = await axios.get("http://localhost:8000/api/cart", {
+              const cartResponse = await axios.get("/cart", {
                   headers: {
                       Authorization: `Bearer ${response.data.token}`,
                     },

@@ -1,8 +1,9 @@
 import { Flex, Input, Select } from "@chakra-ui/react"
-import axios from "axios"
 import { useEffect, useState } from "react"
 import { OrderCard } from "./OrderCard"
 import { PaginationProfile } from "./PaginationProfile"
+import headersGen from "../../../api/headers"
+import axios from "../../../api/axios"
 
 
 export const OrderList = () => {
@@ -15,12 +16,10 @@ export const OrderList = () => {
     const [status, setStatus] = useState()
     const [selectedStatus, setSelectedStatus] = useState("")
     const token = localStorage.getItem("token")
-    const headers = {
-        Authorization: `Bearer ${token}`
-    }
+    const headers = headersGen(token)
     const getOrderList = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/userOrder?sort=${sort}&page=${page}&search=${search}&statusId=${selectedStatus}`, 
+            const response = await axios.get(`/userOrder?sort=${sort}&page=${page}&search=${search}&statusId=${selectedStatus}`, 
             { headers }
             )
             setOrder(response.data.result)
@@ -31,7 +30,7 @@ export const OrderList = () => {
     }
     const getStatus = async () => {
         try {
-            const response = await axios.get("http://localhost:8000/api/userOrder/status")
+            const response = await axios.get("/userOrder/status")
             setStatus(response.data.result)
         } catch (error) {
             console.log(error);
