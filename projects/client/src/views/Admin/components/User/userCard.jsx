@@ -15,7 +15,7 @@ import {
 import { useEffect, useState } from "react";
 import { BiSolidUser, BiSolidUserDetail } from "react-icons/bi";
 import { UserProfileModal } from "./userProfileModal";
-import { FaWarehouse } from "react-icons/fa";
+import { FaImage, FaWarehouse } from "react-icons/fa";
 import { PaginationAddress } from "../pagination";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "../../../../api/axios";

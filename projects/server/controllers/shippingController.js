@@ -19,7 +19,6 @@ module.exports = {
 
       let nearestWarehouse = null;
       let shortestDistance = Infinity;
-      
       warehouses.forEach((warehouse) => {
         const distance = calculateDistance(userLat, userLon, warehouse.address.lat, warehouse.address.lng);
         if (distance < shortestDistance) {

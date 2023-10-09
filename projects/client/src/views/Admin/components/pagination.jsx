@@ -12,6 +12,7 @@ export const PaginationAddress = ({ totalpage }) => {
   const roleId = params.get("roleId") || "";
   const warehouseId = params.get("warehouseId") || "";
   const currentpage = Number(params.get("page")) || 1;
+  const monthly = params.get("monthly") || "";
   const status = params.get("filterStatus") || '';
   const sortDir = params.get("sortDirection") || 'asc';
   const productName = params.get("productName") || '';

@@ -21,7 +21,6 @@ export const CheckoutList = ({ selectedAddress }) => {
   const [subtotal, setSubtotal] = useState(0);
   const [shipChecked, setShipChecked] = useState(false);
   const [protectChecked, setProtectChecked] = useState(false);
-  
   const cost = parseFloat(useSelector((state) => state.cost.value));
 
   const Cart = async () => {
@@ -62,7 +61,8 @@ export const CheckoutList = ({ selectedAddress }) => {
       newSubtotal += 1500;
     }
     setSubtotal(newSubtotal);
-  };  
+  };
+    
   const allWeight = cartItems.reduce((total, item) => {
     return total + item.product.weight;
   }, 0);
@@ -75,8 +75,8 @@ export const CheckoutList = ({ selectedAddress }) => {
           <Flex key={item.product.id}>
             <Image
               src={`http://localhost:8000/productImg/${item.product.productImg}`}
+              h="100px" w="100px" objectFit={"cover"}
               maxW={{ base: "50px", sm: "100px" }}
-              objectFit="cover"
               mr={5}
             />
             <Stack>
@@ -128,4 +128,4 @@ export const CheckoutList = ({ selectedAddress }) => {
       </Flex>
     </Flex>
   );
-};
+}
