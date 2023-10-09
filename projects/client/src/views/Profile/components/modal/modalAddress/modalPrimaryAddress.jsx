@@ -9,22 +9,19 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from "../../../../../api/axios";
+import headersGen from "../../../../../api/headers";
 
 export const PrimaryAddress = ({ id, onOpen, onClose, reload, setReload }) => {
   const finalRef = React.useRef(null);
   const token = localStorage.getItem("token");
+  const headers = headersGen(token)
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.patch(
-        `http://localhost:8000/api/address/primary/${id}`,
-        {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+      const response = await axios.patch(`/address/primary/${id}`, {}, { headers }
       );
       toast.success('Primary address changed successfully');
       setReload(!reload)

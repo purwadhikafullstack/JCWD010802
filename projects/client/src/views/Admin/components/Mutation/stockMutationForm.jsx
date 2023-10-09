@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Box,
   FormControl,
   FormLabel,
   Input,
@@ -14,16 +13,15 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  ModalFooter,
   Flex,
   Select,
 } from '@chakra-ui/react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
+import 'react-toastify/dist/ReactToastify.css';
+import * as Yup from 'yup';
+import axios from '../../../../api/axios';
 
 export const ManualStockMutationForm = ({ isOpen, onClose, warehouse, product, reload, setReload }) => {
   const initialValues = {
@@ -64,9 +62,8 @@ export const ManualStockMutationForm = ({ isOpen, onClose, warehouse, product, r
 
   const handleSubmit = async (values) => {
     setErrorMessage('');
-
     try {
-      const response = await axios.post('http://localhost:8000/api/mutation/manual', values);
+      await axios.post('/mutation/manual', values);
 
       toast.success('Stock mutation request created successfully', {
         position: toast.POSITION.TOP_RIGHT,

@@ -1,9 +1,9 @@
-import axios from "axios"
 import { useEffect, useState } from "react"
 import { SuperOrderList } from "../components/Order/superOrderList"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { OrderList } from "../components/Order/orderList"
+import axios from "../../../api/axios"
 export const OrderView = () => {
 const [superOrder, setSuperOrder] = useState([])
 const [order, setOrder] = useState([])
@@ -28,7 +28,7 @@ const shipping = params.get("shipping") || '';
 
     const getSuperOrder = async()=>{
         try {
-            const response = await axios.get(`http://localhost:8000/api/userOrder/admin/?page=${currentPage}&statuses=${status}&warehouseId=${warehouseId}&sortDir=${sortDir}&shipping=${shipping}`)
+            const response = await axios.get(`/userOrder/admin/?page=${currentPage}&statuses=${status}&warehouseId=${warehouseId}&sortDir=${sortDir}&shipping=${shipping}`)
             setSuperOrder(response.data.result)
             setPageSuperOrders(response.data.totalpage); 
         } catch (error) {
@@ -37,7 +37,7 @@ const shipping = params.get("shipping") || '';
     }
     const getOrder = async()=>{
         try {
-            const response = await axios.get(`http://localhost:8000/api/userOrder/warehouse/${id}?page=${currentPage}&statuses=${status}&warehouseId=${warehouseId}&sortDir=${sortDir}&shipping=${shipping}`)
+            const response = await axios.get(`/userOrder/warehouse/${id}?page=${currentPage}&statuses=${status}&warehouseId=${warehouseId}&sortDir=${sortDir}&shipping=${shipping}`)
             setOrder(response.data.result)
             setPageAllOrders(response.data.totalpage); 
         } catch (error) {
@@ -46,7 +46,7 @@ const shipping = params.get("shipping") || '';
     }
     const getWarehouse = async () => {
         try {
-          const response = await axios.get(`http://localhost:8000/api/warehouse/list`);
+          const response = await axios.get(`/warehouse/list`);
           setWarehouse(response.data);
         } catch (error) {
           console.log(error);
@@ -54,7 +54,7 @@ const shipping = params.get("shipping") || '';
       };
     const getStatus = async () => {
         try {
-          const response = await axios.get(`http://localhost:8000/api/userOrder/status`);
+          const response = await axios.get(`/userOrder/status`);
           setStatusList(response.data.result);
         } catch (error) {
           console.log(error);

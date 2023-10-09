@@ -15,14 +15,16 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import axios from "axios";
-import * as Yup from "yup";
 import { ErrorMessage, Form, Formik } from "formik";
+import * as Yup from "yup";
+import headersGen from "../../../../../api/headers";
+import axios from "../../../../../api/axios";
 
 export const ChangeImage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef(null);
   const token = localStorage.getItem("token");
+  const headers = headersGen(token)
 
   const CreateSchema = Yup.object().shape({
     file: Yup.mixed().required("Image profile is required"),
@@ -33,11 +35,9 @@ export const ChangeImage = () => {
       console.log(data);
       const formData = new FormData();
       formData.append("file", data.file);
-      const response = await axios.patch(
-        `http://localhost:8000/api/user/changeImage`,
-        formData,
+      const response = await axios.patch(`/user/changeImage`, formData,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers,
           "Content-Type": "multipart/form-data",
         }
       );

@@ -1,22 +1,20 @@
-import { Button, Flex, FormControl, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from "@chakra-ui/react"
+import { Button, Flex, FormControl, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from "@chakra-ui/react"
 import { ErrorMessage, Form, Formik } from "formik"
 import { ToastContainer, toast } from 'react-toastify';
 import * as Yup from "yup"
-import axios from "axios"
 import 'react-toastify/dist/ReactToastify.css';
-import { InputField } from "../../../../../components/input/InputField";
+import headersGen from "../../../../../api/headers";
+import axios from "../../../../../api/axios";
 
 
 export const PaymentProof = ({ isOpen, onClose, id, reload }) => {
     const token = localStorage.getItem("token")
-    const headers = {
-        Authorization: `Bearer ${token}`
-    }
+    const headers = headersGen(token)
     const handleSubmit = async (value) => {
         try {
             const data = new FormData()
             data.append("file", value.file)
-            const response = await axios.patch(`http://localhost:8000/api/userOrder/payment/${id}`, data, { headers })
+            const response = await axios.patch(`/userOrder/payment/${id}`, data, { headers })
             toast.success('Payment proof successfuly uploaded!', {
                 position: 'top-right',
                 autoClose: 3000, 

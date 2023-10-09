@@ -1,5 +1,4 @@
 import * as Yup from "yup"
-import axios from "axios"
 import { Button, Center, Flex, Heading, Text, useToast } from "@chakra-ui/react"
 import { Form, Formik } from "formik"
 import { InputField } from "../../../components/input/InputField"
@@ -7,8 +6,9 @@ import { FcGoogle } from "react-icons/fc"
 import { Link, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { setValue } from "../../../redux/userSlice"
-import {  setCart} from "../../../redux/cartSlice"
-import {  setPrice} from "../../../redux/totalPrice"
+import {  setCart } from "../../../redux/cartSlice"
+import {  setPrice } from "../../../redux/totalPrice"
+import axios from "../../../api/axios"
 
 
 
@@ -31,7 +31,7 @@ export const LoginCard = () => {
 
     const onLogin = async (data) => {
         try {
-            const response = await axios.post("http://localhost:8000/api/auth/login", data)
+            const response = await axios.post("/auth/login", data)
             dispatch(setValue(response.data.result))
             toast({
                 title: "Success",
@@ -48,7 +48,7 @@ export const LoginCard = () => {
                   localStorage.setItem("warehouseId",response.data.result.warehouseAdmin.warehouseId||"")
               }
               
-              const cartResponse = await axios.get("http://localhost:8000/api/cart", {
+              const cartResponse = await axios.get("/cart", {
                   headers: {
                       Authorization: `Bearer ${response.data.token}`,
                     },
@@ -57,17 +57,16 @@ export const LoginCard = () => {
                 dispatch(setCart(userCart))
                 dispatch(setPrice(cartResponse.data.totalPrice))
                 setTimeout(() => {
-                  if (response.data.result.roleId === 1) {
-                      navigate("/") } else {
-                      navigate("/admin")
-                      }              }, 2000)
-
+                    if (response.data.result.roleId === 1) {
+                        navigate("/") } else {
+                        navigate("/admin")
+                        }
+                }, 2000)
         console.log(userCart);
         } catch (error) {
             toast({
                 title: "Login Failed!",
                 description: error?.response?.data?.message,
-
                 status: "error",
                 duration: 1500,
                 isClosable: true,
@@ -138,12 +137,6 @@ export const LoginCard = () => {
             </Flex>
             )}
             </Formik>
-            <Text mt="10px">Or</Text>
-            <Button w={'full'} bg="gray.200" leftIcon={<FcGoogle />} mt="10px">
-                <Center>
-                    <Text>Sign In with Google</Text>
-                </Center>
-            </Button>
         </Flex>
     )
 }

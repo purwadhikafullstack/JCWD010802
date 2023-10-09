@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Grid, GridItem, Button, Flex } from "@chakra-ui/react";
-import axios from 'axios';
 import { WarehouseCard} from '../components/Warehouse/warehouseCard';
 import { AddWarehouseModal} from '../components/Warehouse/addWarehouseModal';
 import { useLocation } from 'react-router-dom';
 import { Pagination } from '../../../components/pagination/pagination';
+import axios from '../../../api/axios';
 
 
 export const WarehousePageView = () => {
@@ -18,7 +18,7 @@ export const WarehousePageView = () => {
 
   const getWarehouse = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/warehouse?page=${currentPage}`);
+      const response = await axios.get(`/warehouse?page=${currentPage}`);
       setWarehouse(response.data.result);
       setPage(response.data.totalpage);
     } catch (error) {

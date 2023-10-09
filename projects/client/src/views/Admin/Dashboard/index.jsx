@@ -5,12 +5,11 @@ import {
   Text,
   SimpleGrid,
   GridItem,
-  Flex,
   HStack,
 } from '@chakra-ui/react';
-import axios from 'axios';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import { StatCard } from '../components/Dashboard/statCard';
+import axios from '../../../api/axios';
 
 export const Dashboard = () => {
   const [data, setData] = useState({
@@ -26,7 +25,7 @@ export const Dashboard = () => {
 
   const getData = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/dashboard');
+      const response = await axios.get('/dashboard');
       setData(response.data);
     } catch (error) {
       console.error(error);

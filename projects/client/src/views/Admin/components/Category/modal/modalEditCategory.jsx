@@ -13,12 +13,12 @@ import {
   ModalFooter,
 } from "@chakra-ui/react";
 import * as Yup from "yup";
-import axios from "axios";
 import { ErrorMessage, Form, Formik } from "formik";
 import React from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { InputField } from "../../../../../components/input/InputField";
+import axios from "../../../../../api/axios";
 
 export const ModalEditCategory = ({ id, name, image, isOpen, onClose, reload, setReload }) => {
   const finalRef = React.useRef(null);
@@ -33,12 +33,8 @@ export const ModalEditCategory = ({ id, name, image, isOpen, onClose, reload, se
       const formData = new FormData();
       formData.append("name", name);
       formData.append("file", file);
-      const response = await axios.patch(
-        `http://localhost:8000/api/category/edit/${id}`,
-        formData,
-        {
-          "Content-Type": "multipart/form-data",
-        }
+      const response = await axios.patch(`/category/edit/${id}`, formData,
+        { "Content-Type": "multipart/form-data", }
       );
       setReload(!reload);
       onClose();
