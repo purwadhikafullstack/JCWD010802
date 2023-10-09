@@ -4,8 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
 const schedule = require('node-schedule');
-
-const {userRouters, adminRouters, warehouseRouter, authRouters, authRouter, userRouter, addressRouter, rajaongkirRouter, productRouter, stockRouter, categoryRouter, cartRouter,shippingRouter,productReportRouter,orderRouter, adminOrderRouter,mutationRouter, dashboardRouter} = require('../routers')
+const {userRouters, adminRouters, warehouseRouter, authRouters, authRouter, userRouter, addressRouter, rajaongkirRouter, productRouter, stockRouter, categoryRouter, cartRouter, shippingRouter, productReportRouter, orderRouter, adminOrderRouter,mutationRouter, dashboardRouter, reportRouter} = require('../routers')
 const { checkPaymentProof } = require("../schedulers/autoCancel");
 const runAutoCancel = require("../schedulers/autoCancel");
 const runAutoConfirm = require("../schedulers/autoConfirm");
@@ -49,10 +48,11 @@ app.use("/api/mutation", mutationRouter)
 app.use("/api/dashboard", dashboardRouter)
 app.use("/api/userOrder", orderRouter)
 app.use("/api/adminOrder", adminOrderRouter)
+app.use("/api/report", reportRouter)
 
 // Scheduler
-schedule.scheduleJob('0 0 * * *', runAutoCancel)
-schedule.scheduleJob('0 0 * * *', runAutoConfirm)
+schedule.scheduleJob('* * * * *', runAutoCancel)
+schedule.scheduleJob('* * * * *', runAutoConfirm)
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);

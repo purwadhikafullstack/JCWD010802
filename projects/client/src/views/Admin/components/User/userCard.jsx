@@ -12,13 +12,13 @@ import {
   Text,
   UnorderedList,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { BiSolidUser, BiSolidUserDetail } from "react-icons/bi";
 import { UserProfileModal } from "./userProfileModal";
 import { FaImage, FaWarehouse } from "react-icons/fa";
 import { PaginationAddress } from "../pagination";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "../../../../api/axios";
 
 export const UserCard = () => {
   const [user, setUser] = useState([]);
@@ -33,12 +33,10 @@ export const UserCard = () => {
   const currentPage = Number(params.get("page")) || 1;
   const [page, setPage] = useState([]);
   const navigate = useNavigate();
-
+  const defaultAvatar = "https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png"
   const getUser = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/user/list-user?&page=${currentPage}&roleId=${roleId}`
-      );
+      const response = await axios.get(`/user/list-user?&page=${currentPage}&roleId=${roleId}`);
       console.log(response.data.result);
       setUser(response.data.result);
       setPage(response.data.totalPage);
@@ -49,9 +47,7 @@ export const UserCard = () => {
 
   const getProfile = async (userId) => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/user/${userId}`
-      );
+      const response = await axios.get(`/user/${userId}`);
       setProfile(response.data.result);
     } catch (error) {
       console.log(error);
@@ -105,26 +101,20 @@ export const UserCard = () => {
             boxShadow={"2xl"}
             padding={4}
           >
-            <Flex>
+            <Flex >
             {item.profileImg ? (
       <Image
-        w={"170px"}
-        h={"170px"}
-        src={`http://localhost:8000/profileImg/${item.profileImg}`}
-        alt="#"
-        objectFit="cover"
+      objectFit="cover"
+      boxSize="100%"        
+      src={`http://localhost:8000/profileImg/${item.profileImg}`}
+        alt="profile image"
       />
     ) : (
-      <Box
-        w={"170px"}
-        h={"170px"}
-        bg="gray.200"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <FaImage size={40} color="gray" /> {/* Broken image icon */}
-      </Box>
+      <Image
+        src={defaultAvatar}
+        alt="default avatar"
+        objectFit="cover"
+        boxSize="100%"      />
     )}
             </Flex>
             <Box>

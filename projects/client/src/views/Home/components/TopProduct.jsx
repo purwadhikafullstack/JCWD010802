@@ -2,7 +2,6 @@ import { Flex, Heading } from "@chakra-ui/react"
 import { useNavigate } from "react-router-dom"
 import { ProductCard } from "../../../components/product/ProductCard"
 
-
 export const TopProduct = ({ data, isLoaded }) => {
     const navigate = useNavigate()
 

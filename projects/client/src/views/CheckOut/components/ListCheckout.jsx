@@ -8,13 +8,15 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { ShippingMethod } from "./ShippingMethod";
 import { useSelector } from "react-redux";
 import formatIDR from "../../../helpers/formatIDR";
+import headersGen from "../../../api/headers";
+import axios from "../../../api/axios";
 
 export const CheckoutList = ({ selectedAddress }) => {
   const token = localStorage.getItem("token");
+  const headers = headersGen(token)
   const [cartItems, setCartItems] = useState([]);
   const [subtotal, setSubtotal] = useState(0);
   const [shipChecked, setShipChecked] = useState(false);
@@ -23,11 +25,7 @@ export const CheckoutList = ({ selectedAddress }) => {
 
   const Cart = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/cart`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(`/cart`, { headers });
       setCartItems(response.data.result);
 
       const calculatedSubtotal = response.data.result.reduce((value, item) => {

@@ -3,10 +3,10 @@ import { Button } from '@chakra-ui/react'
 export const ButtomTemp = ({content, func}) => {
   return (
         <Button
-        colorScheme={"facebook"}
-        bgGradient="linear(to-r, blackAlpha.400, blackAlpha.500, blackAlpha.600)"
+        bg={'#517664'}
         color={'white'}
         onClick={func}
+        _hover={{ bg: "#2d3319" }}
         >
         {content}
         </Button>

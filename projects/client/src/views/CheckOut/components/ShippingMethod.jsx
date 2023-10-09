@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Box, Flex, Select, Text } from "@chakra-ui/react";
-import axios from "axios";
 import { useDispatch } from "react-redux";
 
 import { setCost,setShip } from "../../../redux/costSlice";
 import formatIDR from "../../../helpers/formatIDR";
+import axios from "../../../api/axios";
 
 export const ShippingMethod = ({ selectedAddress, totalWeight }) => {
   const [warehouse, setWarehouse] = useState();
@@ -17,7 +17,7 @@ export const ShippingMethod = ({ selectedAddress, totalWeight }) => {
   const WarehouseOrigin = useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/ship?lat=${selectedAddress?.address.lat || 0}&lng=${selectedAddress?.address.lng || 0}`
+        `/ship?lat=${selectedAddress?.address.lat || 0}&lng=${selectedAddress?.address.lng || 0}`
       );
       setWarehouse(response.data.origin);
     } catch (error) {
@@ -31,7 +31,7 @@ export const ShippingMethod = ({ selectedAddress, totalWeight }) => {
 
   const Cost = useCallback(async () => {
     try {
-      const response = await axios.post(`http://localhost:8000/api/location`, {
+      const response = await axios.post(`/location`, {
         origin: warehouse,
         destination: selectedAddress?.address?.kota,
         weight: totalWeight,

@@ -1,11 +1,14 @@
-import { Box, Heading, Image, Text, VStack } from "@chakra-ui/react"
+import { Box, Button, Heading, Image, Text, VStack } from "@chakra-ui/react"
 import { ForgotPasswordForm } from "./components/forgotPassForm"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { IoArrowBack } from 'react-icons/io5'; 
 
 import axios from 'axios';
+import { NotFound } from "../../pages/Error";
+import { NavLink } from "react-router-dom";
 export const ForgotPassPageView = () => {
-
+const token = localStorage.getItem("token")
 const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
   try {
     const response = await axios.post('http://localhost:8000/api/auth/forgot', {
@@ -18,10 +21,8 @@ const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
         })}
     
 
-    // Handle success (e.g., show a success message)
     console.log(response.data.message);
   } catch (error) {
-    // Handle errors (e.g., display error message)
     console.error(error.response.data.message);
     setFieldError('email', error.response.data.message);
   } finally {
@@ -31,9 +32,17 @@ const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
 
     return (
         <>
-        <Box p={8} mt={5}>
+        {token?(
+          <NotFound/>
+        ):(
+          <Box  mt={5}>
             <ToastContainer/>
-            <Heading textAlign={"center"} mb={3} color={"#9fd8cb"} fontSize={"5xl"}>
+            <NavLink to={"/login"}>
+            <Button leftIcon={<IoArrowBack />} variant="ghost" mx={8}  color={"#517664"} fontWeight={"bold"} _hover={{}}> 
+              Login
+            </Button>
+            </NavLink>
+            <Heading textAlign={"center"} mb={3} color={"#517664"} fontSize={"5xl"}>
                 Forgot your password?
             </Heading>
             <Text fontSize={"xl"} textAlign={"center"} mb={3}>
@@ -49,6 +58,7 @@ const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
             />
             </VStack>
             </Box>
+        )}
         </>
     )
 }

@@ -3,15 +3,13 @@ import {
   Box,
   Heading,
   Text,
-  Stat,
-  StatLabel,
-  StatNumber,
   SimpleGrid,
   GridItem,
+  HStack,
 } from '@chakra-ui/react';
-import axios from 'axios';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import { StatCard } from '../components/Dashboard/statCard';
+import axios from '../../../api/axios';
 
 export const Dashboard = () => {
   const [data, setData] = useState({
@@ -20,12 +18,14 @@ export const Dashboard = () => {
     totalWarehouse: 0,
     totalProduct: 0,
     totalCategory: 0,
+    totalVerifiedUsers: 0,
+    totalUnverifiedUsers: 0,
     categoriesWithProductCount: [],
   });
 
   const getData = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/dashboard');
+      const response = await axios.get('/dashboard');
       setData(response.data);
     } catch (error) {
       console.error(error);
@@ -36,24 +36,54 @@ export const Dashboard = () => {
     getData();
   }, []);
 
-  const pieData = data.categoriesWithProductCount.map((category) => ({
+  const COLORS = [
+    "#0088FE",
+    "#00C49F",
+    "#FFBB28",
+    "#FF8042",
+    "#8884d8",
+    "#ffcc00",
+    "#FF6B6B",
+    "#A3A1FB",
+    "#64C4ED",
+    "#FFD166",
+    "#FF8C42",
+    "#A0E7E5",
+    "#3A506B",
+    "#EF476F",
+    "#F7F7FF",
+    "#21313E",
+    "#FDE74C",
+    "#DBEDF3",
+    "#F6F6F6",
+    "#023047",];
+
+  const categoryPieData = data.categoriesWithProductCount.map((category) => ({
     name: category.name,
     value: category.productCount,
   }));
 
-  const COLORS = [
-    '#0088FE',
-    '#00C49F',
-    '#FFBB28',
-    '#FF8042',
-    '#8884d8',
-    '#ffcc00',
+  const userVerificationPieData = [
+    { name: 'Verified Users', value: data.totalVerifiedUsers },
+    { name: 'Unverified Users', value: data.totalUnverifiedUsers },
   ];
+  const RADIAN = Math.PI / 180;
 
+  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+  
+    return (
+      <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
+    );
+  };
   return (
     <Box p={4}>
       <Heading as="h1" size="xl" mb={4}>
-         Dashboard
+        Dashboard
       </Heading>
       <SimpleGrid columns={[1, 2, 3]} spacing={6}>
         <GridItem>
@@ -71,20 +101,25 @@ export const Dashboard = () => {
         <GridItem>
           <StatCard label="Total Category" value={data.totalCategory} />
         </GridItem>
-        <Box gridColumn="span 3">
+        </SimpleGrid>
+        <HStack>
           <Box>
-            {pieData.length > 0 ? (
+            {userVerificationPieData.length > 0 ? (
               <PieChart width={400} height={400}>
                 <Pie
                   dataKey="value"
                   isAnimationActive={false}
-                  data={pieData}
+                  data={userVerificationPieData}
                   outerRadius={80}
                   fill="#8884d8"
-                  label
+                  label={renderCustomizedLabel}
+                  labelLine={false}
                 >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  {userVerificationPieData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -94,10 +129,34 @@ export const Dashboard = () => {
               <Text>Loading...</Text>
             )}
           </Box>
-        </Box>
-      </SimpleGrid>
+          <Box>
+            {categoryPieData.length > 0 ? (
+              <PieChart width={450} height={400}>
+                <Pie
+                  dataKey="value"
+                  isAnimationActive={false}
+                  data={categoryPieData}
+                  outerRadius={80}
+                  fill="#FFBB28"
+                  label={renderCustomizedLabel}
+                  labelLine={false}
+
+                >
+                  {categoryPieData.map((entry, index) => (
+                    <Cell
+                    key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                      />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            ) : (
+              <Text>Loading...</Text>
+              )}
+          </Box>
+              </HStack>
     </Box>
   );
 };
-
-    
