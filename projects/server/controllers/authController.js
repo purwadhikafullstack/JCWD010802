@@ -145,7 +145,8 @@ module.exports = {
             const result = await user.update({
                 name,
                 password: hashPassword,
-                isVerified: true
+                isVerified: true,
+                roleId: 1
             }, {
                 where: {
                     email: req.user.email

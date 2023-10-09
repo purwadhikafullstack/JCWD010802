@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -12,14 +11,15 @@ import {
   FormLabel,
   Input,
 } from '@chakra-ui/react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import axios from 'axios';
+import { Formik, Form, ErrorMessage } from 'formik';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { InputField } from '../../../../components/input/InputField';
 import { TextareaField } from '../../../../components/input/TextAreaField';
 import { SelectField } from '../../../../components/input/SelectField';
+import 'react-toastify/dist/ReactToastify.css';
+import * as Yup from 'yup';
+import axios from '../../../../api/axios';
+import headersGen from '../../../../api/headers';
 
 export const EditProduct = ({ isOpen, onClose, category, product, reload }) => {
     const token = localStorage.getItem("token")
@@ -39,9 +39,7 @@ export const EditProduct = ({ isOpen, onClose, category, product, reload }) => {
         weight: product.weight,
         file: product.productImg
     }
-    const headers = {
-        Authorization: `Bearer ${token}`
-    }
+    const headers = headersGen(token)
     const handleSubmit = async (value) => {
         const data = new FormData()
         data.append("name", value.product)
@@ -51,7 +49,7 @@ export const EditProduct = ({ isOpen, onClose, category, product, reload }) => {
         data.append("file", value.file)
         data.append("weight", value.weight)
         try {
-            const response = await axios.patch(`http://localhost:8000/api/product/edit/${product.id}`, data, { headers })
+            await axios.patch(`/product/edit/${product.id}`, data, { headers })
             toast.success('successfully edit product', {
                 position: 'top-right',
                 autoClose: 3000, 

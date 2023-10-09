@@ -6,7 +6,10 @@ import { useSelector } from 'react-redux';
 export const CartNotif = () => {
   const cart = useSelector(state => state.cart.value); 
 
-  const numberOfItems = cart.length;
+  let numberOfItems
+  if (cart) {
+    numberOfItems = cart.length;
+  }
 console.log(cart);
   return (
     <Flex direction="column" align="center">
@@ -14,17 +17,17 @@ console.log(cart);
       {numberOfItems > 0 && (
         <Box
           position="absolute"
-          top="18"
-          right="192"
+          top="22px"
+          right="178"
           bg="red.500"
           color="white"
           borderRadius="full"
-          w="1rem"
-          h="1rem"
+          w="0.9rem"
+          h="0.9rem"
           display="flex"
           justifyContent="center"
           alignItems="center"
-          fontSize="xs"
+          fontSize="10px"
         >
           {numberOfItems}
         </Box>

@@ -1,12 +1,13 @@
-import { Flex } from "@chakra-ui/react"
+import { Flex, Table, TableContainer } from "@chakra-ui/react"
 import { ProductCardAdmin } from "../../../../components/product/ProductCardAdmin"
+import { ProductTable } from "./ProductTable"
 
 
 export const ProductList = ({ reload, product, category }) => {
     
     return (
-        <Flex justifyContent={{base: "center", md: "flex-start"}} gap={3} mt="20px" wrap={"wrap"} pb="20px" maxW="1400px">
-            <ProductCardAdmin data={product} category={category} reload={reload} />
+        <Flex w="full">
+            <ProductTable reload={reload} product={product} category={category} />
         </Flex>
     )
 }

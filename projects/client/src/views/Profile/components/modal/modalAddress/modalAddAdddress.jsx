@@ -14,17 +14,19 @@ import {
   Select,
   useDisclosure,
 } from "@chakra-ui/react";
-import axios from "axios";
-import * as Yup from "yup";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { InputField } from "../../../../../components/input/InputField";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import * as Yup from "yup";
+import axios from "../../../../../api/axios";
+import headersGen from "../../../../../api/headers";
 
 export const AddAddress = ({ dataCities, dataProvince, reload, setReload }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef(null);
   const token = localStorage.getItem("token");
+  const headers = headersGen(token)
   
   const CreateSchema = Yup.object().shape({
     address: Yup.string().required("Address is required"),
@@ -35,13 +37,7 @@ export const AddAddress = ({ dataCities, dataProvince, reload, setReload }) => {
 
   const handleSubmit = async (data) => {
     try {
-      const response = await axios.post(
-        `http://localhost:8000/api/address/add`,
-        data,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.post(`/address/add`, data, { headers });
       toast.success('Address added successfully');
       onClose();
       setReload(!reload)

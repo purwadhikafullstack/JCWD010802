@@ -1,17 +1,16 @@
-import axios from "axios"
 import { Flex, Heading } from "@chakra-ui/react"
 import { StockTable } from "../components/Stock/StockTable"
 import { useEffect, useState } from "react"
 import { Pagination } from "../../../components/pagination/pagination"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
+import headersGen from "../../../api/headers"
+import axios from "../../../api/axios"
 
 export const StockView = () => {
     const user = useSelector((state) => state.user.value)
     const token = localStorage.getItem("token")
-    const headers = {
-        Authorization: `Bearer ${token}`
-    }
+    const headers = headersGen(token)
     const navigate = useNavigate()
     const location = useLocation();
     const params = new URLSearchParams(location.search);
@@ -27,7 +26,7 @@ export const StockView = () => {
 
     const getStock = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/stock?categoryId=${categoryId}&warehouseId=${warehouseId}&search=${search}&page=${currentPage}`, { headers })
+            const response = await axios.get(`/stock?categoryId=${categoryId}&warehouseId=${warehouseId}&search=${search}&page=${currentPage}`, { headers })
             setStock(response.data.result);
             setTotalPage(response.data.totalpage)
         } catch (error) {
@@ -36,7 +35,7 @@ export const StockView = () => {
     }
     const getCategory = async () => {
         try {
-            const response = await axios.get("http://localhost:8000/api/category?limit=9999")
+            const response = await axios.get("/category?limit=9999")
             setCategory(response.data.result);
         } catch (error) {
             console.log(error);
@@ -44,7 +43,7 @@ export const StockView = () => {
     }
     const getWarehouse = async () => {
         try {
-            const response = await axios.get("http://localhost:8000/api/warehouse")
+            const response = await axios.get("/warehouse")
             setWarehouse(response.data.result);
         } catch (error) {
             

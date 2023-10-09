@@ -3,14 +3,16 @@ import { Form, Formik } from "formik"
 import { SelectField } from "../../../../components/input/SelectField";
 import { InputField } from "../../../../components/input/InputField";
 import { ToastContainer, toast } from 'react-toastify';
+import { ProductCardModal } from "./CardModal";
 import 'react-toastify/dist/ReactToastify.css';
 import * as Yup from 'yup';
-import axios from 'axios';
-import { ProductCardModal } from "./CardModal";
+import headersGen from "../../../../api/headers";
+import axios from "../../../../api/axios";
 
 
 export const ModalUpdateStock = ({ data, isOpen, onClose, triggerReload }) => {
     const token = localStorage.getItem("token")
+    const headers = headersGen(token)
     const initialValues = {
         description: "",
         quantity: data?.totalQuantity,
@@ -24,11 +26,7 @@ export const ModalUpdateStock = ({ data, isOpen, onClose, triggerReload }) => {
     })
     const handleSubmit = async (value) => {
         try {
-            const response = await axios.patch('http://localhost:8000/api/stock', value, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
+            const response = await axios.patch('http://localhost:8000/api/stock', value, { headers })
             onClose()
             triggerReload()
             toast.success('successfully updated stock', {

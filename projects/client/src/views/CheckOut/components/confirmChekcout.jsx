@@ -1,11 +1,13 @@
 import { Box, Button, Divider, HStack, Heading, Text, VStack } from "@chakra-ui/react";
-import formatIDR from "../../../helpers/formatIDR";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 import { toast } from 'react-toastify';
+import { setCartOut } from "../../../redux/cartSlice";
+import { useNavigate } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import convertToUppercase from "../../../helpers/upperCase";
-import { setCartOut } from "../../../redux/cartSlice";
+import formatIDR from "../../../helpers/formatIDR";
+import headersGen from "../../../api/headers";
+import axios from "../../../api/axios";
 
 
 export const ConfirmCheckout = ({addressId}) => {
@@ -15,8 +17,10 @@ export const ConfirmCheckout = ({addressId}) => {
   const cost = parseFloat(useSelector((state) => state.cost.value));
   const ship = useSelector((state) => state.cost.ship)
   const token = localStorage.getItem("token")
+  const headers = headersGen(token)
   const chekoutPrice = total+cost
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const handleBuyClick = async () => {
     try {
@@ -26,15 +30,9 @@ export const ConfirmCheckout = ({addressId}) => {
         shippingMethod: ship, 
         shippingCost: cost,
       };
-
-
-      const response = await axios.post('http://localhost:8000/api/userOrder', dataToSend,{
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.post('/userOrder', dataToSend,{ headers });
       setTimeout(() => {
-        window.location.href = '/profile'; 
+        navigate("/profile#myorder"); 
       }, 3000)
  toast.success('Order placed successfully!', {
       position: 'top-right', 
@@ -103,8 +101,7 @@ export const ConfirmCheckout = ({addressId}) => {
           <Heading fontSize={"2xl"}>Total Price</Heading>
           <Heading fontSize={"2xl"}>{formatIDR(chekoutPrice)}</Heading>
         </HStack>
-        <Button colorScheme="green" mt={5} w={"full"} isDisabled={cost===0} onClick={handleBuyClick}
->
+        <Button colorScheme="green" mt={5} w={"full"} isDisabled={cost===0} onClick={handleBuyClick}>
           Buy
         </Button>
       </Box>

@@ -14,7 +14,7 @@ export const SearchProductAdmin = ({ search, handleSearch }) => {
                 color={"black"}
                 onChange={handleSearch}
                 borderColor={"2px solid black"}
-                w="60%"
+                
             />
             <InputLeftElement>
                 <Icon as={BsSearch} color={"gray.500"} />

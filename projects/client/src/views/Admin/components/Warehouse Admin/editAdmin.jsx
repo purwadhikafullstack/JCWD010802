@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Button, FormControl, FormLabel, Input, Text, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Flex } from '@chakra-ui/react';
-import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from '../../../../api/axios';
 export const AdminEditForm = ({ admin, onUpdateAdmin}) => {
   const initialValues = {
     name: admin.user.name ||'',
@@ -32,7 +32,7 @@ export const AdminEditForm = ({ admin, onUpdateAdmin}) => {
       formData.append('name', values.name);
       formData.append('email', values.email);
 
-      const response = await axios.patch(`http://localhost:8000/api/admin/${admin.user.id}`, {
+      const response = await axios.patch(`/admin/${admin.user.id}`, {
         name:values.name,
         email:values.email
       });

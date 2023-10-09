@@ -14,15 +14,17 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import axios from "axios";
-import * as Yup from "yup";
 import { Form, Formik } from "formik";
 import { InputField } from "../../../../../components/input/InputField";
+import * as Yup from "yup";
+import headersGen from "../../../../../api/headers";
+import axios from "../../../../../api/axios";
 
 export const ChangePassword = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef(null);
   const token = localStorage.getItem("token");
+  const headers = headersGen(token)
   const [showPassword, setShowPassword] = useState(false);
   const SeePsw = () => {
     setShowPassword(!showPassword);
@@ -46,12 +48,7 @@ export const ChangePassword = () => {
 
   const handleSubmit = async (data) => {
     try {
-      const response = await axios.patch(
-        `http://localhost:8000/api/user/changePassword`,
-        data,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+      const response = await axios.patch(`/user/changePassword`, data, { headers }
       );
       onClose();
       console.log(response);

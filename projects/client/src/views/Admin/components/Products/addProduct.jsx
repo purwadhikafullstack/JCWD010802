@@ -13,13 +13,14 @@ import {
   Input,
 } from '@chakra-ui/react';
 import { Formik, Form, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { InputField } from '../../../../components/input/InputField';
 import { TextareaField } from '../../../../components/input/TextAreaField';
 import { SelectField } from '../../../../components/input/SelectField';
+import 'react-toastify/dist/ReactToastify.css';
+import * as Yup from 'yup';
+import axios from '../../../../api/axios';
+import headersGen from '../../../../api/headers';
 
 export const AddProduct = ({ isOpen, onClose, category, reload }) => {
     
@@ -40,9 +41,7 @@ export const AddProduct = ({ isOpen, onClose, category, reload }) => {
         weight: 0,
         file: ""
     }
-    const headers = {
-        Authorization: `Bearer ${token}`
-    }
+    const headers = headersGen(token)
     const handleSubmit = async (value) => {
         const data = new FormData()
         data.append("name", value.product)
@@ -52,7 +51,7 @@ export const AddProduct = ({ isOpen, onClose, category, reload }) => {
         data.append("file", value.file)
         data.append("weight", value.weight)
         try {
-            const response = await axios.post("http://localhost:8000/api/product", data, { headers })
+            const response = await axios.post("/product", data, { headers })
             toast.success('successfully added new product', {
                 position: 'top-right',
                 autoClose: 3000, 
