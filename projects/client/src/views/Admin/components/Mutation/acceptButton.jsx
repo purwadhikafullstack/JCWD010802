@@ -1,14 +1,14 @@
 import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react";
 import { useState } from "react";
-import axios from 'axios';
 import { toast } from "react-toastify";
+import axios from "../../../../api/axios";
 
 export const Accept = ({ requestId, reload, setReload }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleAccept = async () => {
     try {
-      await axios.patch(`http://localhost:8000/api/mutation/accept/${requestId}`)
+      await axios.patch(`/mutation/accept/${requestId}`)
       setIsModalOpen(false)
       toast.success("Stock request has been accepted")
       setReload(!reload)

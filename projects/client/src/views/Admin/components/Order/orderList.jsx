@@ -52,7 +52,7 @@ export const OrderList = ({
   const navigate = useNavigate();
 
   const handleRowClick = (orderId) => {
-    navigate(`admin/detail-order/${orderId}`);
+    navigate(`detail-order/${orderId}`);
   };
 
 
@@ -71,7 +71,7 @@ export const OrderList = ({
             <option value="">All Status</option>
             {statusList.map((item) => (
               <option key={item.id} value={item.id}>
-                {item.status}
+                {item.name}
               </option>
             ))}
           </Select>

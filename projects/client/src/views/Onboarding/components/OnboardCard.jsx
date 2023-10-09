@@ -1,7 +1,7 @@
 import { Flex, Heading, Text } from "@chakra-ui/react"
-import axios from "axios"
 import { useSelector } from "react-redux"
 import Swal from "sweetalert2"
+import axios from "../../../api/axios"
 
 
 export const OnboardCard = () => {
@@ -13,7 +13,7 @@ export const OnboardCard = () => {
 
     const onResend = async () => {
         try {
-            await axios.put("http://localhost:8000/api/auth/resend", data)
+            await axios.put("/auth/resend", data)
             Swal.fire({
                 title: "Resend Email Success!",
                 text: "Please check your email to verify your account",

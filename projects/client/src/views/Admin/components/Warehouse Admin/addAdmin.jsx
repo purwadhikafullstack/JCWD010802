@@ -16,10 +16,10 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
+import * as Yup from 'yup';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from '../../../../api/axios';
 
 
 const SignupSchema = Yup.object().shape({
@@ -42,9 +42,7 @@ console.log(warehouses);
 
   const handleSubmit = async(values) => {
     try {
-        const response = await axios.post(
-          "http://localhost:8000/api/admin",
-          {
+        const response = await axios.post("/admin", {
             name: values.name,
             email: values.email,
             password: values.password,
@@ -65,7 +63,7 @@ console.log(warehouses);
   
   const getWarehouse = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/warehouse/list`);
+      const response = await axios.get(`/warehouse/list`);
       setWarehouse(response.data);
     } catch (error) {
       console.log(error);

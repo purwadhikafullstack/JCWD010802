@@ -1,10 +1,10 @@
 import { Box, Container, Flex } from "@chakra-ui/react";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Pagination } from "../../../components/pagination/pagination";
 import { DrawerSorting } from "./Drawer/DrawerSort";
 import { ProductCardUser } from "../../../components/product/ProductCardUser";
+import axios from "../../../api/axios";
 
 export const AllProduct = () => {
   const location = useLocation();
@@ -24,7 +24,7 @@ export const AllProduct = () => {
   const getProduct = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/product?search=${search}&sort=${sort}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&page=${currentPage}`);
+        `/product?search=${search}&sort=${sort}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&page=${currentPage}`);
       setProduct(response.data.result);
       setPage(response.data.totalpage);
     } catch (error) {

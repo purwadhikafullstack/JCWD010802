@@ -1,13 +1,13 @@
 import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react";
 import { useState } from "react";
-import axios from 'axios';
 import { toast } from "react-toastify";
+import axios from "../../../../api/axios";
 
 export const Reject = ({requestId,reload,setReload})=>{
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleReject = async() =>{
         try {
-            await axios.patch(`http://localhost:8000/api/mutation/reject/${requestId}`)
+            await axios.patch(`/mutation/reject/${requestId}`)
             setIsModalOpen(false)
             toast.success("Stock request has been rejected")
             setReload(!reload)

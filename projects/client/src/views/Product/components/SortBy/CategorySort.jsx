@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Select } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../../../../api/axios";
 
 export const CategorySort = () => {
   const location = useLocation();
@@ -17,8 +17,7 @@ export const CategorySort = () => {
 
   const getCategory = async () => {
     try {
-        const response = await axios.get(
-          `http://localhost:8000/api/category/`
+        const response = await axios.get(`/category/`
           // {
           //   headers: {
           //     Authorization: `Bearer ${token}`,

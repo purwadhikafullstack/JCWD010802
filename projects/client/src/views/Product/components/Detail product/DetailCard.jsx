@@ -1,5 +1,4 @@
 import {
-  Button,
   Flex,
   Heading,
   Image,
@@ -8,15 +7,12 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ButtonQuantity } from "./Button/ButtonQuantity";
-import { FiShoppingCart, FiHeart, FiCheckCircle } from "react-icons/fi";
-import formatIDR from "../../../../helpers/formatIDR";
 import { AddToCart } from "../addToCart";
-import { ProfileCard } from "../../../Profile/components/Profile";
 import { useSelector } from "react-redux";
+import formatIDR from "../../../../helpers/formatIDR";
+import axios from "../../../../api/axios";
 
 export const DetailCard = () => {
   const { id } = useParams();
@@ -26,9 +22,7 @@ export const DetailCard = () => {
   const profile = useSelector(state=>state.user.value)
   const getDetail = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/product/${id}`
-      );
+      const response = await axios.get(`/product/${id}`);
       setDetail(response.data.result);
       console.log(response);
     } catch (error) {
@@ -37,9 +31,7 @@ export const DetailCard = () => {
   };
   const getStock = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/stock/product/${id}`
-      );
+      const response = await axios.get(`/stock/product/${id}`);
       setStock(response.data.result);
       console.log(response);
     } catch (error) {

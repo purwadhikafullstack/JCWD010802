@@ -12,13 +12,13 @@ import {
   Text,
   UnorderedList,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { BiSolidUser, BiSolidUserDetail } from "react-icons/bi";
 import { UserProfileModal } from "./userProfileModal";
 import { FaImage, FaWarehouse } from "react-icons/fa";
 import { PaginationAddress } from "../pagination";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "../../../../api/axios";
 
 export const UserCard = () => {
   const [user, setUser] = useState([]);
@@ -36,9 +36,7 @@ export const UserCard = () => {
   const defaultAvatar = "https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png"
   const getUser = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/user/list-user?&page=${currentPage}&roleId=${roleId}`
-      );
+      const response = await axios.get(`/user/list-user?&page=${currentPage}&roleId=${roleId}`);
       console.log(response.data.result);
       setUser(response.data.result);
       setPage(response.data.totalPage);
@@ -49,9 +47,7 @@ export const UserCard = () => {
 
   const getProfile = async (userId) => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/user/${userId}`
-      );
+      const response = await axios.get(`/user/${userId}`);
       setProfile(response.data.result);
     } catch (error) {
       console.log(error);

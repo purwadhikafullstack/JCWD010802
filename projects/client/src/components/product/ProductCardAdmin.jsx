@@ -3,7 +3,6 @@ import formatIDR from "../../helpers/formatIDR"
 import { EditProductButton } from "../../views/Admin/components/Products/editButtonProduct"
 import { useSelector } from "react-redux"
 import { DeleteProductButton } from "../../views/Admin/components/Products/deleteProductButton"
-import { DeactivateProduct } from "../../views/Admin/components/Products/activateProductButton"
 
 
 export const ProductCardAdmin = ({ data, category, reload }) => {
@@ -24,7 +23,6 @@ export const ProductCardAdmin = ({ data, category, reload }) => {
                     <Flex align="center">
                         <EditProductButton product={item} category={category} reload={reload}/>
                         <DeleteProductButton product={item} reload={reload}/>
-                        {/* <DeactivateProduct product={item} /> */}
                     </Flex> : null}
                 </Flex>
             ))}

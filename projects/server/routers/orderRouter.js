@@ -11,6 +11,7 @@ router.patch("/payment/:id", verifyToken, multerUpload('./public/paymentImg', 'p
 router.put("/cancel/:id", verifyToken, orderController.cancelOrder)
 router.patch("/confirm/:id", verifyToken, orderController.confirmOrder)
 router.get("/warehouse/:id",orderController.userWarehouseOrder)
+router.get("/:id", orderController.orderById)
 
 
 module.exports = router

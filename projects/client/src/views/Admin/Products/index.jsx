@@ -1,21 +1,25 @@
-import { Flex } from "@chakra-ui/react"
+import axios from "../../../api/axios";
+import { Flex, Heading } from "@chakra-ui/react"
 import { AddProductButton } from "../components/Products/addProductButton"
 import { ProductList } from "../components/Products/listProduct"
 import { useEffect, useState } from "react"
-import axios from 'axios';
 import { useLocation, useNavigate } from "react-router-dom";
 import { SearchProductAdmin } from "../components/Products/searchProductAdmin";
 import { CategorySort } from "../components/Products/categorySort";
 import { Pagination } from "../../../components/pagination/pagination";
+import { useSelector } from "react-redux";
+import { SortingProduct } from "../components/Products/SortingProduct";
 
 
 
 export const AdminProducts = () => {
+    const user = useSelector((state) => state.user.value)
     const location = useLocation();
     const navigate = useNavigate()
     const params = new URLSearchParams(location.search);
     const search = params.get("search") || "";
-    const sort = params.get("category") || ""
+    const sortCat = params.get("category") || ""
+    const sort = params.get("sort") || ""
     const [category, setCategory] = useState()
     const [product, setProduct] = useState()
     const [reload, setReload] = useState(0)
@@ -24,7 +28,14 @@ export const AdminProducts = () => {
 
     const getProduct = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/product?page=${currentPage}&category=${sort}&search=${search}&limit=10`)
+            const params = {
+                page: currentPage,
+                category: sortCat,
+                search,
+                sort,
+                limit: 10
+            }
+            const response = await axios.get(`/product`, { params })
             setProduct(response.data.result);
             setTotalPage(response.data.totalpage)
         } catch (error) {
@@ -34,7 +45,7 @@ export const AdminProducts = () => {
 
     const getCategories = async () => {
         try {
-            const response = await axios.get("http://localhost:8000/api/category")
+            const response = await axios.get("http://localhost:8000/api/category?limit=9999")
             setCategory(response.data.result)
         } catch (error) {
             console.log(error);
@@ -44,28 +55,41 @@ export const AdminProducts = () => {
         setReload(!reload)
     }
     const handleSearch = (result) => {
-        navigate(`?search=${result.target.value}`);
+        navigate(`?search=${result.target.value}&category=${sortCat}&sort=${sort}`);
+    }
+    const handleSortCat = (selectedSort) => {
+        if (selectedSort === sortCat) {
+          navigate(`?search=${search}&sort=${sort}&category=`);
+        } else {
+          navigate(`?search=${search}&sort=${sort}&category=${selectedSort}`);
+        }
     }
     const handleSort = (selectedSort) => {
         if (selectedSort === sort) {
-          navigate(`?search=${search}&category=`);
+            navigate(`?search=${search}&category=${sortCat}&sort=`);
         } else {
-          navigate(`?search=${search}&categoty=${selectedSort}`);
+            navigate(`?search=${search}&category=${sortCat}&sort=${selectedSort}`);
         }
-    }
+    } 
     
     useEffect(() => {
         getCategories()
         getProduct()
-    },[reload, currentPage, search, sort])
+    },[reload, currentPage, search, sortCat, sort])
     return (
         <Flex direction="column" align="center">
-            <Flex align="center" justifyContent={{base: "center", md: "space-between"}} w="full" p="10px">
-                <SearchProductAdmin search={search} handleSearch={handleSearch} />
-                {/* <CategorySort category={category} handleSort={handleSort} /> */}
-                <AddProductButton category={category} reload={triggerReload} />
+            <Flex w="full" justify="flex-start" p="10px">
+                <Heading fontSize="22px">Products</Heading>
             </Flex>
-            <Flex mx="5">
+            <Flex align="center" gap={2} justifyContent={{base: "center", md: "space-between"}} w="full" p="10px">
+                <Flex gap={2}>
+                    <SearchProductAdmin search={search} handleSearch={handleSearch} />
+                    <CategorySort category={category} handleSort={handleSortCat} />
+                    <SortingProduct handleSort={handleSort} />
+                </Flex>
+                {user?.roleId === 3 ? <AddProductButton category={category} reload={triggerReload} /> : null}
+            </Flex>
+            <Flex mx="5" w="full">
                 <ProductList reload={triggerReload}  product={product} category={category} />
             </Flex>
             <Pagination totalpage={totalPage}/>

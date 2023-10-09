@@ -1,12 +1,12 @@
-import { Avatar, Badge, Button, Center, Flex, Image, Text } from "@chakra-ui/react"
+import { Avatar, Badge, Button, Flex } from "@chakra-ui/react"
 import { Table, TableContainer, Tbody, Td, Th, Tr } from "@chakra-ui/react"
-import {BiDetail, BiSolidUserDetail} from "react-icons/bi"
+import { BiSolidUserDetail } from "react-icons/bi"
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { UserProfileModal } from "./userProfileModal";
 import { PaginationAddress } from "../pagination";
 import { UserCard } from "./userCard";
 import { useLocation } from "react-router-dom";
+import axios from "../../../../api/axios";
 
 export const ListUser = () => {
     const [user, setUser] = useState([]);
@@ -22,8 +22,7 @@ export const ListUser = () => {
     
     const getUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/user/list-user?&page=${currentPage}`);
-        console.log(response.data.result);
+        const response = await axios.get(`/user/list-user?&page=${currentPage}`);
         setUser(response.data.result);
         setPage(response.data.totalPage)
 
@@ -33,8 +32,7 @@ export const ListUser = () => {
     };
     const getProfile = async (userId) => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/user/${userId}`);
-        console.log(response.data.result);
+        const response = await axios.get(`/user/${userId}`);
         setProfile(response.data.result);
       } catch (error) {
         console.log(error);

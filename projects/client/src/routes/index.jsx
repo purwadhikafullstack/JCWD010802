@@ -19,8 +19,7 @@ import { CategoryView } from "../views/Admin/Category";
 import { AdminProducts } from "../views/Admin/Products";
 import { Cart } from "../pages/Cart";
 import { Checkout } from "../pages/CheckOut";
-import { ProductReport } from "../views/Admin/ProductReport";
-import { SalesReportView } from "../views/Admin/SalesReport";
+import { Report } from "../views/Admin/Report";
 import { StockView } from "../views/Admin/Stock";
 import ManualStockMutationForm from "../views/Admin/components/Mutation/stockMutationForm";
 import { MutationView } from "../views/Admin/Mutation";
@@ -108,7 +107,6 @@ const Routes = (
       </Route>
       <Route path="/product/:id" element={<ProductDetailGuardedRoute element={<DetailProduct />}/>} />
     </Route>
-
     <Route path="/login" element={<LoginGuardedRoute element={<Login />}/>} />
     <Route path="/register" element={<LoginGuardedRoute element={<Register />}/>} />
     <Route path="/verified/:token" element={<Verified />} />
@@ -126,11 +124,13 @@ const Routes = (
       <Route path="product-list" element={<AdminProducts />} />
       <Route path="warehouse-stock" element={<StockView />} />
       {/* <Route path="warehouse-stock/:id" element={<DetailStockWarehouse />} /> */}
-      <Route path="product-report" element={<ProductReport />} />
-      <Route path="sales-report" element={<SalesReportView/>} />
+      <Route path="report" element={<Report />} />
       <Route path="mutation" element={<Mutation />} />
       <Route path="order" element={<Order />} />
       <Route path="detail-order" element={<OrderDetailView />} />
+      <Route path="mutation" element={<Mutation />} />
+      <Route path="order" element={<Order />} />
+      <Route path="order/detail-order/:id" element={<OrderDetailView />} />
     </Route>
     <Route path="*" element={<NotFound/>}/>
   </>

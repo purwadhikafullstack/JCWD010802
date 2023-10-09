@@ -107,7 +107,7 @@ export const SuperRequests = ({
               <Td>{request.to_name}</Td>
               <Td>
                 <Badge
-                  colorScheme={statusStyles[request.status].color}
+                  colorScheme={statusStyles[request.status]?.color}
                 >
                   {convertToUppercase(request.status)}
                 </Badge>

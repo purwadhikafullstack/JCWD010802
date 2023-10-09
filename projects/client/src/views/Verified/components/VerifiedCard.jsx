@@ -1,5 +1,6 @@
+import headersGen from "../../../api/headers";
+import axios from "../../../api/axios";
 import * as Yup from "yup";
-import axios from "axios";
 import {
   Button,
   Checkbox,
@@ -12,7 +13,8 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 
 export const VerifiedCard = () => {
-  const {token} = useParams();
+  const { token } = useParams();
+  const headers = headersGen(token)
   const [showPassword, setShowPassword] = useState(false);
   const SeePsw = () => {
     setShowPassword(!showPassword);
@@ -30,14 +32,7 @@ export const VerifiedCard = () => {
   });
   const onVerified = async (data) => {
     try {
-      const response = await axios.patch(
-        "http://localhost:8000/api/auth/verified",
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          }
-        }
+      const response = await axios.patch("/auth/verified", data, { headers }
       );
     } catch (error) {
       console.log(error);

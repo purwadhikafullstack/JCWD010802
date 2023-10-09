@@ -11,7 +11,6 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -20,6 +19,8 @@ import { AddAddress } from "../../Profile/components/modal/modalAddress/modalAdd
 import { Pagination } from "../../../components/pagination/pagination";
 import { EditAddress } from "../../Profile/components/modal/modalAddress/modalEditAddress";
 import { PrimaryAddress } from "../../Profile/components/modal/modalAddress/modalPrimaryAddress";
+import axios from "../../../api/axios";
+import headersGen from "../../../api/headers";
 
 export const AddressCheckout = ({ handleClick, selectedId }) => {
   const location = useLocation();
@@ -28,6 +29,7 @@ export const AddressCheckout = ({ handleClick, selectedId }) => {
   const sort = params.get("sort") || "";
   const currentPage = Number(params.get("page")) || 1;
   const token = localStorage.getItem("token");
+  const headers = headersGen(token)
   const [address, setAddress] = useState([]);
   const [cities, setCities] = useState([]);
   const [province, setProvince] = useState([]);
@@ -44,13 +46,8 @@ export const AddressCheckout = ({ handleClick, selectedId }) => {
 
   const AllAdrress = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/address?search=${search}&sort=${sort}&page=${currentPage}&limit=3`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const response = await axios.get(`/address?search=${search}&sort=${sort}&page=${currentPage}&limit=3`,
+        { headers }
       );
       setAddress(response.data.result);
       setPage(response.data.totalpage);
@@ -61,7 +58,7 @@ export const AddressCheckout = ({ handleClick, selectedId }) => {
   const getCity = async (data) => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/location/city`,
+        `/location/city`,
         data
       );
       setCities(response.data.city.rajaongkir.results);
@@ -72,7 +69,7 @@ export const AddressCheckout = ({ handleClick, selectedId }) => {
   const getProvince = async (data) => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/location/province`,
+        `/location/province`,
         data
       );
       setProvince(response.data.province.rajaongkir.results);
