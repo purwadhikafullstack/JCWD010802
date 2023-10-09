@@ -29,7 +29,6 @@ export const OrderCard = ({ data, reload }) => {
                         <Text fontSize="14px" color="gray.500">{`${data?.orderItems[0]?.quantity} item x ${formatIDR(data?.orderItems[0]?.product?.price)}`}</Text>
                         {data?.orderItems?.length > 1 ? 
                         <Text fontSize="14px" color="gray.500">{`+${data?.orderItems?.length - 1} other product`}</Text> : null}
-                        
                     </Flex>
                 </Flex>
                 <Flex direction="column">
