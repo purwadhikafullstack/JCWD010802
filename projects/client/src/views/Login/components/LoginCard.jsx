@@ -137,12 +137,6 @@ export const LoginCard = () => {
             </Flex>
             )}
             </Formik>
-            <Text mt="10px">Or</Text>
-            <Button w={'full'} bg="gray.200" leftIcon={<FcGoogle />} mt="10px">
-                <Center>
-                    <Text>Sign In with Google</Text>
-                </Center>
-            </Button>
         </Flex>
     )
 }

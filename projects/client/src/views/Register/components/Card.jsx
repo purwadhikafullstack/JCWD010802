@@ -83,12 +83,6 @@ export const RegisterCard = () => {
             </Flex>
             )}
             </Formik>
-            <Text mt="10px">Or</Text>
-            <Button w="full" bg="gray.200" leftIcon={<FcGoogle />} mt="10px">
-                <Center>
-                    <Text>Register with Google</Text>
-                </Center>
-            </Button>
         </Flex>
     )
 }
