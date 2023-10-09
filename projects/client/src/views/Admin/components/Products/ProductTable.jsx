@@ -1,4 +1,4 @@
-import { Avatar, Flex, Image, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react"
+import { Avatar, Flex, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react"
 import formatIDR from "../../../../helpers/formatIDR"
 import { EditProductButton } from "./editButtonProduct"
 import { DeleteProductButton } from "./deleteProductButton"
