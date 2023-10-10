@@ -4,7 +4,7 @@ import { TopProduct } from "./components/TopProduct"
 import { NewProduct } from "./components/NewProduct"
 import { Category } from "./components/Category"
 import { useEffect, useState } from "react"
-import axios from "axios"
+import axios from "../../api/axios"
 
 export const HomepageView = () => {
   const [category, setCategory] = useState()
@@ -14,7 +14,7 @@ export const HomepageView = () => {
 
   const getCategory = async () => {
     try {
-        const response = await axios.get("http://localhost:8000/api/category?limit=7")
+        const response = await axios.get("/category?limit=7")
         setCategory(response.data.result)
     } catch (error) {
         console.log(error);
@@ -22,7 +22,7 @@ export const HomepageView = () => {
   }
   const getTopProduct = async () => {
     try {
-        const response = await axios.get("http://localhost:8000/api/product?sort=za&limit=8")
+        const response = await axios.get("/product?sort=za&limit=8")
         setTopProduct(response.data.result)
     } catch (error) {
         console.log(error);
@@ -30,7 +30,7 @@ export const HomepageView = () => {
   }
   const getNewProduct = async () => {
     try {
-        const response = await axios.get("http://localhost:8000/api/product?limit=8")
+        const response = await axios.get("/product?limit=8")
         setNewProduct(response.data.result)
     } catch (error) {
         console.log(error);

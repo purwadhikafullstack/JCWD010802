@@ -5,7 +5,6 @@ import {
   Image,
   Button,
   Flex,
-  HStack,
   Heading,
   Divider,
   Center,
@@ -18,6 +17,7 @@ import { useDispatch } from 'react-redux';
 import { setCart } from '../../../redux/cartSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import { setPrice } from '../../../redux/totalPrice';
+import headersGen from '../../../api/headers';
 import axios from '../../../api/axios';
 
 export const CartItem = ({ cart, reload, setReload }) => {
@@ -25,6 +25,7 @@ export const CartItem = ({ cart, reload, setReload }) => {
   const [itemToDelete, setItemToDelete] = useState(null);
   const [isInWishlistMap, setIsInWishlistMap] = useState({}); 
   const token = localStorage.getItem('token');
+  const headers = headersGen(token)
   const dispatch = useDispatch();
 
   const checkWishlist = async (productId) => {
@@ -54,16 +55,8 @@ export const CartItem = ({ cart, reload, setReload }) => {
 
   const handleDelete = async (itemId) => {
     try {
-      await axios.delete(`/cart/${itemId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      const cartResponse = await axios.get(`/cart`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.delete(`/cart/${itemId}`, { headers });
+      const cartResponse = await axios.get(`/cart`, { headers });
 
       setIsModalOpen(false);
       setItemToDelete(null);
@@ -115,11 +108,20 @@ export const CartItem = ({ cart, reload, setReload }) => {
   return (
     <>
       <ToastContainer autoClose={1000} hideProgressBar={true} />
-      <Flex direction="column" w={{ base: '100%', sm: '80%', md: '60%' }}>
-        <Heading>Cart</Heading>
-        <Divider borderWidth={4} mt={3} />
-        {cart.length === 0 ? (
-          <Center>
+    <Flex direction="column" w={{ base: '100%', sm: '80%', md: '60%' }}>
+     <Heading>Cart</Heading>
+      <Divider borderWidth={4} mt={3} />
+      {cart?.length === 0 || !cart ? (
+        <Center>
+          <Image
+            src="https://img.freepik.com/free-vector/add-cart-concept-illustration_114360-1435.jpg?w=740&t=st=1695704262~exp=1695704862~hmac=3b04c76b1390720ab571e66d6ac6ed8b08c68314607cb6f7c70349c5a6bfecd4"
+            boxSize={{ base: '100%', md: 'lg' }}
+          />
+          <Heading>Your cart is empty, Let's go shopping</Heading>
+        </Center>
+      ) : (
+        cart.map((item) => (
+          <Box p={4} borderRadius="md" display="flex" flexDirection={{ base: 'column', md: 'row' }}>
             <Image
               src="https://img.freepik.com/free-vector/add-cart-concept-illustration_114360-1435.jpg?w=740&t=st=1695704262~exp=1695704862~hmac=3b04c76b1390720ab571e66d6ac6ed8b08c68314607cb6f7c70349c5a6bfecd4"
               boxSize={{ base: '100%', md: 'lg' }}

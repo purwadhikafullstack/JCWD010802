@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Flex, IconButton, Text, Box, Input } from '@chakra-ui/react';
-import { AddIcon, MinusIcon } from '@chakra-ui/icons';
+import React, { useEffect, useState } from "react";
+import { Flex, IconButton, Text, Box, Input } from "@chakra-ui/react";
+import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 
 export const Counter = ({ stock, onCountChange }) => {
   const [count, setCount] = useState(1);
@@ -25,7 +25,8 @@ export const Counter = ({ stock, onCountChange }) => {
   };
 
   const handleInputChange = (event) => {
-    let inputCount = event.target.value === '' ? '' : parseInt(event.target.value);
+    let inputCount =
+      event.target.value === "" ? "" : parseInt(event.target.value);
 
     if (!isNaN(inputCount)) {
       inputCount = Math.min(Math.max(inputCount, 0), stock);
@@ -38,7 +39,13 @@ export const Counter = ({ stock, onCountChange }) => {
 
   return (
     <Box>
-      <Flex align="center" border={"1px"} borderRadius={"lg"} borderColor={"gray.200"} w={"120px"}>
+      <Flex
+        align="center"
+        border={"1px"}
+        borderRadius={"lg"}
+        borderColor={"gray.200"}
+        w={"120px"}
+      >
         <IconButton
           aria-label="Decrement"
           icon={<MinusIcon />}
@@ -48,10 +55,10 @@ export const Counter = ({ stock, onCountChange }) => {
           size="sm"
           isDisabled={count === 0}
         />
-        <Box borderRadius="lg" display="inline-block" mx={1}> 
+        <Box borderRadius="lg" display="inline-block" mx={1}>
           <Input
             type="text"
-            value={count === 0 ? '' : count}
+            value={count === 0 ? "" : count}
             onChange={handleInputChange}
             min="0"
             max={stock}
@@ -60,12 +67,12 @@ export const Counter = ({ stock, onCountChange }) => {
             backgroundColor="transparent"
             border="none"
             pattern="[0-9]*"
-            _focus={{boxShadow:"none"}} 
+            _focus={{ boxShadow: "none" }}
           />
         </Box>
         <IconButton
           aria-label="Increment"
-          bg={'transparent'}
+          bg={"transparent"}
           color={"#517664"}
           icon={<AddIcon />}
           onClick={increment}
@@ -74,7 +81,7 @@ export const Counter = ({ stock, onCountChange }) => {
         />
       </Flex>
       {inputError && (
-        <Text color="red" fontSize="sm" ml={1}> 
+        <Text color="red" fontSize="sm" ml={1}>
           Please enter a valid quantity.
         </Text>
       )}

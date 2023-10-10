@@ -1,21 +1,16 @@
-import React, { useState } from 'react';
 import {
   Box,
-  Heading,
   Button,
   Input,
-  Textarea,
   FormControl,
   FormLabel,
   Stack,
-  Badge,
   Select,
-  Text,
 } from '@chakra-ui/react';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { InputField } from '../../../../components/input/InputField';
-import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
+import axios from '../../../../api/axios';
 
 export const EditWarehouse = ({ data, onClose,dataCities,dataProvince,provinces,city,reload,setReload}) => {
   const handleSubmit = async (values) => {
@@ -28,26 +23,19 @@ export const EditWarehouse = ({ data, onClose,dataCities,dataProvince,provinces,
       formData.append("kode_pos", values.kode_pos);
       formData.append("file", values.file); 
   
-      const response = await axios.patch(
-        `http://localhost:8000/api/warehouse/${data.id}`,
-        formData, {
+      const response = await axios.patch(`/warehouse/${data.id}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data", 
           },
         }
       );
-  console.log(values);
       toast.success("Warehouse updated successfully");
       onClose();
       setReload(!reload);
-  
-      console.log(response);
     } catch (error) {
       console.error(error);
     }
   };
-  
-
   
   return (
     <>

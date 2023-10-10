@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { Flex, IconButton, Text, Box, Input } from '@chakra-ui/react';
 import { AddIcon, MinusIcon } from '@chakra-ui/icons';
-import axios from 'axios';
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from 'react-router-dom';
+import { useDispatch } from "react-redux";
 import { setCart } from '../../../redux/cartSlice';
 import { setPrice } from '../../../redux/totalPrice';
+import headersGen from '../../../api/headers';
+import axios from '../../../api/axios';
 
 export const CartCounter = ({ initialCount, onCountChange, productId, cartId }) => {
   const [count, setCount] = useState(initialCount || 0);
   const [stock, setStock] = useState(null);
   const [inputError, setInputError] = useState(false);
+  const [reload, setReload] = useState(0);
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
-  const [reload, setReload] = useState(0);
+  const headers = headersGen(token)
 
   const getStock = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/stock/product/${productId}`);
+      const response = await axios.get(`/stock/product/${productId}`);
 
       setStock(response.data.result);
     } catch (error) {
@@ -43,7 +44,7 @@ export const CartCounter = ({ initialCount, onCountChange, productId, cartId }) 
 
   const updateCartQuantity = async (newCount) => {
     try {
-      const response = await axios.patch(`http://localhost:8000/api/cart/${cartId}`, {
+      const response = await axios.patch(`/cart/${cartId}`, {
         quantity: newCount,
       });
 
@@ -53,12 +54,7 @@ export const CartCounter = ({ initialCount, onCountChange, productId, cartId }) 
           onCountChange(newCount);
         }
       }
-      const cartResponse = await axios.get(`http://localhost:8000/api/cart`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(cartResponse);
+      const cartResponse = await axios.get(`/cart`, { headers });
       setReload(!reload);
       dispatch(setCart(cartResponse.data.result));
       dispatch(setPrice(cartResponse.data.totalPrice));

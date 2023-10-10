@@ -1,21 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Text, Center, Spinner, Table, Thead, Tbody, Tr, Th, Td, Heading, HStack } from '@chakra-ui/react';
-import axios from "axios"
-import { useSelector } from 'react-redux';
-import convertToUppercase from '../../../../helpers/upperCase';
+import { Box, Center, Table, Thead, Tbody, Tr, Th, Td, Heading, HStack } from '@chakra-ui/react';
 import { Accept } from './acceptButton';
 import { Reject } from './rejectButton';
 
-export const IncomingRequests = ({data,reload,setReload}) => 
-{
-
+export const IncomingRequests = ({data,reload,setReload}) => {
     return(
-
         <Box p={4}>
       <Heading   mb={4}>
         Incoming Request
       </Heading>
-    {data.length === 0 ?(
+      {data.length === 0 ?(
         <Center>
         <Heading>
             No incoming request

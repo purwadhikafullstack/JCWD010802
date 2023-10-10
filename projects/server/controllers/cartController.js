@@ -99,22 +99,25 @@ module.exports = {
     try {
       const userId = req.user.id;
       const userCart = await cart.findOne({where:{userId:userId, isCheckOut:false}})
-  
-      const cartItems = await cartItem.findAll({
-        where: { cartId:userCart.id  },
-        include: [{ model: product }],
-      });
-  
-  
-      res.status(200).json({
-        status: true,
-        totalPrice: userCart.totalPrice,
-        message: 'User cart retrieved successfully',
-        result: cartItems,
-        Cart:userCart
-      });
+      if (!userCart) {
+        res.status(200).send({
+          message: "No user cart"
+        })
+      } else {
+        const cartItems = await cartItem.findAll({
+          where: { cartId:userCart.id  },
+          include: [{ model: product }],
+        });
+        res.status(200).json({
+          status: true,
+          totalPrice: userCart.totalPrice,
+          message: 'User cart retrieved successfully',
+          result: cartItems,
+          Cart:userCart
+        });
+      }
     } catch (error) {
-      console.error(error);
+      console.log(error);
       res.status(500).json({
         status: false,
         message: 'Error retrieving user cart',

@@ -7,22 +7,11 @@ import {
   MenuList,
   MenuOptionGroup,
 } from "@chakra-ui/react";
-import { useLocation, useNavigate } from "react-router-dom";
 
-export const Sort = () => {
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const search = params.get("search") || "";
-  const sort = params.get("sort") || "";
-  const navigate = useNavigate();
+export const Sort = ({ setSort, sort }) => {
 
   const handleSort = (selectedSort) => {
-    if (selectedSort === sort) {
-      // Jika pilihan yang dipilih adalah yang sudah aktif, kosongkan parameter "sort"
-      navigate(`?search=${search}&sort=`);
-    } else {
-      navigate(`?search=${search}&sort=${selectedSort}`);
-    }
+    setSort(selectedSort)
   };
 
   return (
@@ -34,15 +23,15 @@ export const Sort = () => {
         <MenuOptionGroup defaultValue={sort || "asc"} title="Sort by :" type="radio">
           <MenuItemOption
             value="asc"
-            onClick={() => handleSort("asc")} // Menyebabkan ascending saat dipilih
+            onClick={() => handleSort("asc")}
           >
-            Ascending
+            Newest address
           </MenuItemOption>
           <MenuItemOption
             value="desc"
-            onClick={() => handleSort("desc")} // Menyebabkan descending saat dipilih
+            onClick={() => handleSort("desc")}
           >
-            Descending
+            Oldest address
           </MenuItemOption>
         </MenuOptionGroup>
       </MenuList>

@@ -35,8 +35,9 @@ import useLoginAuthentication from "../views/Error/components/privateRoutelogin"
 import useProfileAuthentication from "../views/Error/components/privateProfileRoute";
 import useIdValidation from "../views/Error/components/privateProductRoute";
 import { ProductNotFound } from "../views/Error/components/productNotFound";
-import { WishlistView } from "../views/Wishlist";
 import { Wishlist } from "../pages/Wishlist";
+import { ProductReport } from "../views/Admin/ProductReport";
+import { SalesReportView } from "../views/Admin/SalesReport";
 
 
 const UserGuardedRoute = ({ element }) => {
@@ -98,7 +99,6 @@ const Routes = (
       </Route>
       <Route path="/product/:id" element={<ProductDetailGuardedRoute element={<DetailProduct />}/>} />
     </Route>
-
     <Route path="/login" element={<LoginGuardedRoute element={<Login />}/>} />
     <Route path="/register" element={<LoginGuardedRoute element={<Register />}/>} />
     <Route path="/verified/:token" element={<Verified />} />
@@ -115,9 +115,17 @@ const Routes = (
       <Route path="warehouse" element={<WarehousePageView />} />
       <Route path="product-list" element={<AdminProducts />} />
       <Route path="warehouse-stock" element={<StockView />} />
+      {/* <Route path="warehouse-stock/:id" element={<DetailStockWarehouse />} /> */}
       <Route path="mutation" element={<Mutation />} />
       <Route path="order" element={<Order />} />
       <Route path="detail-order" element={<OrderDetailView />} />
+      <Route path="mutation" element={<Mutation />} />
+      <Route path="order" element={<Order />} />
+      <Route path="order/detail-order/:id" element={<OrderDetailView />} />
+      <Route path="product-report" element={<ProductReport />} />
+      <Route path="sales-report" element={<SalesReportView />} />
+
+
     </Route>
     <Route path="*" element={<NotFound/>}/>
   </>

@@ -20,7 +20,6 @@ export const DeleteCart = ({ isOpen, onClose, onDelete }) => {
         <ModalBody>
           Are you sure you want to remove item from cart? 
         </ModalBody>
-
         <ModalFooter>
             <HStack gap={3}>
           <Button onClick={onClose} colorScheme='red'>No</Button>

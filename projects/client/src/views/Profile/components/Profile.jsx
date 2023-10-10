@@ -1,36 +1,35 @@
-import React from 'react';
 import { Avatar, Box, Button, Flex, VStack } from "@chakra-ui/react";
-import * as Yup from "yup";
-import axios from "axios";
 import { InputField } from "../../../components/input/InputField";
 import { Form, Formik } from "formik";
 import { ChangeImage } from "./modal/modalProfile/modalImage";
 import { ChangePassword } from "./modal/modalProfile/modalPassword";
 import { ToastContainer, toast } from 'react-toastify';
+import { useSelector } from 'react-redux'
 import 'react-toastify/dist/ReactToastify.css';
-import {useSelector} from 'react-redux'
+import * as Yup from "yup";
+import headersGen from "../../../api/headers";
+import axios from "../../../api/axios";
 
 export const ProfileCard = () => {
   const profile = useSelector((state) => state.user.value)
   const token = localStorage.getItem("token");
+  const headers = headersGen(token)
   const CreateSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     email: Yup.string().email().required("Email is required"),
   });
   const EditProfile = async (data) => {
     try {
-      const response = await axios.patch(
-        `http://localhost:8000/api/user/edit`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      toast.success('Profile updated successfully');
+      await axios.patch(`/user/edit`, data, { headers });
+      toast.success("Profile updated successfully", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000
+      });
     } catch (error) {
-      toast.error('Error updating profile');
+      toast.error("Error to updating profile", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000
+      });
       console.log(error);
     }
   };
@@ -117,7 +116,7 @@ export const ProfileCard = () => {
           </Formik>
         </Box>
       </Box>
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+      <ToastContainer />
     </Flex>
   );
 };

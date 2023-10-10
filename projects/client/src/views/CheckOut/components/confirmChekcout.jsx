@@ -1,19 +1,12 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Heading,
-  HStack,
-  Text,
-  VStack,
-  useBreakpointValue,
-} from "@chakra-ui/react";
-import formatIDR from "../../../helpers/formatIDR";
+import { Box, Button, Divider, HStack, Heading, Text, VStack,useBreakpointValue} from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import convertToUppercase from "../../../helpers/upperCase";
+import { toast } from 'react-toastify';
 import { setCartOut } from "../../../redux/cartSlice";
+import { useNavigate } from "react-router-dom";
+import 'react-toastify/dist/ReactToastify.css';
+import convertToUppercase from "../../../helpers/upperCase";
+import formatIDR from "../../../helpers/formatIDR";
+import headersGen from "../../../api/headers";
 import axios from "../../../api/axios";
 
 export const ConfirmCheckout = ({ addressId }) => {
@@ -25,9 +18,10 @@ export const ConfirmCheckout = ({ addressId }) => {
   const token = localStorage.getItem("token");
   const chekoutPrice = total + cost;
   const dispatch = useDispatch();
-
   const isMobile = useBreakpointValue({ base: true, lg: false });
   const smallTextSize = useBreakpointValue({ base: "14px", lg: "18px" });
+  const headers = headersGen(token)
+  const navigate = useNavigate()
 
   const handleBuyClick = async () => {
     try {
@@ -37,27 +31,15 @@ export const ConfirmCheckout = ({ addressId }) => {
         shippingMethod: ship,
         shippingCost: cost,
       };
-
-      const response = await axios.post(
-        "/userOrder",
-        dataToSend,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
+      await axios.post('/userOrder', dataToSend,{ headers });
       setTimeout(() => {
-        window.location.href = "/profile";
-      }, 3000);
-
-      toast.success("Order placed successfully!", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-
-      dispatch(setCartOut());
+        navigate("/profile#myorder"); 
+      }, 3000)
+ toast.success('Order placed successfully!', {
+      position: 'top-right', 
+      autoClose: 3000, 
+    });
+    dispatch(setCartOut())
     } catch (error) {
       console.error("Checkout failed:", error);
     }
@@ -142,13 +124,7 @@ export const ConfirmCheckout = ({ addressId }) => {
             {formatIDR(chekoutPrice)}
           </Heading>
         </HStack>
-        <Button
-          colorScheme="green"
-          mt={5}
-          w="full"
-          isDisabled={cost === 0}
-          onClick={handleBuyClick}
-        >
+        <Button colorScheme="green" mt={5} w={"full"} isDisabled={cost===0} onClick={handleBuyClick}>
           Buy
         </Button>
       </Box>

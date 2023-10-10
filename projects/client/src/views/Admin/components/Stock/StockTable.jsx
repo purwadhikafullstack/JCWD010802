@@ -18,7 +18,6 @@ export const StockTable = ({ data, handleCat, handleWarehouse, handleSearch, war
                 <Select placeholder="All Warehouses" w="fit-content"
                 onChange={(e) => handleWarehouse(e.target.value)} borderColor="black"
                 >
-                    <option value="">All Warehouses</option>
                     {warehouse?.map((item) => (
                         <option key={item.id} value={item.id}>{item.name}</option>
                     ))}
@@ -37,7 +36,7 @@ export const StockTable = ({ data, handleCat, handleWarehouse, handleSearch, war
                         {data?.map((item, index) => (
                             <Tr key={index}>
                                 <Td>
-                                    <Text>{item.product.name}</Text>
+                                    <Text maxW="200px" whiteSpace="nowrap" textOverflow="ellipsis" overflow="hidden">{item.product.name}</Text>
                                 </Td>
                                 <Td>{item.totalQuantity}</Td>
                                 <Td>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../../../api/axios";
 
 export const WarehouseFilter = ({ onChange }) => {
   const [warehouse, setWarehouse] = useState([]);
@@ -8,8 +8,7 @@ export const WarehouseFilter = ({ onChange }) => {
   
   const getWarehouse = async () => {
       try {
-          const response = await axios.get(`http://localhost:8000/api/warehouse`);
-          console.log(response);
+          const response = await axios.get(`/warehouse`);
           setWarehouse(response.data);
         } catch (error) {
             console.log(error);

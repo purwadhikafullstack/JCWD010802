@@ -1,5 +1,5 @@
-import { Button, Divider, Flex, HStack, Stack, Text } from "@chakra-ui/react"
-import copyToClipboard from "../../../helpers/copyToClipboard"
+import { Button, Divider, Flex, HStack, Stack, Text } from "@chakra-ui/react";
+import copyToClipboard from "../../../helpers/copyToClipboard";
 import { ToastContainer, toast } from "react-toastify";
 import { FaHeart, FaShare } from 'react-icons/fa'
 import { useSelector } from "react-redux";
@@ -66,8 +66,8 @@ export const CartFooter = ({copylink, productId}) => {
         <Button bg={"transparent"} leftIcon={<FaShare color="517664" />} gap={2} onClick={handleCopyLink}>
           Share Link
         </Button>
-        </HStack>
-        <ToastContainer autoClose={1000} hideProgressBar={true}/>
-        </>
-    )
-}
+      </HStack>
+      <ToastContainer autoClose={1000} hideProgressBar={true} />
+    </>
+  );
+};

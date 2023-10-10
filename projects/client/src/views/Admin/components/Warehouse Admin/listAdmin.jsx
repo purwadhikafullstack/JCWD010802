@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {Button,Flex,Box,Heading,Text,VStack,Card,Image, Select, HStack, Input,
-  InputGroup,
-  InputLeftElement,
-  Icon,
-  Stack,} from "@chakra-ui/react";
+import {Button,Flex,Box,Heading,Text,VStack,Card,Image, Select, HStack, Input,InputGroup,InputLeftElement,Icon,Stack,} from "@chakra-ui/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AdminMenu } from "./adminMenu";
@@ -36,9 +32,7 @@ export const ListAdmin = () => {
   const defaultAvatar = "https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png"
   const getAdmin = async () => {
     try {
-      const response = await axios.get(
-        `/admin/profile?search=${search}&page=${currentPage}&warehouseId=${warehouseId}`);
-        console.log(response);
+      const response = await axios.get(`/admin/profile?search=${search}&page=${currentPage}&warehouseId=${warehouseId}`);
       setAdmin(response.data.result);
       setPage(response.data.totalPage);
     } catch (error) {
@@ -71,8 +65,7 @@ export const ListAdmin = () => {
       if (!adminToDelete) {
         console.error("No admin selected for deletion.");
         return;}
-      const response = await axios.delete(
-        `/admin/${adminToDelete.user.id}`);
+      const response = await axios.delete(`/admin/${adminToDelete.user.id}`);
       if (response.status === 200) {
         toast.success('Admin deleted successfully', {
           position: 'top-right',
@@ -92,9 +85,7 @@ export const ListAdmin = () => {
   };
   const changeWarehouse = async (userId, selectedWarehouse) => {
     try {
-      const response = await axios.patch(
-        `/admin/warehouse/${userId}`,
-        {warehouse: selectedWarehouse})
+      const response = await axios.patch(`/admin/warehouse/${userId}`, {warehouse: selectedWarehouse})
       if (response.status === 200) {
         toast.success("Warehouse changed successfully", {
           position: "top-right",
@@ -220,7 +211,6 @@ export const ListAdmin = () => {
             onClick={() => {
               setAdminToDelete(item);
               setSelectedUser(item)
-              console.log(item);
               setIsModalOpenDel(true);
             }}>
             Delete Admin

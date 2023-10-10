@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Box,
   Button,
@@ -9,23 +8,20 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
+import { useRef } from "react";
 import 'react-toastify/dist/ReactToastify.css';
+import headersGen from "../../../../api/headers";
+import axios from "../../../../api/axios";
 
 export const DeleteProduct = ({ product, isOpen, onClose, reload }) => {
 
-  const finalRef = React.useRef(null);
+  const finalRef = useRef(null);
   const token = localStorage.getItem("token");
-
+  const headers = headersGen(token)
   const handleSubmit = async () => {
     try {
-      const response = await axios.patch(
-        `http://localhost:8000/api/product/delete/${product.id}`,
-        {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+      const response = await axios.patch(`/product/delete/${product.id}`, {}, { headers }
       );
       toast.success('Product successfuly deleted', {
         position: "top-right",
@@ -33,7 +29,6 @@ export const DeleteProduct = ({ product, isOpen, onClose, reload }) => {
       });
       reload()
       onClose();
-      console.log(response);
     } catch (error) {
       toast.error('Error deleting product', {
         position: "top-right",

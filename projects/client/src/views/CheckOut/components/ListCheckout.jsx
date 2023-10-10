@@ -11,24 +11,21 @@ import { useEffect, useState } from "react";
 import { ShippingMethod } from "./ShippingMethod";
 import { useSelector } from "react-redux";
 import formatIDR from "../../../helpers/formatIDR";
+import headersGen from "../../../api/headers";
 import axios from "../../../api/axios";
 
 export const CheckoutList = ({ selectedAddress }) => {
   const token = localStorage.getItem("token");
+  const headers = headersGen(token)
   const [cartItems, setCartItems] = useState([]);
   const [subtotal, setSubtotal] = useState(0);
   const [shipChecked, setShipChecked] = useState(false);
   const [protectChecked, setProtectChecked] = useState(false);
-  
   const cost = parseFloat(useSelector((state) => state.cost.value));
 
   const Cart = async () => {
     try {
-      const response = await axios.get(`/cart`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(`/cart`, { headers });
       setCartItems(response.data.result);
 
       const calculatedSubtotal = response.data.result.reduce((value, item) => {
@@ -64,7 +61,8 @@ export const CheckoutList = ({ selectedAddress }) => {
       newSubtotal += 1500;
     }
     setSubtotal(newSubtotal);
-  };  
+  };
+    
   const allWeight = cartItems.reduce((total, item) => {
     return total + item.product.weight;
   }, 0);
@@ -110,4 +108,4 @@ export const CheckoutList = ({ selectedAddress }) => {
       </Flex>
     </Flex>
   );
-};
+}

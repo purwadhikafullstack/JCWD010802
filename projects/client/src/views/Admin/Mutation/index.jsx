@@ -88,7 +88,6 @@ export const MutationView = () => {
       console.error('Error fetching data:', error);
     }
   };
-
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };

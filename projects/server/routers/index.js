@@ -10,12 +10,13 @@ const adminRouters = require("./adminRouters")
 const warehouseRouter = require("./warehouseRouter")
 const authRouters = require('./authRouters')
 const cartRouter = require('./cartRouter')
-const orderRouter = require('./orderRouter')
 const shippingRouter = require('./shippingRouter')
+const productReportRouter = require('./productReportRouter')
+const salesReportRouter = require('./salesReportRouter')
+const orderRouter = require('./orderRouter')
 const mutationRouter = require("./mutationRouter")
 const dashboardRouter = require("./dashboardRouter")
 const adminOrderRouter = require("./adminOrderRouter")
-
 
 module.exports= {
     userRouters,
@@ -32,8 +33,10 @@ module.exports= {
     cartRouter,
     orderRouter,
     shippingRouter,
+    productReportRouter,
+    salesReportRouter,
+    orderRouter,
     mutationRouter,
     dashboardRouter,
     adminOrderRouter,
-
 }

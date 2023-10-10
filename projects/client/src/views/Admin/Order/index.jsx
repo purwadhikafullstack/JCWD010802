@@ -57,8 +57,7 @@ const search = params.get("search") || "";
     }
     const getWarehouse = async () => {
         try {
-          const response = await axios.get(`
-          /warehouse/list`);
+          const response = await axios.get(`/warehouse/list`);
           setWarehouse(response.data);
         } catch (error) {
           console.log(error);
@@ -66,8 +65,7 @@ const search = params.get("search") || "";
       };
     const getStatus = async () => {
         try {
-          const response = await axios.get(`
-          /userOrder/status`);
+          const response = await axios.get(`/userOrder/status`);
           setStatusList(response.data.result);
         } catch (error) {
           console.log(error);

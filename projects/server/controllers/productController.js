@@ -12,7 +12,7 @@ module.exports = {
             const offset = (page - 1) * limit;
             const search = req.query.search || "";
             const category = +req.query.category || null;
-            const sort = req.query.sort || "asc";
+            const sort = req.query.sort || "az";
             const minPrice = +req.query.minPrice || 0;
             const maxPrice = +req.query.maxPrice || 9999999999;
     

@@ -15,15 +15,34 @@ import {
   Text,
   Toast,
   useDisclosure,
-  useToast, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Button,
+  useToast,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  Button,
 } from "@chakra-ui/react";
 import { FiMenu, FiSearch, FiBell } from "react-icons/fi";
 import { MdHome } from "react-icons/md";
-import { FaRss, FaClipboardCheck, FaWarehouse, FaUsers } from "react-icons/fa";
-import { PiPackageFill} from "react-icons/pi";
+import {
+  FaRss,
+  FaClipboardCheck,
+  FaWarehouse,
+  FaUsers,
+  FaChartLine,
+} from "react-icons/fa";
+import { HiMiniPresentationChartBar } from "react-icons/hi2";
+import { PiPackageFill } from "react-icons/pi";
 import { AiFillGift } from "react-icons/ai";
 import { BsGearFill, BsFillCartFill } from "react-icons/bs";
-import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
+import {
+  Link,
+  NavLink,
+  Outlet,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import { BiSolidCategoryAlt, BiTransfer } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { setLogOut } from "../../../redux/userSlice";
@@ -33,11 +52,10 @@ import { ModalLogout } from "../../../components/navigation/ModalLogOut";
 export const Sidebar = () => {
   const sidebar = useDisclosure();
   const location = useLocation();
-  const user = useSelector(state=>state.user.value)
+  const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
   const toast = useToast();
   const navigate = useNavigate();
-
 
   const onLogOut = () => {
     localStorage.removeItem("token");
@@ -114,8 +132,13 @@ export const Sidebar = () => {
       {...props}
     >
       <Flex px="4" py="5" align="center">
-      <Box as={Link} to="/" >
-          <Image src="https://i.ibb.co/71gL42Q/TECHTOK-ID-2-removebg-preview.png" alt="TECHTOK-ID-2-removebg-preview" border="0" h="80px" />
+        <Box as={Link} to="/">
+          <Image
+            src="https://i.ibb.co/71gL42Q/TECHTOK-ID-2-removebg-preview.png"
+            alt="TECHTOK-ID-2-removebg-preview"
+            border="0"
+            h="80px"
+          />
         </Box>
       </Flex>
       <Flex
@@ -134,46 +157,76 @@ export const Sidebar = () => {
             Order
           </NavItem>
         </NavLink>
-        {user.roleId===3?(
+        {user.roleId === 3 ? (
           <>
-        <NavLink to="list-user">
-          <NavItem icon={FaUsers} to="/admin/list-user">
-            User
-          </NavItem>
-        </NavLink>
-        <NavLink to="list-admin">
-          <NavItem icon={FaWarehouse} to="/admin/list-admin">
-            Warehouse Admin
-          </NavItem>
-        </NavLink>
-        <NavLink to="warehouse">
-          <NavItem icon={FaWarehouse} to="/admin/warehouse">
-            Warehouse
-          </NavItem>
-          </NavLink>
+            <NavLink to="list-user">
+              <NavItem icon={FaUsers} to="/admin/list-user">
+                User
+              </NavItem>
+            </NavLink>
+            <NavLink to="list-admin">
+              <NavItem icon={FaWarehouse} to="/admin/list-admin">
+                Warehouse Admin
+              </NavItem>
+            </NavLink>
+            <NavLink to="warehouse">
+              <NavItem icon={FaWarehouse} to="/admin/warehouse">
+                Warehouse
+              </NavItem>
+            </NavLink>
           </>
-
-        ):(
-           null
-        )}
+        ) : null}
         <NavLink to="list-category">
           <NavItem icon={BiSolidCategoryAlt} to="/admin/list-category">
             Category
           </NavItem>
+          </Navlink>
+          <NavLink to="product-list">
+            <NavItem icon={AiFillGift} to="/admin/product-list">
+              Products
+            </NavItem>
           </NavLink>
-        <NavLink to="product-list">
-          <NavItem icon={AiFillGift} to="/admin/product-list">Products</NavItem>
-        </NavLink>
-        {user.roleId === 3 ? 
-        <NavLink to="warehouse-stock">
-          <NavItem to="/admin/warehouse-stock" icon={FaClipboardCheck}>Stock</NavItem>
-        </NavLink> : 
-        <NavLink to={`warehouse-stock?warehouseId=${user.warehouseAdmin?.warehouseId}`}>
-          <NavItem to={`warehouse-stock?warehouseId=${user.warehouseAdmin?.warehouseId}`} icon={FaClipboardCheck}>Stock</NavItem>
-        </NavLink>}
-        <NavLink to="mutation">
-          <NavItem to="/admin/mutation" icon={BiTransfer}>Request Stock</NavItem>
-        </NavLink>
+          {user.roleId === 3 ? (
+            <NavLink to="warehouse-stock">
+              <NavItem to="/admin/warehouse-stock" icon={FaClipboardCheck}>
+                Stock
+              </NavItem>
+            </NavLink>
+          ) : (
+            <NavLink
+              to={`warehouse-stock?warehouseId=${user.warehouseAdmin?.warehouseId}`}
+            >
+              <NavItem
+                to={`warehouse-stock?warehouseId=${user.warehouseAdmin?.warehouseId}`}
+                icon={FaClipboardCheck}
+              >
+                Stock
+              </NavItem>
+            </NavLink>
+          )}
+          <NavLink to="">
+            <NavItem to="/admin/" icon={BsFillCartFill}>
+              Order
+            </NavItem>
+          </NavLink>
+          <NavLink to="mutation">
+            <NavItem to="/admin/mutation" icon={BiTransfer}>
+              Request Stock
+            </NavItem>
+          </NavLink>
+          <NavLink to="product-report">
+            <NavItem
+              to="/admin/product-report"
+              icon={HiMiniPresentationChartBar}
+            >
+              Product report
+            </NavItem>
+          </NavLink>
+          <NavLink to="sales-report">
+            <NavItem to="/admin/sales-report" icon={FaChartLine}>
+              Sales report
+            </NavItem>
+            </Navlink>
       </Flex>
     </Box>
   );
@@ -242,16 +295,25 @@ export const Sidebar = () => {
             }}
           ></InputGroup>
 
-<Menu>
-                        <MenuButton as={Button} variant="ghost" _active={{ bg: "#517664"}} mr="10px">
-                            <Avatar size="sm" />
-                        </MenuButton>
-                        <MenuList color="#517664">
-                            <MenuItem as={Link} to={"/profile"}>Profile</MenuItem>
-                            <MenuDivider />
-                            <MenuItem as={ModalLogout} onLogout={onLogOut}>Sign Out</MenuItem>
-                        </MenuList>
-                    </Menu>
+          <Menu>
+            <MenuButton
+              as={Button}
+              variant="ghost"
+              _active={{ bg: "#517664" }}
+              mr="10px"
+            >
+              <Avatar size="sm" />
+            </MenuButton>
+            <MenuList color="#517664">
+              <MenuItem as={Link} to={"/profile"}>
+                Profile
+              </MenuItem>
+              <MenuDivider />
+              <MenuItem as={ModalLogout} onLogout={onLogOut}>
+                Sign Out
+              </MenuItem>
+            </MenuList>
+          </Menu>
         </Flex>
 
         <Box as="main" p="4" bg={"#edf3f8"}>

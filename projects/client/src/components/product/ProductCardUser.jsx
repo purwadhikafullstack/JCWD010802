@@ -24,7 +24,7 @@ export const ProductCardUser = ({ name, price, image, category, reload, setReloa
           </Box>
           <Box>
               <Badge variant='outline' colorScheme='whatsapp' mb={2}>{category}</Badge>
-            <Text fontSize="12px">{name}</Text>
+            <Text fontSize="14px" maxW="160px" whiteSpace="nowrap" textOverflow="ellipsis" overflow="hidden">{name}</Text>
             <Text fontSize={{base: "14px", lg: "16px"}} fontWeight="bold">
               {formatIDR(price)}
             </Text>

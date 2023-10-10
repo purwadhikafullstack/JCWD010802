@@ -1,13 +1,13 @@
 import * as Yup from "yup"
-import axios from "axios"
+import Swal from "sweetalert2"
 import { Button, Center, Flex, Heading, Text } from "@chakra-ui/react"
 import { Form, Formik } from "formik"
 import { InputField } from "../../../components/input/InputField"
 import { FcGoogle } from "react-icons/fc"
 import { Link, useNavigate } from "react-router-dom"
-import Swal from "sweetalert2"
 import { useDispatch } from "react-redux"
 import { setEmail } from "../../../redux/regisSlice"
+import axios from "../../../api/axios"
 
 export const RegisterCard = () => {
     const navigate = useNavigate()
@@ -15,7 +15,7 @@ export const RegisterCard = () => {
 
     const onRegister = async (data) => {
         try {
-            const response = await axios.post("http://localhost:8000/api/auth/register", data)
+            const response = await axios.post("/auth/register", data)
             dispatch(setEmail({email: data.email, token: response.data.token}))
             Swal.fire({
                 title: "Register Success!",
@@ -83,12 +83,6 @@ export const RegisterCard = () => {
             </Flex>
             )}
             </Formik>
-            <Text mt="10px">Or</Text>
-            <Button w="full" bg="gray.200" leftIcon={<FcGoogle />} mt="10px">
-                <Center>
-                    <Text>Register with Google</Text>
-                </Center>
-            </Button>
         </Flex>
     )
 }

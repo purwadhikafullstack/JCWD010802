@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Select } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../../../../api/axios";
 
 export const CategorySort = () => {
   const location = useLocation();
@@ -9,13 +9,15 @@ export const CategorySort = () => {
   const search = params.get("search") || "";
   const sort = params.get("sort") || "";
   const category = params.get("category") || "";
+  const minPrice = params.get("minPrice") || "";
+  const maxPrice = params.get("maxPrice") || "";
+  const currentPage = Number(params.get("page")) || 1;
   const navigate = useNavigate();
   const [categories, setCategories] = useState()
 
   const getCategory = async () => {
     try {
-        const response = await axios.get(
-          `http://localhost:8000/api/category/`
+        const response = await axios.get(`/category/`
           // {
           //   headers: {
           //     Authorization: `Bearer ${token}`,
@@ -32,7 +34,7 @@ export const CategorySort = () => {
     }, []);
 
   const handleSort = (selectedSort) => {
-      navigate(`?search=${search}&sort=${sort}&category=${selectedSort}`);
+      navigate(`?search=${search}&sort=${sort}&category=${selectedSort}&minPrice=${minPrice}&maxPrice=${maxPrice}&page=${currentPage}`);
   };
 
   return (

@@ -1,5 +1,6 @@
-import axios from "axios";
 import "./App.css";
+import axios from "./api/axios";
+import headersGen from "./api/headers";
 import { useEffect, useState } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { routes } from "./routes";
@@ -12,25 +13,21 @@ function App() {
   const router = createBrowserRouter(routes);
   const token = localStorage.getItem("token")
   const dispatch = useDispatch()
-
+  const headers = headersGen(token)
 
   const keepLogin = async () => {
-    try {
-      if (token) {
-        const response = await axios.get("http://localhost:8000/api/auth/keeplogin", {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        dispatch(setValue(response.data.result))
-      } 
-    } catch (error) {
-      console.log(error);
+
+    if (token) {
+      const response = await axios.get("/auth/keeplogin", { headers })
+      console.log(response);
+      dispatch(setValue(response.data.result))
+    } else {
+      localStorage.removeItem("token")
     }
   }
   const userCart = async()=>{
     try {
-      const response = await axios.get(`http://localhost:8000/api/cart`, {
+      const response = await axios.get(`/cart`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

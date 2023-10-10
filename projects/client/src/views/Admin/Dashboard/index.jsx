@@ -5,7 +5,6 @@ import {
   Text,
   SimpleGrid,
   GridItem,
-  Flex,
   HStack,
 } from '@chakra-ui/react';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';

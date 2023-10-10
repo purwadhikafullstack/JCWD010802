@@ -1,5 +1,4 @@
 import {
-  Button,
   Flex,
   Heading,
   Image,
@@ -8,36 +7,31 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ButtonQuantity } from "./Button/ButtonQuantity";
-import { FiShoppingCart, FiHeart, FiCheckCircle } from "react-icons/fi";
-import formatIDR from "../../../../helpers/formatIDR";
 import { AddToCart } from "../addToCart";
-import { ProfileCard } from "../../../Profile/components/Profile";
 import { useSelector } from "react-redux";
+import formatIDR from "../../../../helpers/formatIDR";
+import axios from "../../../../api/axios";
 
 export const DetailCard = () => {
   const { id } = useParams();
   const [detail, setDetail] = useState([]);
-  const [stock, setStock] = useState([])
+  const [stock, setStock] = useState([]);
   const [wish, setWish] = useState(false);
   const profile = useSelector(state=>state.user.value)
   const getDetail = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/product/${id}`);
+      const response = await axios.get(`/product/${id}`);
       setDetail(response.data.result);
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
   };
   const getStock = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/stock/product/${id}`);
+      const response = await axios.get(`/stock/product/${id}`);
       setStock(response.data.result);
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -45,7 +39,7 @@ export const DetailCard = () => {
 
   useEffect(() => {
     getDetail();
-    getStock()
+    getStock();
   }, []);
 
   return (
@@ -53,18 +47,21 @@ export const DetailCard = () => {
       minH={"100vh"}
       mb={3}
       pt={"70px"}
-      direction={{ base: "column", md: "row" }} 
+      direction={{ base: "column", md: "row" }}
     >
       <Flex
-        w={{ base: "100%", md: "50%" }} 
-        justifyContent={{ base: "center", md: "end" }} 
-        p={{ base: "20px", md: "40px" }} 
+        w={{ base: "100%", md: "50%" }}
+        justifyContent={{ base: "center" }}
+        m={{ base: "20px", md: "40px" }}
       >
-        <Flex w={"full"}>
+        <Flex>
           <Image
             src={`http://localhost:8000/productImg/${detail.productImg}`}
             borderRadius={"10px"}
             shadow={"md"}
+            w={"500px"}
+            h={"500px"}
+            objectFit={"cover"}
           />
         </Flex>
       </Flex>
@@ -106,7 +103,6 @@ export const DetailCard = () => {
                 {formatIDR(detail.price)}
               </Text>
             </Flex>
-           
           </Stack>
         </Stack>
         {profile.roleId===2 ||profile.roleId===3?(

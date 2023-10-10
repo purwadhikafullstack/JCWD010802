@@ -12,6 +12,7 @@ export const PaginationAddress = ({ totalpage }) => {
   const roleId = params.get("roleId") || "";
   const warehouseId = params.get("warehouseId") || "";
   const currentpage = Number(params.get("page")) || 1;
+  const monthly = params.get("monthly") || "";
   const status = params.get("filterStatus") || '';
   const sortDir = params.get("sortDirection") || 'asc';
   const productName = params.get("productName") || '';
@@ -21,7 +22,7 @@ export const PaginationAddress = ({ totalpage }) => {
   function handlePage(newPage) {
     if (newPage >= 1 && newPage <= totalpage) {
       params.set("page", newPage);
-      navigate(`?search=${search}&sort=${sort}&page=${newPage}&roleId=${roleId}&warehouseId=${warehouseId}&filterStatus=${status}&sortDirection=${sortDir}&productName=${productName}&shipping=${shipping}&dateFilter=${dateFilter}`);
+      navigate(`?search=${search}&sort=${sort}&page=${newPage}&roleId=${roleId}&warehouseId=${warehouseId}&filterStatus=${status}&sortDirection=${sortDir}&productName=${productName}&shipping=${shipping}&monthly=${monthly}&dateFilter=${dateFilter}`);
     }
   }
   return (

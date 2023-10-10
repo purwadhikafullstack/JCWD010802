@@ -9,9 +9,9 @@ import {
   ModalCloseButton,
   Button,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "../../../../../api/axios";
 
 export const ModalDeleteCategory = ({ id, isOpen, onClose, reload, setReload }) => {
   const finalRef = React.useRef(null);
@@ -19,7 +19,7 @@ export const ModalDeleteCategory = ({ id, isOpen, onClose, reload, setReload }) 
   const handleSubmit = async () => {
     try {
       const response = await axios.patch(
-        `http://localhost:8000/api/category/delete/${id}`
+        `/category/delete/${id}`
       );
       toast.success("Category deleted successfully", {
         position: toast.POSITION.TOP_RIGHT,
@@ -27,7 +27,7 @@ export const ModalDeleteCategory = ({ id, isOpen, onClose, reload, setReload }) 
       setReload(!reload);
       onClose();
     } catch (err) {
-      console.log(err.response);
+      console.log(err);
       toast.error("Error deleting category", {
         position: toast.POSITION.TOP_RIGHT,
       });

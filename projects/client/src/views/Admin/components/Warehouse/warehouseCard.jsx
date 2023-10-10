@@ -12,16 +12,12 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import {EditWarehouseModal} from './editWarehouseModal';
-import {DeleteWarehouseModal} from './deleteWarehouseModal'; 
+import {DeleteWarehouseModal} from './deleteWarehouseModal';
+import axios from '../../../../api/axios';
 
 export const WarehouseCard = ({ data,setReload,reload }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); 
- const [cities, setCities] = useState([]);
-  const [province, setProvince] = useState([]);
-  const [dataCities, setDataCities] = useState([]);
-  const [dataProvince, setDataProvince] = useState([]);
-  
   const handleEditClick = () => {
     setIsEditModalOpen(true);
     console.log(data);

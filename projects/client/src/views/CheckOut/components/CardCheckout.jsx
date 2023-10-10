@@ -185,5 +185,5 @@ const cart =useSelector(state=>state.cart.value)
     </Flex>
           )}
           </>
-  );
+  )
 };

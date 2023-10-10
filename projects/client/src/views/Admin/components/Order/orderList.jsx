@@ -59,7 +59,7 @@ export const OrderList = ({
   const navigate = useNavigate();
 
   const handleRowClick = (orderId) => {
-    navigate(`admin/detail-order/${orderId}`);
+    navigate(`detail-order/${orderId}`);
   };
 
 
