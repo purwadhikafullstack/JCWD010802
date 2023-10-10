@@ -7,11 +7,9 @@ export const ChartReport = ({ chart }) => {
     return <div>No data available.</div>;
   }
 
-  // Deklarasikan variabel dateParam dari properti yang dikirimkan (jika ada)
   const dateParam = chart[0].orderDate;
 
-  // Mendapatkan tanggal awal dan tanggal akhir dalam satu bulan
-  const currentDate = new Date(dateParam || new Date()); // Gunakan tanggal dari data pertama atau tanggal sekarang
+  const currentDate = new Date(dateParam || new Date()); 
   const firstDayOfMonth = new Date(
     currentDate.getFullYear(),
     currentDate.getMonth(),
@@ -23,22 +21,19 @@ export const ChartReport = ({ chart }) => {
     0
   );
 
-  // Membuat array berisi seluruh tanggal dalam satu bulan
   const labels = [];
   const currentDateIter = new Date(firstDayOfMonth);
   while (currentDateIter <= lastDayOfMonth) {
-    labels.push(currentDateIter.toISOString().split("T")[0]); // Format tanggal menjadi string (YYYY-MM-DD)
-    currentDateIter.setDate(currentDateIter.getDate() + 1); // Pindah ke tanggal berikutnya
+    labels.push(currentDateIter.toISOString().split("T")[0]); 
+    currentDateIter.setDate(currentDateIter.getDate() + 1); 
   }
 
-  // Mengumpulkan semua nama produk yang muncul dalam data Anda
   const productNames = [
     ...new Set(
       chart.flatMap((data) => data.products.map((product) => product.name))
     ),
   ];
 
-  // Mengelompokkan data berdasarkan tanggal
   const dataByDate = {};
   chart.forEach((data) => {
     const dateStr = data.orderDate;
@@ -48,7 +43,6 @@ export const ChartReport = ({ chart }) => {
     });
   });
 
-  // Mengisi nilai-nilai yang tidak ada dalam database dengan 0
   labels.forEach((date) => {
     if (!dataByDate[date]) {
       dataByDate[date] = {};
@@ -58,7 +52,6 @@ export const ChartReport = ({ chart }) => {
     }
   });
 
-  // Menghasilkan data untuk chart
   const productsData = productNames.map((productName) => {
     return {
       label: productName,

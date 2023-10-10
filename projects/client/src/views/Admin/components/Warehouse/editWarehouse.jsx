@@ -32,8 +32,6 @@ export const EditWarehouse = ({ data, onClose,dataCities,dataProvince,provinces,
       toast.success("Warehouse updated successfully");
       onClose();
       setReload(!reload);
-  
-      console.log(response);
     } catch (error) {
       console.error(error);
     }

@@ -19,7 +19,6 @@ export const PaymentProof = ({ isOpen, onClose, id, reload }) => {
                 position: 'top-right',
                 autoClose: 3000, 
             });
-            console.log(response);
             reload()
             onClose()
         } catch (error) {

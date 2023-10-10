@@ -17,7 +17,6 @@ const orderRouter = require('./orderRouter')
 const mutationRouter = require("./mutationRouter")
 const dashboardRouter = require("./dashboardRouter")
 const adminOrderRouter = require("./adminOrderRouter")
-const reportRouter = require("./reportRouter")
 
 module.exports= {
     userRouters,
@@ -40,5 +39,4 @@ module.exports= {
     mutationRouter,
     dashboardRouter,
     adminOrderRouter,
-    reportRouter
 }

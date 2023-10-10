@@ -29,7 +29,7 @@ export const AddressCheckout = ({ handleClick, selectedId }) => {
   const sort = params.get("sort") || "";
   const currentPage = Number(params.get("page")) || 1;
   const token = localStorage.getItem("token");
-  const headers = headersGen(token)
+  const headers = headersGen(token);
   const [address, setAddress] = useState([]);
   const [cities, setCities] = useState([]);
   const [province, setProvince] = useState([]);
@@ -40,13 +40,13 @@ export const AddressCheckout = ({ handleClick, selectedId }) => {
   const [onOpenModalPrimary, setOnOpenModalPrimary] = useState(false);
   const [onOpenModalEdit, setOnOpenModalEdit] = useState(false);
   const [reload, setReload] = useState(0);
-  const itemsPerPage = 3;
-  const startIndex = (currentPage - 1) * itemsPerPage;
+  const itemsPerPage = 5;
   const navigate = useNavigate();
 
   const AllAdrress = async () => {
     try {
-      const response = await axios.get(`/address?search=${search}&sort=${sort}&page=${currentPage}&limit=3`,
+      const response = await axios.get(
+        `/address?search=${search}&sort=${sort}&page=${currentPage}&limit=3`,
         { headers }
       );
       setAddress(response.data.result);
@@ -57,10 +57,7 @@ export const AddressCheckout = ({ handleClick, selectedId }) => {
   };
   const getCity = async (data) => {
     try {
-      const response = await axios.get(
-        `/location/city`,
-        data
-      );
+      const response = await axios.get(`/location/city`, data);
       setCities(response.data.city.rajaongkir.results);
     } catch (error) {
       console.log(error);
@@ -68,10 +65,7 @@ export const AddressCheckout = ({ handleClick, selectedId }) => {
   };
   const getProvince = async (data) => {
     try {
-      const response = await axios.get(
-        `/location/province`,
-        data
-      );
+      const response = await axios.get(`/location/province`, data);
       setProvince(response.data.province.rajaongkir.results);
     } catch (error) {
       console.log(error);
@@ -137,9 +131,9 @@ export const AddressCheckout = ({ handleClick, selectedId }) => {
                 </Badge>
               ) : null}
               <Heading fontSize="24px" mb={5}>
-                Address {startIndex + index + 1}
+                {`${item.address.address}`}
               </Heading>
-              <Text>{`${item.address.address}, ${item.address.nama_kota}, ${item.address.nama_provinsi}`}</Text>
+              <Text>{`${item.address.nama_kota}, ${item.address.nama_provinsi}`}</Text>
             </Box>
             <Box w="100%">
               <Flex

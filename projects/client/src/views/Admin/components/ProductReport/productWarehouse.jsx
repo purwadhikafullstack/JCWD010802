@@ -21,8 +21,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { PaginationAddress } from "../pagination";
 import { BsSearch } from "react-icons/bs";
-import { useSelector } from 'react-redux';
-
+import { useSelector } from "react-redux";
 
 export const ProductWarehouse = () => {
   const [history, setHistory] = useState();
@@ -35,8 +34,7 @@ export const ProductWarehouse = () => {
   const warehouseId = params.get("warehouseId") || "";
   const monthly = params.get("monthly") || "";
   const currentPage = Number(params.get("page")) || 1;
-  const user = useSelector(state => state.user.value)
-
+  const user = useSelector((state) => state.user.value);
 
   const getProductWarehouse = async () => {
     try {
@@ -48,7 +46,7 @@ export const ProductWarehouse = () => {
       );
       setHistory(response.data.groupedResults);
       setPage(response.data.totalpage);
-      // console.log(response.data.groupedResults);
+      console.log(response.data.groupedResults);
     } catch (error) {
       console.log(error);
     }
@@ -58,7 +56,6 @@ export const ProductWarehouse = () => {
       const response = await axios.get(
         `http://localhost:8000/api/warehouse/list`
       );
-      // console.log(response.data);
       setWarehouse(response.data);
     } catch (error) {
       console.log(error);
@@ -92,22 +89,22 @@ export const ProductWarehouse = () => {
         alignItems={"center"}
       >
         <Flex maxW={"50vw"} gap={5} mt={6}>
-        {user.roleId === 3 ? 
-          <Select
-          id="warehouseSelect"
-          value={warehouseId}
-          onChange={handleWarehouseChange}
-          maxWidth="200px"
-          borderColor={"2px solid black"}
-        >
-          <option value="">Select a warehouse</option>
-          {warehouse?.map((warehouse) => (
-            <option key={warehouse.id} value={warehouse.id}>
-              {warehouse.name}
-            </option>
-          ))}
-        </Select> : null
-        }
+          {user.roleId === 3 ? (
+            <Select
+              id="warehouseSelect"
+              value={warehouseId}
+              onChange={handleWarehouseChange}
+              maxWidth="200px"
+              borderColor={"2px solid black"}
+            >
+              <option value="">Select a warehouse</option>
+              {warehouse?.map((warehouse) => (
+                <option key={warehouse.id} value={warehouse.id}>
+                  {warehouse.name}
+                </option>
+              ))}
+            </Select>
+          ) : null}
           <InputGroup>
             <Input
               variant="outline"
@@ -142,6 +139,7 @@ export const ProductWarehouse = () => {
           <TableCaption>STOCK REPORT ALL PRODUCT</TableCaption>
           <Thead>
             <Tr>
+              {user.roleId === 3 ? (<Th>Warehouse</Th>) : null}
               <Th>Product</Th>
               <Th>Total add</Th>
               <Th>Total reduce</Th>
@@ -154,6 +152,9 @@ export const ProductWarehouse = () => {
               const createdAtDate = item.totals.latestUpdatedAt.split("T")[0];
               return (
                 <Tr>
+                  {user.roleId === 3 ? (
+                    <Td>{item.entries[0].stock.warehouse.name}</Td>
+                  ) : null}
                   <Td>{item.productName}</Td>
                   <Td>{item.totals.tambah}</Td>
                   <Td>{item.totals.kurang}</Td>

@@ -51,8 +51,6 @@ export const EditAddress = ({
       toast.success("Address updated successfully");
       setReload(!reload)
       onClose();
-
-      console.log(response);
     } catch (error) {
       toast.error("Error updating address");
       console.log(error);

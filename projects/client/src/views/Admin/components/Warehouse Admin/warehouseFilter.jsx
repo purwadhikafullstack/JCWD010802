@@ -9,7 +9,6 @@ export const WarehouseFilter = ({ onChange }) => {
   const getWarehouse = async () => {
       try {
           const response = await axios.get(`/warehouse`);
-          console.log(response);
           setWarehouse(response.data);
         } catch (error) {
             console.log(error);

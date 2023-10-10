@@ -4,7 +4,6 @@ import formatIDR from "../../../../helpers/formatIDR"
 
 export const ProductCardOrder = ({ data }) => {
     const product = data?.orderItems
-    console.log(product);
     return (
         <>
         {product?.map((item) => (

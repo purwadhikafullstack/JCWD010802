@@ -40,8 +40,7 @@ export const ModalEditCategory = ({ id, name, image, isOpen, onClose, reload, se
       onClose();
       toast.success('Category updated successfully');
     } catch (err) {
-      console.log(err.response);
-      console.log(data);
+      console.log(err);
       toast.error('Error updating category', {
         position: toast.POSITION.TOP_RIGHT,
       });

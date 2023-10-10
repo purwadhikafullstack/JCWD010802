@@ -17,7 +17,6 @@ export const CartView = () => {
         try {
             const response = await axios.get(`/cart`, { headers });
             if (response.data) {
-                console.log(response);
                 setCart(response.data.result);
                 setCartId(response.data.Cart.id);
                 setTotal(response.data.totalPrice);

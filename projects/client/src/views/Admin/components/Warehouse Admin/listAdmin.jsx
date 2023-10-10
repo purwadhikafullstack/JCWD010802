@@ -183,7 +183,6 @@ export const ListAdmin = () => {
             onClick={() => {
               setAdminToDelete(item);
               setSelectedUser(item)
-              console.log(item);
               setIsModalOpenDel(true);
             }}>
             Delete Admin

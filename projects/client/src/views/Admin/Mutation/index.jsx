@@ -34,7 +34,6 @@ export const MutationView = () => {
   const getWarehouse = async () => {
     try {
       const response = await axios.get(`/warehouse/list`);
-      console.log(response);
       setWarehouse(response.data);
     } catch (error) {
       console.log(error);
@@ -53,7 +52,6 @@ export const MutationView = () => {
   const incomingRequest = async () => {
     try {
       const response = await axios.get(`/mutation/incoming/${id}`); 
-      console.log(response);
       setRequest(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -63,7 +61,6 @@ export const MutationView = () => {
   const allRequests = async () => {
     try {
       const response = await axios.get(`/mutation/${id}?page=${currentPage}&status=${status}&sortDir=${sortDir}&productName=${productName}`); 
-      console.log(response);
       setAllRequest(response.data.result);
       setPageAllRequests(response.data.totalpage); 
     } catch (error) {
@@ -74,14 +71,12 @@ export const MutationView = () => {
   const superRequests = async () => {
     try {
       const response = await axios.get(`/mutation/super/?page=${currentPage}&status=${status}&sortDir=${sortDir}&productName=${productName}`); 
-      console.log(response);
       setSuperRequest(response.data.result);
       setPageSuperRequests(response.data.totalpage); 
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
-console.log(data);
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
