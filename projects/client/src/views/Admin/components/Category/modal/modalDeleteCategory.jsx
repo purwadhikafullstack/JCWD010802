@@ -27,7 +27,7 @@ export const ModalDeleteCategory = ({ id, isOpen, onClose, reload, setReload }) 
       setReload(!reload);
       onClose();
     } catch (err) {
-      console.log(err.response);
+      console.log(err);
       toast.error("Error deleting category", {
         position: toast.POSITION.TOP_RIGHT,
       });

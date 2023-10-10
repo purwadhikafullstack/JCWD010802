@@ -24,7 +24,6 @@ export const DetailCard = () => {
     try {
       const response = await axios.get(`/product/${id}`);
       setDetail(response.data.result);
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -33,7 +32,6 @@ export const DetailCard = () => {
     try {
       const response = await axios.get(`/stock/product/${id}`);
       setStock(response.data.result);
-      console.log(response);
     } catch (error) {
       console.log(error);
     }

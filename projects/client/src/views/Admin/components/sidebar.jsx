@@ -214,7 +214,10 @@ export const Sidebar = () => {
             </NavItem>
           </NavLink>
           <NavLink to="product-report">
-            <NavItem to="/admin/product-report" icon={HiMiniPresentationChartBar}>
+            <NavItem
+              to="/admin/product-report"
+              icon={HiMiniPresentationChartBar}
+            >
               Product report
             </NavItem>
           </NavLink>

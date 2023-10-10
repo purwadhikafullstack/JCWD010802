@@ -55,7 +55,6 @@ export const CartCounter = ({ initialCount, onCountChange, productId, cartId }) 
         }
       }
       const cartResponse = await axios.get(`/cart`, { headers });
-      console.log(cartResponse);
       setReload(!reload);
       dispatch(setCart(cartResponse.data.result));
       dispatch(setPrice(cartResponse.data.totalPrice));

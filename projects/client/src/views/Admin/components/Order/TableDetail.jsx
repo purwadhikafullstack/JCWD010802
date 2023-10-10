@@ -21,7 +21,6 @@ export const TableDetail = ({ id, data, reload }) => {
                 position: 'top-right',
                 autoClose: 3000, 
               });
-            console.log(response);
         } catch (error) {
             console.log(error);
             toast.error("Failed to confirm order", {

@@ -24,7 +24,7 @@ import headersGen from "../../../api/headers";
 
 export const AddressCard = () => {
   const token = localStorage.getItem("token");
-  const headers = headersGen(token)
+  const headers = headersGen(token);
   const [address, setAddress] = useState([]);
   const [cities, setCities] = useState([]);
   const [province, setProvince] = useState([]);
@@ -35,15 +35,15 @@ export const AddressCard = () => {
   const [onOpenModalPrimary, setOnOpenModalPrimary] = useState(false);
   const [onOpenModalEdit, setOnOpenModalEdit] = useState(false);
   const [reload, setReload] = useState(0);
-  const [search, setSearch] = useState("")
-  const [currentPage, setCurrentPage] = useState(1)
-  const [sort, setSort] = useState("DESC")
+  const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sort, setSort] = useState("DESC");
   const itemsPerPage = 5;
-  const startIndex = (currentPage - 1) * itemsPerPage;
 
   const AllAdrress = async () => {
     try {
-      const response = await axios.get(`/address?search=${search}&sort=${sort}&page=${currentPage}`,
+      const response = await axios.get(
+        `/address?search=${search}&sort=${sort}&page=${currentPage}`,
         { headers }
       );
       setAddress(response.data.result);
@@ -69,7 +69,7 @@ export const AddressCard = () => {
     }
   };
   const handleSearch = (result) => {
-    setSearch(result)
+    setSearch(result);
   };
   useEffect(() => {
     AllAdrress();
@@ -128,9 +128,9 @@ export const AddressCard = () => {
                 </Badge>
               ) : null}
               <Heading fontSize="24px" mb={5}>
-                Address {startIndex + index + 1}
+                {`${item?.address?.address}`}
               </Heading>
-              <Text>{`${item?.address?.address}, ${item?.address?.nama_kota}, ${item?.address?.nama_provinsi}`}</Text>
+              <Text>{`${item?.address?.nama_kota}, ${item?.address?.nama_provinsi}`}</Text>
             </Box>
             <Box w="50%">
               <Flex
@@ -175,7 +175,11 @@ export const AddressCard = () => {
           </Flex>
         </Box>
       ))}
-      <PaginationProfile totalpage={page} currentpage={currentPage} setPage={setCurrentPage} />
+      <PaginationProfile
+        totalpage={page}
+        currentpage={currentPage}
+        setPage={setCurrentPage}
+      />
       <EditAddress
         onOpen={onOpenModalEdit}
         onClose={() => setOnOpenModalEdit(false)}

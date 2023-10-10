@@ -23,15 +23,15 @@ export const Sort = ({ setSort, sort }) => {
         <MenuOptionGroup defaultValue={sort || "asc"} title="Sort by :" type="radio">
           <MenuItemOption
             value="asc"
-            onClick={() => handleSort("asc")} // Menyebabkan ascending saat dipilih
+            onClick={() => handleSort("asc")}
           >
-            Ascending
+            Newest address
           </MenuItemOption>
           <MenuItemOption
             value="desc"
-            onClick={() => handleSort("desc")} // Menyebabkan descending saat dipilih
+            onClick={() => handleSort("desc")}
           >
-            Descending
+            Oldest address
           </MenuItemOption>
         </MenuOptionGroup>
       </MenuList>

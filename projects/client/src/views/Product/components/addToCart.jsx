@@ -66,7 +66,6 @@ export const AddToCart = ({ detail, stock }) => {
           },
         });
         setReload(!reload);
-        console.log(cartResponse);
         dispatch(setCart(cartResponse.data.result))
         dispatch(setPrice(cartResponse.data.Cart.totalPrice))
         toast.success("Product added to cart", { position: "top-center" });

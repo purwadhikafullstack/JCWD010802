@@ -29,7 +29,6 @@ export const DeleteProduct = ({ product, isOpen, onClose, reload }) => {
       });
       reload()
       onClose();
-      console.log(response);
     } catch (error) {
       toast.error('Error deleting product', {
         position: "top-right",

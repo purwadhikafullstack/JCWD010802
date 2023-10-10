@@ -21,9 +21,15 @@ export const ProfileCard = () => {
   const EditProfile = async (data) => {
     try {
       await axios.patch(`/user/edit`, data, { headers });
-      toast.success('Profile updated successfully');
+      toast.success("Profile updated successfully", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000
+      });
     } catch (error) {
-      toast.error('Error updating profile');
+      toast.error("Error to updating profile", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000
+      });
       console.log(error);
     }
   };
@@ -110,7 +116,7 @@ export const ProfileCard = () => {
           </Formik>
         </Box>
       </Box>
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+      <ToastContainer />
     </Flex>
   );
 };

@@ -20,9 +20,9 @@ export const SalesReportView = () => {
   const productId = params.get("productId") || "";
   const currentDate = new Date();
   const year = currentDate.getFullYear();
-  let month = currentDate.getMonth() + 1; // Adding 1 because months are zero-indexed
+  let month = currentDate.getMonth() + 1; 
   if (month < 10) {
-    month = `0${month}`; // Ensure the month has two digits
+    month = `0${month}`; 
   }
   const todayDate = `${year}-${month}`;
   const date = params.get("date") || todayDate;

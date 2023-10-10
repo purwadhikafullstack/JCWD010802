@@ -27,7 +27,6 @@ export const DeleteAddress = ({ id, reload, setReload }) => {
       toast.success("Address deleted successfully");
       setReload(!reload);
       onClose();
-      console.log(response);
     } catch (error) {
       toast.error("Error deleting address");
       console.log(error);

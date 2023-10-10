@@ -37,7 +37,6 @@ export const ShippingMethod = ({ selectedAddress, totalWeight }) => {
         weight: totalWeight,
         service: selectedCourier,
       });
-      // console.log(response.data.price.rajaongkir);
       setServiceCourier(response.data.price.rajaongkir.results[0].costs);
     } catch (error) {
       console.log(error);
