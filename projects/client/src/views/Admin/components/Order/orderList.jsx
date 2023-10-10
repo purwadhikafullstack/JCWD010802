@@ -13,11 +13,17 @@ import {
   Select,
   Flex,
   HStack,
+  Button,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Icon
 } from '@chakra-ui/react';
 import convertToUppercase from '../../../../helpers/upperCase';
 import formatIDR from '../../../../helpers/formatIDR';
 import { useNavigate } from 'react-router-dom';
 import { PaginationAddress } from '../pagination';
+import { BsSearch } from 'react-icons/bs';
 
 export const OrderList = ({ 
   order,
@@ -29,7 +35,8 @@ export const OrderList = ({
   onFilterStatus,
   onSortDirection,
   currentPage,
-  statusList }) => {
+  handleResetFilter,
+  statusList, dateFilter,onFilterDate,search,handleSearch}) => {
   const getStatusBadgeColor = (status) => {
     switch (status) {
       case 'Menunggu Pembayaran':
@@ -59,8 +66,27 @@ export const OrderList = ({
   return (
     <>
      <Flex justifyContent={"flex-end"}>
-
-    <HStack p={5} w={"40%"} gap={2}>
+     <Flex p={5} w={"50%"}>
+    <InputGroup>
+            <Input
+                variant="outline"
+                placeholder="Search Invoice Number"
+                _placeholder={{ color: "black" }}
+                value={search}
+                type={"search"}
+                color={"black"}
+                onChange={(e) => {
+                  handleSearch(e.target.value);
+                }}                
+                borderColor={"2px solid black"}
+                w="40%"
+                />
+            <InputLeftElement>
+                <Icon as={BsSearch} color={"gray.500"} />
+            </InputLeftElement>
+        </InputGroup>
+                </Flex>
+    <HStack p={5} w={"60%"} gap={2}>
           <Select
             placeholder="Status"
             value={filterStatus}
@@ -71,7 +97,7 @@ export const OrderList = ({
             <option value="">All Status</option>
             {statusList.map((item) => (
               <option key={item.id} value={item.id}>
-                {item.status}
+                {item.name}
               </option>
             ))}
           </Select>
@@ -88,6 +114,21 @@ export const OrderList = ({
             <option value="pos">POS INDONESIA</option>
           </Select>
           <Select
+  placeholder="Date Range"
+  value={dateFilter}
+  borderWidth="2px"
+  borderColor="gray.400"
+  onChange={(e) => {
+    onFilterDate(e.target.value);
+  }}
+>
+  <option value="">All</option>
+  <option value="today">Today</option>
+  <option value="last7">Last 7 Days</option>
+  <option value="last30">Last 30 Days</option>
+</Select>
+
+          <Select
             placeholder="Sort by Date"
             value={sortDirection}
             borderWidth={"2px"}
@@ -97,6 +138,14 @@ export const OrderList = ({
             <option value="asc">Oldest</option>
             <option value="desc">Newest</option>
           </Select>
+          <Button
+          mx={2}
+          _hover={{}}
+          onClick={handleResetFilter}
+          variant={"ghost"}
+        >
+          Clear Filter
+        </Button>
         </HStack>
         </Flex>
         {order.length === 0 ? (
@@ -107,7 +156,7 @@ export const OrderList = ({
     <Table variant="simple">
       <Thead>
         <Tr>
-          <Th>Order ID</Th>
+          <Th>Invoice</Th>
           <Th>Total Price</Th>
           <Th>Shipping Method</Th>
           <Th>Send From</Th>
@@ -122,7 +171,7 @@ export const OrderList = ({
             onClick={() => handleRowClick(order.id)} 
             style={{ cursor: 'pointer' }} 
           >
-            <Td>{order.id}</Td>
+            <Td>{order.invoice}</Td>
             <Td>{formatIDR(order.totalPrice)}</Td>
             <Td>{convertToUppercase(order.shippingMethod)}</Td>
             <Td>{order.warehouse?.name}</Td>

@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Flex, Heading,Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
-import axios from "axios";
+import { Box, Button, Flex, Heading, Tabs, TabList, TabPanels, Tab, TabPanel, Select } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { IncomingRequests } from "../components/Mutation/mutationRequest";
 import { AllRequests } from "../components/Mutation/allRequest";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ManualStockMutationForm } from '../components/Mutation/stockMutationForm';
 import { SuperRequests } from '../components/Mutation/superRequest';
+import axios from '../../../api/axios';
 
 export const MutationView = () => {
-  const [filterStatus, setFilterStatus] = useState('');  
-  const [filterProduct, setFilterProduct] = useState('');  
-  const [sortDirection, setSortDirection] = useState('asc')
+  const [filterStatus, setFilterStatus] = useState('');
+  const [filterProduct, setFilterProduct] = useState('');
+  const [sortDirection, setSortDirection] = useState('asc');
+  const [dateFilters, setDateFilter] = useState('all');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [warehouse, setWarehouse] = useState([]);
   const [product, setProduct] = useState([]);
@@ -21,29 +22,38 @@ export const MutationView = () => {
   const data = useSelector((state) => state.user.value);
   const id = localStorage.getItem("warehouseId");
   const [reload, setReload] = useState(0);
-  const [pageAllRequests, setPageAllRequests] = useState([]); 
-  const [pageSuperRequests, setPageSuperRequests] = useState([]); 
+  const [pageAllRequests, setPageAllRequests] = useState([]);
+  const [pageSuperRequests, setPageSuperRequests] = useState([]);
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const currentPage = Number(params.get("page")) || 1;
   const status = params.get("filterStatus") || '';
   const sortDir = params.get("sortDirection") || 'asc';
   const productName = params.get("productName") || '';
+  const dateFilter = params.get("dateFilter")||""
+
   const navigate = useNavigate();
 
   const getWarehouse = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/warehouse/list`);
-      console.log(response);
+      const response = await axios.get(`/warehouse/list`);
       setWarehouse(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handleResetFilter = () => {
+    setDateFilter("")
+    setFilterProduct("")
+    setFilterStatus("")
+    setSortDirection("asc")
+    navigate('?');
+  };
+
   const getProduct = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/product?limit=99999999`);
+      const response = await axios.get(`/product?limit=99999999`);
       setProduct(response.data.result);
     } catch (error) {
       console.log(error);
@@ -52,8 +62,7 @@ export const MutationView = () => {
 
   const incomingRequest = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/mutation/incoming/${id}`); 
-      console.log(response);
+      const response = await axios.get(`/mutation/incoming/${id}`);
       setRequest(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -62,10 +71,9 @@ export const MutationView = () => {
 
   const allRequests = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/mutation/${id}?page=${currentPage}&status=${status}&sortDir=${sortDir}&productName=${productName}`); 
-      console.log(response);
+      const response = await axios.get(`/mutation/${id}?page=${currentPage}&status=${status}&sortDir=${sortDir}&productName=${productName}&dateFilter=${dateFilter}`);
       setAllRequest(response.data.result);
-      setPageAllRequests(response.data.totalpage); 
+      setPageAllRequests(response.data.totalpage);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -73,15 +81,14 @@ export const MutationView = () => {
 
   const superRequests = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/mutation/super/?page=${currentPage}&status=${status}&sortDir=${sortDir}&productName=${productName}`); 
-      console.log(response);
+      const response = await axios.get(`/mutation/super/?page=${currentPage}&status=${status}&sortDir=${sortDir}&productName=${productName}&dateFilter=${dateFilter}`);
       setSuperRequest(response.data.result);
-      setPageSuperRequests(response.data.totalpage); 
+      setPageSuperRequests(response.data.totalpage);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
-console.log(data);
+
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -92,16 +99,22 @@ console.log(data);
 
   const handleFilterStatus = (status) => {
     setFilterStatus(status);
-    navigate(`?filterStatus=${status}&sortDirection=${sortDir}&productName=${productName}`)
+    navigate(`?filterStatus=${status}&sortDirection=${sortDir}&productName=${productName}&dateFilter=${dateFilter}`);
   };
+
   const handleFilterProduct = (product) => {
     setFilterProduct(product);
-    navigate(`?filterStatus=${status}&sortDirection=${sortDir}&productName=${product}`)
+    navigate(`?filterStatus=${status}&sortDirection=${sortDir}&productName=${product}&dateFilter=${dateFilter}`);
   };
 
   const handleSortDirection = (direction) => {
     setSortDirection(direction);
-    navigate(`?sortDirection=${direction}&filterStatus=${status}&productName=${productName}`)
+    navigate(`?sortDirection=${direction}&filterStatus=${status}&productName=${productName}&dateFilter=${dateFilter}`);
+  };
+
+  const handleDateFilter = (filter) => {
+    setDateFilter(filter);
+    navigate(`?dateFilter=${filter}&filterStatus=${status}&sortDirection=${sortDir}&productName=${productName}`);
   };
 
   useEffect(() => {
@@ -110,8 +123,7 @@ console.log(data);
     incomingRequest();
     allRequests();
     superRequests();
-  }, [reload, currentPage, status, sortDir, productName]);
-
+  }, [reload, currentPage, status, sortDir, productName, dateFilter]);
   return (
     <Box p={3}>
       <Flex justifyContent={"flex-end"} p={5}>
@@ -142,6 +154,9 @@ console.log(data);
             onFilterProduct={handleFilterProduct}
             currentPage={currentPage}
             product={product}
+            handleResetFilter={handleResetFilter}
+            dateFilter={dateFilters}
+            handleDateFilter={handleDateFilter}
           />
     </TabPanel>
   </TabPanels>
@@ -159,6 +174,9 @@ console.log(data);
           onFilterProduct={handleFilterProduct}
           currentPage={currentPage}
           product={product}
+          handleResetFilter={handleResetFilter}
+          dateFilter={dateFilters}
+          handleDateFilter={handleDateFilter}
         />
       )}
       <ManualStockMutationForm isOpen={isModalOpen} onClose={handleCloseModal} warehouse={warehouse} product={product} reload={reload} setReload={setReload} />

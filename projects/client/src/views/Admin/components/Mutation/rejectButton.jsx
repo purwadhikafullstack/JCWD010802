@@ -1,13 +1,13 @@
-import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react";
+import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, HStack } from "@chakra-ui/react";
 import { useState } from "react";
-import axios from 'axios';
 import { toast } from "react-toastify";
+import axios from "../../../../api/axios";
 
 export const Reject = ({requestId,reload,setReload})=>{
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleReject = async() =>{
         try {
-            await axios.patch(`http://localhost:8000/api/mutation/reject/${requestId}`)
+            await axios.patch(`/mutation/reject/${requestId}`)
             setIsModalOpen(false)
             toast.success("Stock request has been rejected")
             setReload(!reload)
@@ -35,11 +35,14 @@ export const Reject = ({requestId,reload,setReload})=>{
                     <ModalHeader>Reject Stock Request</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        Are you sure you want to reject product request?
+                    Are you sure you want to <span style={{ fontWeight: 'bold' }}>REJECT</span> product request?
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme="red" onClick={handleReject}>Yes</Button>
-                        <Button onClick={handleCloseModal}>No</Button>
+                        <HStack gap={4}>
+
+                        <Button colorScheme="green" onClick={handleReject}>Yes</Button>
+                        <Button onClick={handleCloseModal} colorScheme="red">No</Button>
+                        </HStack>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

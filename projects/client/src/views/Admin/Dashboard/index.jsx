@@ -8,9 +8,9 @@ import {
   Flex,
   HStack,
 } from '@chakra-ui/react';
-import axios from 'axios';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import { StatCard } from '../components/Dashboard/statCard';
+import axios from '../../../api/axios';
 
 export const Dashboard = () => {
   const [data, setData] = useState({
@@ -26,7 +26,7 @@ export const Dashboard = () => {
 
   const getData = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/dashboard');
+      const response = await axios.get('/dashboard');
       setData(response.data);
     } catch (error) {
       console.error(error);
@@ -57,7 +57,8 @@ export const Dashboard = () => {
     "#FDE74C",
     "#DBEDF3",
     "#F6F6F6",
-    "#023047",];
+    "#023047",
+  ];
 
   const categoryPieData = data.categoriesWithProductCount.map((category) => ({
     name: category.name,
@@ -74,13 +75,16 @@ export const Dashboard = () => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
-  
+
+    const unit = "Products";
+
     return (
       <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
         {`${(percent * 100).toFixed(0)}%`}
       </text>
     );
   };
+
   return (
     <Box p={4}>
       <Heading as="h1" size="xl" mb={4}>
@@ -102,62 +106,61 @@ export const Dashboard = () => {
         <GridItem>
           <StatCard label="Total Category" value={data.totalCategory} />
         </GridItem>
-        </SimpleGrid>
-        <HStack>
-          <Box>
-            {userVerificationPieData.length > 0 ? (
-              <PieChart width={400} height={400}>
-                <Pie
-                  dataKey="value"
-                  isAnimationActive={false}
-                  data={userVerificationPieData}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  label={renderCustomizedLabel}
-                  labelLine={false}
-                >
-                  {userVerificationPieData.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            ) : (
-              <Text>Loading...</Text>
-            )}
-          </Box>
-          <Box>
-            {categoryPieData.length > 0 ? (
-              <PieChart width={450} height={400}>
-                <Pie
-                  dataKey="value"
-                  isAnimationActive={false}
-                  data={categoryPieData}
-                  outerRadius={80}
-                  fill="#FFBB28"
-                  label={renderCustomizedLabel}
-                  labelLine={false}
-
-                >
-                  {categoryPieData.map((entry, index) => (
-                    <Cell
+      </SimpleGrid>
+      <HStack>
+        <Box>
+          {userVerificationPieData.length > 0 ? (
+            <PieChart width={400} height={400}>
+              <Pie
+                dataKey="value"
+                isAnimationActive={false}
+                data={userVerificationPieData}
+                outerRadius={80}
+                fill="#8884d8"
+                label
+                labelLine={false}
+              >
+                {userVerificationPieData.map((entry, index) => (
+                  <Cell
                     key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                      />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            ) : (
-              <Text>Loading...</Text>
-              )}
-          </Box>
-              </HStack>
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          ) : (
+            <Text>Loading...</Text>
+          )}
+        </Box>
+        <Box>
+          {categoryPieData.length > 0 ? (
+            <PieChart width={450} height={400}>
+              <Pie
+                dataKey="value"
+                isAnimationActive={false}
+                data={categoryPieData}
+                outerRadius={80}
+                fill="#FFBB28"
+                label={renderCustomizedLabel}
+                labelLine={false}
+              >
+                {categoryPieData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip formatter={(value) => [value, 'Products']} />
+              <Legend />
+            </PieChart>
+          ) : (
+            <Text>Loading...</Text>
+          )}
+        </Box>
+      </HStack>
     </Box>
   );
 };

@@ -14,7 +14,7 @@ import {
   ListItem,
   Badge,
 } from "@chakra-ui/react";
-import axios from "axios";
+import axios from "../../../../api/axios";
 
 export const UserProfileModal = ({ user, profile, isOpen, onClose }) => {
   const [cities, setCities] = useState([]);
@@ -22,7 +22,7 @@ export const UserProfileModal = ({ user, profile, isOpen, onClose }) => {
   const getCity = async (data) => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/location/city`,
+        `/location/city`,
         data
       );
       setCities(response.data.city.rajaongkir.results);
@@ -33,7 +33,7 @@ export const UserProfileModal = ({ user, profile, isOpen, onClose }) => {
   const getProvince = async (data) => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/location/province`,
+        `/location/province`,
         data
       );
       setProvince(response.data.province.rajaongkir.results);
@@ -70,9 +70,8 @@ export const UserProfileModal = ({ user, profile, isOpen, onClose }) => {
                 {profile.map((item, index) => (
                   <ListItem key={index} color={"#2d3319"}>
                     <Text color={"#2d3319"}>
-                      {item.address.address}, {
-                cities[item.address.kota - 1]?.city_name},{" "}
-                      {province[item.address.provinsi - 1]?.province}, {item.address.kode_pos}
+                      {item.address.address}, {item.address.nama_kota},{" "}
+                      {item.address.nama_provinsi}
                     </Text>
                     {item.isPrimary && (
                       <Badge

@@ -12,6 +12,7 @@ import {
   Badge,
   Select,
   Flex,
+  Button,
   HStack,
 } from '@chakra-ui/react';
 import convertToUppercase from '../../../../helpers/upperCase';
@@ -27,7 +28,10 @@ export const AllRequests = ({
   currentPage,
   product, 
   onFilterProduct,
-  filterProduct 
+  filterProduct ,
+  handleResetFilter,
+  dateFilter,
+  handleDateFilter
 }) => {
   const statusStyles = {
     accepted: { color: 'green' },
@@ -39,11 +43,11 @@ export const AllRequests = ({
   
   return (
     <Box p={4}>
-      <Heading fontSize="xl" mb={4}>
+      <Heading  mb={4}>
         Request History
       </Heading>
       <Flex justifyContent={"flex-end"}>
-      <HStack  p={5} w={"40%"} gap={2}>
+      <HStack  p={5} w={"50%"} gap={2}>
       <Select
             placeholder="Product"
             value={filterProduct}
@@ -73,6 +77,20 @@ export const AllRequests = ({
           <option value="requested">Requested</option>
         </Select>
         <Select
+  placeholder="Date Range"
+  value={dateFilter}
+  borderWidth="2px"
+  borderColor="gray.400"
+  onChange={(e) => {
+    handleDateFilter(e.target.value);
+  }}
+>
+  <option value="">All</option>
+  <option value="today">Today</option>
+  <option value="last7">Last 7 Days</option>
+  <option value="last30">Last 30 Days</option>
+</Select>
+        <Select
           placeholder="Sort by Date"
           value={sortDirection}
           borderWidth={"2px"}
@@ -82,6 +100,14 @@ export const AllRequests = ({
           <option value="asc">Oldest</option>
           <option value="desc">Newest</option>
         </Select>
+        <Button
+          _hover={{}}
+          mx={2}
+          onClick={handleResetFilter}
+          variant={"ghost"}
+        >
+          Clear Filter
+        </Button>
       </HStack>
       </Flex>
       {data.length === 0 ? (
@@ -89,7 +115,7 @@ export const AllRequests = ({
           <Heading>No request</Heading>
         </Center>
       ) : (
-        <Table variant="simple">
+        <Table variant="simple" overflowX={"auto"}>
             <Thead>
             <Tr>
               <Th>Product</Th>

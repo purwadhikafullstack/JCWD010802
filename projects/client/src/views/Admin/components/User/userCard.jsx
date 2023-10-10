@@ -2,23 +2,30 @@ import {
   Badge,
   Box,
   Button,
+  Center,
   Flex,
   HStack,
   Heading,
+  Icon,
   Image,
+  Input,
+  InputGroup,
+  InputLeftElement,
   ListItem,
   Select,
   Stack,
   Text,
   UnorderedList,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { BiSolidUser, BiSolidUserDetail } from "react-icons/bi";
 import { UserProfileModal } from "./userProfileModal";
 import { FaWarehouse } from "react-icons/fa";
 import { PaginationAddress } from "../pagination";
 import { useLocation, useNavigate } from "react-router-dom";
+import { BsSearch } from "react-icons/bs";
+import { UserSort } from "./userSort";
+import axios from "../../../../api/axios";
 
 export const UserCard = () => {
   const [user, setUser] = useState([]);
@@ -37,7 +44,7 @@ export const UserCard = () => {
   const getUser = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/user/list-user?&page=${currentPage}&roleId=${roleId}`
+        `/user/list-user?search=${search}&page=${currentPage}&roleId=${roleId}&sort=${sort}`
       );
       console.log(response.data.result);
       setUser(response.data.result);
@@ -50,7 +57,7 @@ export const UserCard = () => {
   const getProfile = async (userId) => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/user/${userId}`
+        `/user/${userId}`
       );
       setProfile(response.data.result);
     } catch (error) {
@@ -63,35 +70,69 @@ export const UserCard = () => {
     setIsModalOpen(true);
   };
   const handleRoleChange = (e) => {
-    navigate(`?roleId=${e.target.value}`);
+    navigate(`?roleId=${e.target.value}&search=${search}&sort=${sort}`);
   };
+  const handleSearch = (result) => {
+    navigate(`?search=${result.target.value}&roleId=${roleId}&sort=${sort}`);
+}
+const handleSort = (selectedSort) => {
+    navigate(`?search=${search}&roleId=${roleId}&sort=${selectedSort}`)
+}
+const handleResetFilter = () => {
+  navigate('?search=&roleId=&sort='); 
+};
   useEffect(() => {
     getUser();
     getProfile();
-  }, [currentPage, roleId]);
+  }, [currentPage, roleId,search,sort]);
   return (
     <>
       <Heading py={5} ml={5}>
         User List
       </Heading>
-      <Box py={3} ml={5}>
-        <Text htmlFor="roleSelect">Filter by Role: </Text>
+      <HStack px={5}>
+      <InputGroup>
+            <Input
+                variant="outline"
+                placeholder="Search"
+                _placeholder={{ color: "black" }}
+                defaultValue={search}
+                type={"search"}
+                color={"black"}
+                onChange={handleSearch}
+                borderColor={"2px solid black"}
+                w="40%"
+            />
+            <InputLeftElement>
+                <Icon as={BsSearch} color={"gray.500"} />
+            </InputLeftElement>
+        </InputGroup>
         <Select
+        placeholder="Select Role"
           id="roleSelect"
           name="roleSelect"
+          color={"black"}
+          borderColor={"2px solid black"}
           onChange={handleRoleChange}
           value={roleId}
-          maxWidth="200px"
+          maxWidth="180px"
         >
           <option value="">All</option>
           <option value="1">User</option>
           <option value="2">Warehouse Admin</option>
         </Select>
-      </Box>
+        <UserSort handleSort={handleSort}/>
+        <Button
+          onClick={handleResetFilter}
+          variant={"ghost"}
+        >
+          Clear Filter
+        </Button>
+        </HStack>
       <Stack py={6} mx={3} gap={4}>
-        {user?.map((item) => (
+        {user.map((item) => (
           <Stack
-            borderWidth="1px"
+          borderWidth="1px"
             borderRadius="lg"
             w={{ sm: "100%", lg: "100%", md: "100%", xl: "100%" }}
             height={{
@@ -109,7 +150,9 @@ export const UserCard = () => {
             {item.profileImg ? (
       <Image
       objectFit="cover"
-      boxSize="100%"        
+      boxSize="100%" 
+      aspectRatio={1}
+      borderRadius={"10px"}       
       src={`http://localhost:8000/profileImg/${item.profileImg}`}
         alt="profile image"
       />
@@ -196,6 +239,11 @@ export const UserCard = () => {
             </Flex>
           </Stack>
         ))}
+        {user.length === 0 && (
+          <Center>
+            <Heading>No User</Heading>
+          </Center>
+        )}
       </Stack>
       <UserProfileModal
         user={selectedUser}

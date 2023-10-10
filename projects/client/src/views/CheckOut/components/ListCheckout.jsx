@@ -8,10 +8,10 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { ShippingMethod } from "./ShippingMethod";
 import { useSelector } from "react-redux";
 import formatIDR from "../../../helpers/formatIDR";
+import axios from "../../../api/axios";
 
 export const CheckoutList = ({ selectedAddress }) => {
   const token = localStorage.getItem("token");
@@ -24,7 +24,7 @@ export const CheckoutList = ({ selectedAddress }) => {
 
   const Cart = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/cart`, {
+      const response = await axios.get(`/cart`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -74,59 +74,39 @@ export const CheckoutList = ({ selectedAddress }) => {
     <Flex direction={"column"}>
       {cartItems?.map((item) => (
         <>
-          <Flex key={item.product.id}>
+          <Flex key={item.id}>
             <Image
               src={`http://localhost:8000/productImg/${item.product.productImg}`}
-              maxW={{ base: "50px", sm: "100px" }}
+              w={"100px"}
+              h={"100px"}
+              borderRadius={"10px"}
               objectFit="cover"
               mr={5}
             />
-            <Stack>
-              <Text fontWeight={"bold"} fontSize={"lg"}>
-                {item.product.name}
-              </Text>
-              <Text fontWeight={"light"}>{item.quantity} item</Text>
-              <Text fontWeight={"light"}>{item.product.weight} kg</Text>
-              <Text fontWeight={"semibold"}>
-                Rp. {item.product.price * item.quantity}
-              </Text>
-            </Stack>
+           <Stack spacing={1}>
+      <Text fontWeight={"bold"} fontSize={"lg"}>
+        {item.product.name}
+      </Text>
+      <Text fontWeight={"light"} noOfLines={{ base: 2, sm: 1 }}>
+        {item.quantity} item
+      </Text>
+      <Text fontWeight={"light"} noOfLines={{ base: 2, sm: 1 }}>
+        {item.product.weight} kg
+      </Text>
+      <Text fontWeight={"semibold"}>
+        {formatIDR(item.product.price * item.quantity)}
+      </Text>
+    </Stack>
           </Flex>
           <Divider borderWidth={2} my={3} marginTop={5} />
         </>
       ))}
-      <CheckboxGroup colorScheme="green">
-        <Stack
-          spacing={[1, 5]}
-          direction={["column", "row"]}
-          justifyContent={"flex-start"}
-        >
-          <Checkbox value="2000" onChange={() => setShipChecked(!shipChecked)}>
-            Shipping insurance
-          </Checkbox>
-          <Checkbox
-            value="1500"
-            onChange={() => setProtectChecked(!protectChecked)}
-          >
-            Protection discount
-          </Checkbox>
-        </Stack>
-      </CheckboxGroup>
-      <Divider borderWidth={2} my={3} marginTop={5} />
+      
       <Flex>
         <ShippingMethod
           selectedAddress={selectedAddress}
           totalWeight={totalWeight}
         />
-      </Flex>
-      <Divider borderWidth={2} my={3} marginTop={5} />
-      <Flex justifyContent={"space-between"}>
-        <Text fontWeight={"bold"} fontSize={{ base: "15px", lg: "25px" }}>
-          Subtotal :
-        </Text>
-        <Text fontWeight={"bold"} fontSize={{ base: "15px", lg: "25px" }}>
-        {formatIDR(totalPrice)}
-        </Text>
       </Flex>
     </Flex>
   );

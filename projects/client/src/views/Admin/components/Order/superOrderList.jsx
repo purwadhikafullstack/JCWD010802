@@ -13,11 +13,17 @@ import {
   Select,
   Flex,
   HStack,
+  Button,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Icon
 } from '@chakra-ui/react';
 import convertToUppercase from '../../../../helpers/upperCase';
 import formatIDR from '../../../../helpers/formatIDR';
 import { useNavigate } from 'react-router-dom';
 import { PaginationAddress } from '../pagination';
+import { BsSearch } from 'react-icons/bs';
 
 export const SuperOrderList = ({ 
   order,
@@ -30,8 +36,10 @@ export const SuperOrderList = ({
   onSortDirection,
   currentPage,
   warehouse, 
+  handleResetFilter,
   onFilterWarehouse,
-  filterWarehouse ,statusList }) => {
+  filterWarehouse ,statusList,
+dateFilter,onFilterDate,search,handleSearch }) => {
   const getStatusBadgeColor = (status) => {
     switch (status) {
       case 'Menunggu Pembayaran':
@@ -61,8 +69,27 @@ export const SuperOrderList = ({
   return (
     <>
      <Flex justifyContent={"flex-end"}>
-
-    <HStack p={5} w={"40%"} gap={2}>
+<Flex p={5} w={"50%"}>
+    <InputGroup>
+            <Input
+                variant="outline"
+                placeholder="Search Invoice Number"
+                _placeholder={{ color: "black" }}
+                value={search}
+                type={"search"}
+                color={"black"}
+                onChange={(e) => {
+                  handleSearch(e.target.value);
+                }}                
+                borderColor={"2px solid black"}
+                w="40%"
+                />
+            <InputLeftElement>
+                <Icon as={BsSearch} color={"gray.500"} />
+            </InputLeftElement>
+        </InputGroup>
+                </Flex>
+    <HStack p={5} w={"60%"} gap={2}>
         <Select
             placeholder="Warehouse"
             value={filterWarehouse}
@@ -80,6 +107,18 @@ export const SuperOrderList = ({
             ))}
           </Select>
           <Select
+            placeholder="Shipping Method"
+            value={filterShipping}
+            borderWidth={"2px"}
+            borderColor={"gray.400"}
+            onChange={(e) => onFilterShipping(e.target.value)}
+          >
+            <option value="">All</option>
+            <option value="jne">JNE</option>
+            <option value="tiki">TIKI</option>
+            <option value="pos">POS INDONESIA</option>
+          </Select>
+          <Select
             placeholder="Status"
             value={filterStatus}
             borderWidth={"2px"}
@@ -89,11 +128,25 @@ export const SuperOrderList = ({
             <option value="">All Status</option>
             {statusList.map((item) => (
               <option key={item.id} value={item.id}>
-                {item.status}
+                {item.name}
               </option>
             ))}
           </Select>
-         
+          <Select
+  placeholder="Date Range"
+  value={dateFilter}
+  borderWidth="2px"
+  borderColor="gray.400"
+  onChange={(e) => {
+    onFilterDate(e.target.value);
+  }}
+>
+  <option value="">All</option>
+  <option value="today">Today</option>
+  <option value="last7">Last 7 Days</option>
+  <option value="last30">Last 30 Days</option>
+</Select>
+
           <Select
             placeholder="Sort by Date"
             value={sortDirection}
@@ -104,6 +157,14 @@ export const SuperOrderList = ({
             <option value="asc">Oldest</option>
             <option value="desc">Newest</option>
           </Select>
+          <Button
+          _hover={{}}
+          mx={2}
+          onClick={handleResetFilter}
+          variant={"ghost"}
+        >
+          Clear Filter
+        </Button>
         </HStack>
         </Flex>
         {order.length === 0 ? (
@@ -114,7 +175,7 @@ export const SuperOrderList = ({
     <Table variant="simple">
       <Thead>
         <Tr>
-          <Th>Order ID</Th>
+          <Th>Invoice</Th>
           <Th>Total Price</Th>
           <Th>Shipping Method</Th>
           <Th>Send From</Th>
@@ -129,7 +190,7 @@ export const SuperOrderList = ({
             onClick={() => handleRowClick(order.id)} 
             style={{ cursor: 'pointer' }} 
           >
-            <Td>{order.id}</Td>
+            <Td>{order.invoice}</Td>
             <Td>{formatIDR(order.totalPrice)}</Td>
             <Td>{convertToUppercase(order.shippingMethod)}</Td>
             <Td>{order.warehouse?.name}</Td>

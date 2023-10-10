@@ -16,14 +16,18 @@ export const PaginationAddress = ({ totalpage }) => {
   const sortDir = params.get("sortDirection") || 'asc';
   const productName = params.get("productName") || '';
   const shipping = params.get("shipping") || '';
+  const dateFilter = params.get("dateFilter") || '';
 
   function handlePage(newPage) {
     if (newPage >= 1 && newPage <= totalpage) {
       params.set("page", newPage);
-      navigate(`?search=${search}&sort=${sort}&page=${newPage}&roleId=${roleId}&warehouseId=${warehouseId}&filterStatus=${status}&sortDirection=${sortDir}&productName=${productName}&shipping=${shipping}`);
+      navigate(`?search=${search}&sort=${sort}&page=${newPage}&roleId=${roleId}&warehouseId=${warehouseId}&filterStatus=${status}&sortDirection=${sortDir}&productName=${productName}&shipping=${shipping}&dateFilter=${dateFilter}`);
     }
   }
   return (
+    <>
+    {totalpage === 0 ?(null):(
+
     <Flex gap={3} alignItems={"center"} justifyContent={"center"} mt={5}>
       <ButtomTemp
         isDisabled={currentpage === 1}
@@ -38,7 +42,9 @@ export const PaginationAddress = ({ totalpage }) => {
         isDisabled={currentpage === totalpage || totalpage === 0}
         content={<Icon as={FaArrowAltCircleRight} w="5" h="5" />}
         func={() => handlePage(currentpage + 1)}
-      />
+        />
     </Flex>
+        )}
+        </>
   );
 };

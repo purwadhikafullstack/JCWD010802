@@ -52,7 +52,7 @@ module.exports = {
             const response = await axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(query)}&key=${apiKey}`);
             if (response.status === 200 && response.data.results.length > 0) {
                 const { lat, lng } = response.data.results[0].geometry;
-                const result = await addresses.create({ address, kota, provinsi, kode_pos, lat, lng: lng });
+                const result = await addresses.create({ address, kota,nama_kota: city.data.rajaongkir.results.city_name, provinsi, nama_provinsi: city.data.rajaongkir.results.province, kode_pos, lat, lng: lng });
 
                 const newWarehouse = await warehouse.create({name, image:image, addressId:result.id })
                

@@ -1,8 +1,8 @@
 import { Badge, Button, Flex, Table, Td, Text, Th, Tr, useDisclosure } from "@chakra-ui/react"
 import formatIDR from "../../../../helpers/formatIDR"
-import axios from "axios"
 import "./style.css"
 import { ModalPayment } from "./ModalPayment"
+import axios from "../../../../api/axios"
 
 
 export const TableDetail = ({ id }) => {
@@ -13,32 +13,28 @@ export const TableDetail = ({ id }) => {
     }
     const handleConfirm = async () => {
         try {
-            const response = await axios.patch(`http://localhost:8000/api/adminOrder/${id}`, {}, { headers })
-            console.log(response);
+            const response = await axios.patch(`/adminOrder/${id}`, {}, { headers })
         } catch (error) {
             console.log(error);
         }
     }
     const handleReject = async () => {
         try {
-            const response = await axios.put(`http://localhost:8000/api/adminOrder/${id}`, {}, { headers })
-            console.log(response);
+            const response = await axios.put(`/adminOrder/${id}`, {}, { headers })
         } catch (error) {
             console.log(error);
         }
     }
     const handleCancel = async () => {
         try {
-           const response = await axios.put(`http://localhost:8000/api/adminOrder/cancel/${id}`, {}, { headers }) 
-           console.log(response);
+           const response = await axios.put(`/adminOrder/cancel/${id}`, {}, { headers }) 
         } catch (error) {
             console.log(error);
         }
     }
     const handleSend = async () => {
         try {
-           const response = await axios.put(`http://localhost:8000/api/adminOrder/send/${id}`, {}, { headers }) 
-           console.log(response);
+           const response = await axios.put(`/adminOrder/send/${id}`, {}, { headers }) 
         } catch (error) {
             console.log(error);
         }

@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { BrowserRouter, RouterProvider, createBrowserRouter } from "react-router-dom";
 import {ChakraProvider} from "@chakra-ui/react"
 import { routes } from "./routes";
 import { Provider } from "react-redux"
@@ -14,9 +14,7 @@ root.render(
   <ChakraProvider>
   <React.StrictMode>
     <Provider store={store}>
-      <ChakraProvider>
         <App />
-      </ChakraProvider>
     </Provider>
   </React.StrictMode>
   </ChakraProvider>

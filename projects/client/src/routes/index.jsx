@@ -35,25 +35,16 @@ import useLoginAuthentication from "../views/Error/components/privateRoutelogin"
 import useProfileAuthentication from "../views/Error/components/privateProfileRoute";
 import useIdValidation from "../views/Error/components/privateProductRoute";
 import { ProductNotFound } from "../views/Error/components/productNotFound";
+import { WishlistView } from "../views/Wishlist";
+import { Wishlist } from "../pages/Wishlist";
 
 
-const AdminGuardedRoute = ({ element }) => {
-  const isAdminAuthenticated = useAdminAuthentication(); 
-
-  if (isAdminAuthenticated()) {
-    return element;
-  } else {
-    return <Navigate to="/login" />;
-  }
-};
 const UserGuardedRoute = ({ element }) => {
   const isUserAuthenticated = useUserAuthentication(); 
 
   if (isUserAuthenticated()) {
     return element;
   } else {
-    
-
     return <NotFound/>; 
   }
 };
@@ -81,19 +72,19 @@ const ProductDetailGuardedRoute = ({ element }) => {
 };
 const LoginGuardedRoute = ({ element }) => {
   const isLoginAuthenticated = useLoginAuthentication();
+  const isUser = useUserAuthentication();
 
   if (isLoginAuthenticated()) {
-    const isAdmin = useAdminAuthentication;
-    
-    if (isAdmin) {
-      return <Navigate to="/admin" />;
-    } else {
+    if (isUser()) { 
       return <Navigate to="/" />;
+    } else {
+      return <Navigate to="/admin" />;
     }
   } else {
     return element;
   }
 };
+
 
 const Routes = (
   <>
@@ -101,6 +92,7 @@ const Routes = (
       <Route path="" element={<HomepageView />} />
       <Route path="profile" element={<ProfileGuardedRoute element={<ProfileView />}/>} />
       <Route path="cart" element={<UserGuardedRoute element={<Cart />}/>} />
+      <Route path="wishlist" element={<UserGuardedRoute element={<Wishlist />}/>} />
       <Route path="/" element={<Product />}>
         <Route path="product" element={<AllProduct />} />
       </Route>
@@ -115,7 +107,7 @@ const Routes = (
     <Route path="/reset-password/:token" element={<ResetPass />} />
     <Route path="/checkout" element={<UserGuardedRoute element={<Checkout />}/>} />
 
-    <Route path="/admin" element={<AdminGuardedRoute element={<Admin />} />}>
+    <Route path="/admin"element={<Admin />} >
       <Route path="" element={<Dashboard />} />
       <Route path="list-user" element={<UserCard />} />
       <Route path="list-admin" element={<WarehouseAdmin />} />

@@ -56,14 +56,28 @@ getAdminProfile: async (req,res) => {
       const limit = +req.query.limit || 5;
       const offset = (page - 1) * limit
       const warehouseId = +req.query.warehouseId || ""
+      const search = req.query.search ||""
+
 
       const condition = {}
+      const cari = {
+        isDeleted:false
+      }
       if (warehouseId) {
         condition.warehouseId = warehouseId;
       }
+      if (search) {
+        cari[Op.or] = [
+            {
+                name: {
+                    [Op.like]: `%${search}%`,
+                },  
+            },
+        ];
+    }
       const total = await warehouseAdmin.count({where:condition})
     
-      const result = await warehouseAdmin.findAll({ limit, offset:offset ,where:condition,  include: [{model: warehouse,include:[{model:address}]},{model: user,where:{isDeleted:false}}]})
+      const result = await warehouseAdmin.findAll({ limit, offset:offset ,where:condition,  include: [{model: warehouse,include:[{model:address}]},{model: user,where:cari}]})
       res.status(200).send({
         totalPage: Math.ceil(total / limit),
         currentPage: page,

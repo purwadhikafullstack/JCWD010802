@@ -2,6 +2,7 @@ const {  cart, address, user, journal, stock, product, warehouse, cartItem,order
 const calculateDistance = require('../utils/calculateDistance');
 const db = require("../models")
 const orders = db.order
+const { Op , Sequelize} = require("sequelize");
 
 module.exports = {
     checkout: async (req, res) => {
@@ -14,16 +15,13 @@ module.exports = {
             } = req.body; 
             const findCartItem = await cartItem.findAll({ where: { cartId: cartId } });
             const findAddress = await address.findOne({ where: { id: addressId } });
-            const findCart = await cart.findOne({where:{userId:req.user.id, isCheckOut:false}})
+            const findCart = await cart.findOne({ where: { userId: req.user.id, isCheckOut: false } });
             const warehouses = await warehouse.findAll({ include: { model: address } });
-            
-
-            let orderItemId
-
+    
+            let orderItemIds = [];     
             if (warehouses.length === 0) {
                 return res.status(404).send({ error: 'No warehouses found.' });
             }
-
             let nearestWarehouse = null;
             let shortestDistance = Infinity;
             warehouses.forEach((warehouse) => {
@@ -38,57 +36,58 @@ module.exports = {
                     nearestWarehouse = warehouse.id;
                 }
             });
-
+    
             if (!nearestWarehouse) {
                 return res.status(404).json({ error: 'Nearest warehouse not found.' });
             }
             const productQuantityToSubtract = new Map();
-
+    
             for (const item of findCartItem) {
                 const sproduct = await product.findByPk(item.productId);
-
+    
                 if (!sproduct) {
                     return res.status(404).send({ error: 'Product not found.' });
                 }
-
+    
                 const stockEntry = await stock.findOne({
                     where: {
                         productId: sproduct.id,
                         warehouseId: nearestWarehouse,
                     },
                 });
-
-
+    
                 const items = await orderItem.create({
                     productId: item.productId,
                     quantity: item.quantity
-                })
-
-                orderItemId = items.id
-
+                });
+    
+                orderItemIds.push(items.id);
+    
                 const currentQuantityToSubtract = productQuantityToSubtract.get(sproduct.id) || 0;
                 productQuantityToSubtract.set(sproduct.id, currentQuantityToSubtract + item.quantity);
             }
             const expireDate = new Date()
             expireDate.setDate(expireDate.getDate() + 1)
-            const response = await order.create({
-                userId:req.user.id,
-                totalPrice:findCart.totalPrice,
+            const response = await orders.create({
+                userId: req.user.id,
+                totalPrice: findCart.totalPrice,
                 shippingCost,
                 shippingMethod,
                 addressId,
                 cartId,
-                statusId:1,
+                statusId: 1,
                 warehouseId: nearestWarehouse,
-                expiredAt: expireDate
-            })
-
-            await orderItem.update({
-                orderId: response.id
-            },{
-                where: { id: orderItemId }
-            })
-
+                paymentExpiredAt: expireDate,
+            });
+    
+            
+            await orderItem.update(
+                { orderId: response.id },
+                {
+                    where: { id: orderItemIds }
+                }
+            );
+    
             for (const [productId, totalQuantity] of productQuantityToSubtract.entries()) {
                 const stockEntry = await stock.findOne({
                     where: {
@@ -96,23 +95,22 @@ module.exports = {
                         warehouseId: nearestWarehouse,
                     },
                 });
-
+    
                 if (stockEntry) {
                     stockEntry.quantity -= totalQuantity;
                     await stockEntry.save();
-
+    
                     const newJournal = await journal.create({
-                     description: "reduce",
-                     quantity: -totalQuantity,
-                     stockId: stockEntry.id,
-                     orderId: response.id
-                    })
+                        description: "reduce",
+                        quantity: -totalQuantity,
+                        stockId: stockEntry.id,
+                        orderId: response.id
+                    });
                 }
             }
-
+    
             const stockWarehouse = await stock.findAll({ where: { warehouseId: nearestWarehouse } });
-
-
+    
             const cartCheckout = await cart.update(
                 { isCheckOut: true },
                 {
@@ -121,110 +119,187 @@ module.exports = {
                     }
                 }
             );
-            
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const formattedDate = `${year}${month}${day}`;
+                        const inv = await orders.update({
+                invoice:`INV/${response.id}/${formattedDate}`
+            },{where:{id:response.id}})
             res.status(200).send({
                 response,
                 cartCheckout,
                 stockWarehouse,
                 status: true
             });
-
+    
         } catch (error) {
             console.error(error);
             res.status(500).send({ error: 'Internal server error.' });
         }
     },
-    userOrder: async(req,res)=>{
+    
+    userOrder: async (req, res) => {
         try {
-            const page = +req.query.page || 1;
-            const limit = +req.query.limit || 5;
-            const offset = (page - 1) * limit;
-            const statuses = req.query.statuses || '';
-            const sortDir = req.query.sortDir || 'asc';
-            const warehouseId = req.query.warehouseId
-            const shipping = req.query.shipping || ""
-        
-            const whereClause = {}
-        
-            if (statuses) {
-              whereClause.statusId = statuses;
-            }
-            if (warehouseId) {
-              whereClause.warehouseId= warehouseId;
-            }
-            if(shipping){
-                whereClause.shippingMethod = shipping
-            }
-            const order = [['createdAt', sortDir]];             
-            const result = await orders.findAll(
-                {
-                    include: [{
-                        model: orderItem, include:{model:product}
-                    },{model:status}, {model:warehouse}],
-                    offset,
-                    limit, 
-                    order,
-                    where: whereClause,
-                }
-            );
-            const total = await orders.count({
-                where:whereClause
-            })
-            res.status(200).send({
-                status: true,
-                message: 'all user order',
-                totalpage:Math.ceil(total/limit),
-                currentpage:page,
-                total_order:total,
-                result,
-            });
+          const page = +req.query.page || 1;
+          const limit = +req.query.limit || 10;
+          const offset = (page - 1) * limit;
+          const statuses = req.query.statuses || '';
+          const sortDir = req.query.sortDir || 'asc';
+          const warehouseId = req.query.warehouseId;
+          const shipping = req.query.shipping || '';
+          const dateFilter = req.query.dateFilter || ''; 
+          const search = req.query.search ||"" 
+      
+          const whereClause = {};
+      
+          if (statuses) {
+            whereClause.statusId = statuses;
+          }
+          if (warehouseId) {
+            whereClause.warehouseId = warehouseId;
+          }
+          if (shipping) {
+            whereClause.shippingMethod = shipping;
+          }
+          if (search) {
+            whereClause.invoice = {
+              [Sequelize.Op.like]: `%${search}%`,
+            };
+          }
+      
+          if (dateFilter === 'last7') {
+            const last7Days = new Date();
+            last7Days.setDate(last7Days.getDate() - 7);
+      
+            whereClause.createdAt = {
+              [Sequelize.Op.gte]: last7Days,
+            };
+          } else if (dateFilter === 'today') {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+      
+            whereClause.createdAt = {
+              [Sequelize.Op.gte]: today,
+              [Sequelize.Op.lte]: new Date()}
+          } else if (dateFilter === 'last30') {
+            const last30Days = new Date();
+            last30Days.setDate(last30Days.getDate() - 30);
+      
+            whereClause.createdAt = {
+              [Sequelize.Op.gte]: last30Days,
+            };
+          }
+          
+      
+          const order = [['createdAt', sortDir]];
+          const result = await orders.findAll({
+            include: [
+              {
+                model: orderItem,
+                include: { model: product },
+              },
+              { model: status },
+              { model: warehouse },
+            ],
+            offset,
+            limit,
+            order,
+            where: whereClause,
+          });
+      
+          const total = await orders.count({
+            where: whereClause,
+          });
+      
+          res.status(200).send({
+            status: true,
+            message: 'all user order',
+            totalpage: Math.ceil(total / limit),
+            currentpage: page,
+            total_order: total,
+            result,
+          });
         } catch (err) {
-            console.error(err);
-            res.status(400).send({
-                status: false,
-                message: err.message
-            });
+          console.error(err);
+          res.status(400).send({
+            status: false,
+            message: err.message,
+          });
         }
-    },
+      },
+      
     userWarehouseOrder: async(req,res)=>{
         try {
             const page = +req.query.page || 1;
-            const limit = +req.query.limit || 5;
+            const limit = +req.query.limit || 10;
             const offset = (page - 1) * limit;
             const statuses = req.query.statuses || '';
             const sortDir = req.query.sortDir || 'asc';
             const { id } = req.params;
             const shipping = req.query.shipping || ""
+            const dateFilter = req.query.dateFilter || ''; 
+            const search = req.query.search ||""
+
 
             const whereClause = {
                 warehouseId: id
             }
-        
+            if (search) {
+                whereClause.invoice = {
+                  [Sequelize.Op.like]: `%${search}%`,
+                };
+              }
+          
             if (statuses) {
               whereClause.statusId = statuses;
             }
             if(shipping){
                 whereClause.shippingMethod = shipping
             }
+            if (dateFilter === 'last7') {
+                const last7Days = new Date();
+                last7Days.setDate(last7Days.getDate() - 7);
+          
+                whereClause.createdAt = {
+                  [Sequelize.Op.gte]: last7Days,
+                };
+              } else if (dateFilter === 'today') {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+          
+                whereClause.createdAt = {
+                  [Sequelize.Op.gte]: today,
+                  [Sequelize.Op.lte]: new Date()}
+              }else if (dateFilter === 'last30') {
+                const last30Days = new Date();
+                last30Days.setDate(last30Days.getDate() - 30);
+          
+                whereClause.createdAt = {
+                  [Sequelize.Op.gte]: last30Days,
+                };
+              }
            
             const order = [['createdAt', sortDir]];             
-            const result = await orders.findAll(
-                {
-                    include: [{
-                        model: orderItem, include:{model:product}
-                    },{model:status}, {model:warehouse}],
-                    offset,
-                    limit, 
-                    order,
-                    where: whereClause,
-                }
-            );
-            const total = await orders.count( {
-                include: [{
-                    model: orderItem, include:{model:product}
-                },{model:status}, {model:warehouse}],
+            const result = await orders.findAll({
+                include: [
+                  {
+                    model: orderItem,
+                    include: { model: product },
+                  },
+                  { model: status },
+                  { model: warehouse },
+                ],
+                offset,
+                limit,
+                order,
                 where: whereClause,
-            })
+              });
+              const total = await orders.count({
+                where: whereClause,
+              });
+          
             res.status(200).send({
                 status: true,
                 message: 'all user order',
@@ -268,7 +343,7 @@ module.exports = {
                 where: { id: req.user.id }
             })
             if (!isUserExist) throw { message: "User not found!" }
-            const result = await order.findAll({
+            const result = await orders.findAll({
                 where: { userId: req.user.id },
                 attributes: { exclude: ['updatedAt'] },
                 include: [
@@ -280,7 +355,7 @@ module.exports = {
                 offset,
                 sort
             })
-            const total = await order.count({ where: { userId: req.user.id }})
+            const total = await orders.count({ where: { userId: req.user.id }})
             
             res.status(200).send({
                 totalpage: Math.ceil(total / limit),
@@ -302,11 +377,11 @@ module.exports = {
             console.log(paymentImg);
             const { id } = req.params
 
-            const isOrderExist = await order.findOne({ where: { id } })
+            const isOrderExist = await orders.findOne({ where: { id } })
             if (!isOrderExist) throw { message: "Order not found!" }
             if (isOrderExist.userId !== req.user.id) throw { message: "Invalid account" }
             if (isOrderExist.paymentProof) throw { message: "Order already paid" }
-            const result = await order.update({ paymentProof: paymentImg, statusId: 2 }, {
+            const result = await orders.update({ paymentProof: paymentImg, statusId: 2 }, {
                 where: { id, userId: req.user.id }
             })
             res.status(200).send({
@@ -323,7 +398,7 @@ module.exports = {
     cancelOrder: async (req, res) => {
         try {
             const { id } = req.params
-            const isOrderExist = await order.findOne({ where: { id }})
+            const isOrderExist = await orders.findOne({ where: { id }})
             if (!isOrderExist) throw { message: "Order not found!" }
             if (isOrderExist.userId !== req.user.id) throw { message: "Invalid account" }
             if (isOrderExist.paymentProof) throw { message: "Cannot cancel your order" }
@@ -365,7 +440,7 @@ module.exports = {
     confirmOrder: async (req, res) => {
         try {
             const { id } = req.params
-            const isOrderExist = await order.findOne({ where: { id }})
+            const isOrderExist = await orders.findOne({ where: { id }})
             if (!isOrderExist) throw { message: "Order not found!" }
             if (isOrderExist.userId !== req.user.id) throw { message: "Invalid account" }
             if (isOrderExist.statusId < 4) throw { message: "Your order still in process"}

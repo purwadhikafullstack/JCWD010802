@@ -32,7 +32,7 @@ export const CartView = () => {
     }, [reload]);
 
     return (
-        <Box pt={20} minH={"100vh"} px={{ base: "20px", lg: "50px" }} maxW="100vw">
+        <Box pt={20} minH={"100vh"} px={{ base: "20px", lg: "50px" }} maxW="100vw" >
             <Flex justifyContent={"center"} py={10} direction={{ base: "column", md: "row" }} gap={5}>
                 <CartItem cart={cart} reload={reload} setReload={setReload} />
                 <CartCheckout cart={cart} total={total} cartId={cartId} />

@@ -15,16 +15,17 @@ function App() {
 
 
   const keepLogin = async () => {
-    if (token) {
-      const response = await axios.get("http://localhost:8000/api/auth/keeplogin", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      console.log(response);
-      dispatch(setValue(response.data.result))
-    } else {
-      
+    try {
+      if (token) {
+        const response = await axios.get("http://localhost:8000/api/auth/keeplogin", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        dispatch(setValue(response.data.result))
+      } 
+    } catch (error) {
+      console.log(error);
     }
   }
   const userCart = async()=>{
@@ -53,6 +54,6 @@ function App() {
       <RouterProvider router={router} />
     </div>
   );
-}
 
+}
 export default App;

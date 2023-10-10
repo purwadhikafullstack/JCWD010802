@@ -18,7 +18,6 @@ export const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const toast = useToast();
-
   const onLogOut = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("warehouseId");
@@ -35,7 +34,7 @@ export const Navbar = () => {
     });
     setTimeout(() => {
       navigate("/login");
-    }, 1500);
+    }, 1000);
   };
   const handleSort = (selectedSort) => {
     if (selectedSort === search) {
