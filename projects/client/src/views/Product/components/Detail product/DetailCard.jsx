@@ -17,7 +17,7 @@ import axios from "../../../../api/axios";
 export const DetailCard = () => {
   const { id } = useParams();
   const [detail, setDetail] = useState([]);
-  const [stock, setStock] = useState([])
+  const [stock, setStock] = useState([]);
   const [wish, setWish] = useState(false);
   const profile = useSelector(state=>state.user.value)
   const getDetail = async () => {
@@ -41,7 +41,7 @@ export const DetailCard = () => {
 
   useEffect(() => {
     getDetail();
-    getStock()
+    getStock();
   }, []);
 
   return (
@@ -49,18 +49,21 @@ export const DetailCard = () => {
       minH={"100vh"}
       mb={3}
       pt={"70px"}
-      direction={{ base: "column", md: "row" }} 
+      direction={{ base: "column", md: "row" }}
     >
       <Flex
-        w={{ base: "100%", md: "50%" }} 
-        justifyContent={{ base: "center", md: "end" }} 
-        p={{ base: "20px", md: "40px" }} 
+        w={{ base: "100%", md: "50%" }}
+        justifyContent={{ base: "center" }}
+        m={{ base: "20px", md: "40px" }}
       >
-        <Flex w={"full"}>
+        <Flex>
           <Image
             src={`http://localhost:8000/productImg/${detail.productImg}`}
             borderRadius={"10px"}
             shadow={"md"}
+            w={"500px"}
+            h={"500px"}
+            objectFit={"cover"}
           />
         </Flex>
       </Flex>
@@ -102,7 +105,6 @@ export const DetailCard = () => {
                 {formatIDR(detail.price)}
               </Text>
             </Flex>
-           
           </Stack>
         </Stack>
         {profile.roleId===2 ||profile.roleId===3?(

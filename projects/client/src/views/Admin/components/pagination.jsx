@@ -21,7 +21,7 @@ export const PaginationAddress = ({ totalpage }) => {
   function handlePage(newPage) {
     if (newPage >= 1 && newPage <= totalpage) {
       params.set("page", newPage);
-      navigate(`?search=${search}&sort=${sort}&page=${newPage}&roleId=${roleId}&warehouseId=${warehouseId}&filterStatus=${status}&sortDirection=${sortDir}&productName=${productName}&shipping=${shipping}`);
+      navigate(`?search=${search}&sort=${sort}&page=${newPage}&roleId=${roleId}&warehouseId=${warehouseId}&filterStatus=${status}&sortDirection=${sortDir}&productName=${productName}&shipping=${shipping}&monthly=${monthly}&page=${newPage}`);
     }
   }
   return (

@@ -7,16 +7,23 @@ export const Sorting = () => {
   const params = new URLSearchParams(location.search);
   const search = params.get("search") || "";
   const sort = params.get("sort") || "";
+  const category = params.get("category") || "";
+  const minPrice = params.get("minPrice") || "";
+  const maxPrice = params.get("maxPrice") || "";
+  const currentPage = Number(params.get("page")) || 1;
   const navigate = useNavigate();
 
   const handleSort = (selectedSort) => {
-    navigate(`?search=${search}&sort=${selectedSort}`);
+    navigate(
+      `?search=${search}&sort=${selectedSort}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&page=${currentPage}`
+    );
   };
 
   return (
     <Select
       placeholder="Select option"
       defaultValue={sort}
+      value={sort}
       onChange={(e) => handleSort(e.target.value)}
       variant="filled"
     >

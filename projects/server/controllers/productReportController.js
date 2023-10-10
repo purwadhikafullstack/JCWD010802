@@ -115,7 +115,6 @@ module.exports = {
             });
         }
     },
-
     getReportProduct: async (req, res) => {
         try {
             const page = +req.query.page || 1;
@@ -124,7 +123,9 @@ module.exports = {
             const sort = req.query.sort || "desc";
             const search = req.query.search || "";
             const warehouseId = +req.query.warehouseId || null;
-            const monthly = req.query.monthly || null;
+            const today = new Date();
+            const defaultMonthly = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}`;
+            const monthly = req.query.monthly || defaultMonthly;
 
             const productName = {
                 name: {

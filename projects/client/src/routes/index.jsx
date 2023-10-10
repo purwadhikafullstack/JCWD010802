@@ -36,6 +36,8 @@ import useLoginAuthentication from "../views/Error/components/privateRoutelogin"
 import useProfileAuthentication from "../views/Error/components/privateProfileRoute";
 import useIdValidation from "../views/Error/components/privateProductRoute";
 import { ProductNotFound } from "../views/Error/components/productNotFound";
+import { ProductReport } from "../views/Admin/ProductReport";
+import { SalesReportView } from "../views/Admin/SalesReport";
 
 
 const AdminGuardedRoute = ({ element }) => {
@@ -131,6 +133,10 @@ const Routes = (
       <Route path="mutation" element={<Mutation />} />
       <Route path="order" element={<Order />} />
       <Route path="order/detail-order/:id" element={<OrderDetailView />} />
+      <Route path="product-report" element={<ProductReport />} />
+      <Route path="sales-report" element={<SalesReportView />} />
+
+
     </Route>
     <Route path="*" element={<NotFound/>}/>
   </>
