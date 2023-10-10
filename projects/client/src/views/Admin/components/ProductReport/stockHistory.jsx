@@ -35,7 +35,6 @@ export const StockHistory = () => {
   const monthly = params.get("monthly") || "";
   const currentPage = Number(params.get("page")) || 1;
   const user = useSelector((state) => state.user.value);
-
   const getStockHistory = async () => {
     try {
       const response = await axios.get(
@@ -46,7 +45,6 @@ export const StockHistory = () => {
       );
       setHistory(response.data.result);
       setPage(response.data.totalpage);
-      console.log(response.data.result);
     } catch (error) {
       console.log(error);
     }

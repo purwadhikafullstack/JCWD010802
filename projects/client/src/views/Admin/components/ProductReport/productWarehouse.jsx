@@ -46,7 +46,6 @@ export const ProductWarehouse = () => {
       );
       setHistory(response.data.groupedResults);
       setPage(response.data.totalpage);
-      console.log(response.data.groupedResults);
     } catch (error) {
       console.log(error);
     }

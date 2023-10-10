@@ -131,7 +131,6 @@ module.exports = {
             const today = new Date();
             const defaultMonthly = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}`;
             const monthly = req.query.monthly || defaultMonthly;
-    
             const productName = {
                 name: {
                     [Sequelize.Op.like]: `%${search}%`,
@@ -186,8 +185,8 @@ module.exports = {
                                 },
                             },
                             {
-                                model: warehouse, // Include the warehouse model
-                                attributes: ['id', 'name'], // Adjust the attributes as needed
+                                model: warehouse,
+                                attributes: ['id', 'name'], 
                             },
                         ],
                     },
@@ -218,8 +217,8 @@ module.exports = {
                                 },
                             },
                             {
-                                model: warehouse, // Include the warehouse model
-                                attributes: ['id', 'name'], // Adjust the attributes as needed
+                                model: warehouse, 
+                                attributes: ['id', 'name'], 
                             },
                         ],
                     },

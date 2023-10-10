@@ -6,7 +6,6 @@ export const ChartReport = ({ chart }) => {
   if (!chart || chart.length === 0) {
     return <div>No data available.</div>;
   }
-
   const dateParam = chart[0].orderDate;
 
   const currentDate = new Date(dateParam || new Date()); 
@@ -27,13 +26,11 @@ export const ChartReport = ({ chart }) => {
     labels.push(currentDateIter.toISOString().split("T")[0]); 
     currentDateIter.setDate(currentDateIter.getDate() + 1); 
   }
-
   const productNames = [
     ...new Set(
       chart.flatMap((data) => data.products.map((product) => product.name))
     ),
   ];
-
   const dataByDate = {};
   chart.forEach((data) => {
     const dateStr = data.orderDate;
@@ -42,7 +39,6 @@ export const ChartReport = ({ chart }) => {
       dataByDate[dateStr][product.name] = product.price;
     });
   });
-
   labels.forEach((date) => {
     if (!dataByDate[date]) {
       dataByDate[date] = {};
@@ -51,7 +47,6 @@ export const ChartReport = ({ chart }) => {
       });
     }
   });
-
   const productsData = productNames.map((productName) => {
     return {
       label: productName,
