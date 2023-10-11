@@ -29,21 +29,41 @@ module.exports = {
             const page = +req.query.page || 1; 
             const limit = +req.query.limit || 5; 
             const roleId = +req.query.roleId || ""
-    
+            const search = req.query.search ||""
+            const sort = req.query.sort || "asc";
+
             const condition = {
                 isDeleted: false
             };
-    
+            let order = [];
+            if (sort === "A-Z") {
+                order.push(["name", "ASC"]);
+            } else if (sort === "Z-A") {
+                order.push(["name", "DESC"]);
+            } else if (sort === "newest") {
+                order.push(["createdAt", "DESC"]);
+            } else if (sort === "oldest") {
+                order.push(["createdAt", "ASC"]);
+            }
             if (roleId) {
                 condition.roleId = roleId;
             }
-    
+            if (search) {
+                condition[Op.or] = [
+                    {
+                        name: {
+                            [Op.like]: `%${search}%`,
+                        },  
+                    },
+                ];
+            }
             const offset = (page - 1) * limit;
             const total = await user.count({ where: condition });
             const result = await user.findAll({
                 limit: limit,
                 offset: offset,
-                where: condition
+                where: condition,
+                order
             });
             res.status(200).send({
                 status: true,

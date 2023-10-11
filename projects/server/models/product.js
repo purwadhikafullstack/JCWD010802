@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const wishlist = require('./wishlist');
 module.exports = (sequelize, DataTypes) => {
   class product extends Model {
     /**
@@ -14,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       product.belongsTo(models.category)
       product.hasMany(models.stock)
       product.hasOne(models.orderItem)
+      product.hasOne(models.wishlist)
     }
   }
   product.init({

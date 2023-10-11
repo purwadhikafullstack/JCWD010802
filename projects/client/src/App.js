@@ -16,6 +16,7 @@ function App() {
   const headers = headersGen(token)
 
   const keepLogin = async () => {
+
     if (token) {
       const response = await axios.get("/auth/keeplogin", { headers })
       console.log(response);
@@ -26,7 +27,7 @@ function App() {
   }
   const userCart = async()=>{
     try {
-      const response = await axios.get(`http://localhost:8000/api/cart`, {
+      const response = await axios.get(`/cart`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -50,6 +51,6 @@ function App() {
       <RouterProvider router={router} />
     </div>
   );
-}
 
+}
 export default App;

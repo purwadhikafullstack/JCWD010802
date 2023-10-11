@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     shippingCost: DataTypes.INTEGER,
     paymentExpiredAt: DataTypes.DATE,
     completeExpiredAt: DataTypes.DATE,
+    invoice: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'order',

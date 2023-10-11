@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {Button,Flex,Box,Heading,Text,VStack,Card,Image, Select,} from "@chakra-ui/react";
+import {Button,Flex,Box,Heading,Text,VStack,Card,Image, Select, HStack, Input,InputGroup,InputLeftElement,Icon,Stack,} from "@chakra-ui/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AdminMenu } from "./adminMenu";
@@ -8,6 +8,7 @@ import { PaginationAddress } from "../pagination";
 import { useLocation, useNavigate } from "react-router-dom";
 import { DeleteUserModal } from "./deleteAdmin";
 import { AdminEditForm } from "./editAdmin";
+import { BsSearch } from "react-icons/bs";
 import axios from "../../../../api/axios";
 
 export const ListAdmin = () => {
@@ -31,7 +32,7 @@ export const ListAdmin = () => {
   const defaultAvatar = "https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png"
   const getAdmin = async () => {
     try {
-      const response = await axios.get(`/admin/profile?&page=${currentPage}&warehouseId=${warehouseId}`);
+      const response = await axios.get(`/admin/profile?search=${search}&page=${currentPage}&warehouseId=${warehouseId}`);
       setAdmin(response.data.result);
       setPage(response.data.totalPage);
     } catch (error) {
@@ -52,9 +53,13 @@ export const ListAdmin = () => {
           : adminItem)
     );
     setIsModalOpen(false);};
+
      const handleWarehouseChange = (e) => {
-      navigate(`?warehouseId=${e.target.value}`)
+      navigate(`?warehouseId=${e.target.value}&search=${search}`)
   };
+  const handleSearch = (result) => {
+    navigate(`?search=${result.target.value}&warehouseId=${warehouseId}`);
+}
   const handleDeleteUser = async () => {
     try {
       if (!adminToDelete) {
@@ -112,42 +117,65 @@ export const ListAdmin = () => {
     getAdmin();
     getWarehouse();
     getProfile();
-  }, [currentPage, warehouseId]);
+  }, [currentPage, warehouseId,search]);
   return (
-    <VStack spacing={4} alignItems="stretch">
-      <ToastContainer />
-      <Text>Filter by Warehouse:</Text>
+    <>
+    
+    <ToastContainer />
+      <HStack px={5} >
+      <InputGroup>
+            <Input
+                variant="outline"
+                placeholder="Search"
+                _placeholder={{ color: "black" }}
+                defaultValue={search}
+                type={"search"}
+                color={"black"}
+                onChange={handleSearch}
+                borderColor={"2px solid black"}
+                w="40%"
+            />
+            <InputLeftElement>
+                <Icon as={BsSearch} color={"gray.500"} />
+            </InputLeftElement>
+        </InputGroup>
       <Select
         id="warehouseSelect"
+        placeholder="Warehouse"
         value={warehouseId}
+        borderColor={"2px solid black"}
         onChange={handleWarehouseChange}
         maxWidth="200px">
-        <option value="">Select a warehouse</option>
+        <option value="">All warehouses</option>
         {warehouse.map((warehouse) => (
           <option key={warehouse.id} value={warehouse.id}>
             {warehouse.name}
           </option>
         ))}
       </Select>
+      </HStack>
+        <Stack py={6}  gap={4} mx={3} >
       {admin?.map((item, index) => (
-              <Card
-              key={item.id}
-              p={4} width={["100%", "100%", "100%", "100%"]} shadow="md" borderWidth="1px" mx={"auto"} position="relative" display="flex" flexDirection="column">
+        <Card
+        key={item.id}
+        p={4} width={["100%", "100%", "100%", "100%"]} shadow="md"  mx={"auto"} position="relative" display="flex" flexDirection="column">
               <Flex alignItems="center">
-              {item.profileImg ? (
-      <Image
-        objectFit="cover"
-        src={`http://localhost:8000/profileImg/${item.profileImg}`}
-        alt="profile image"
+              {item.user.profileImg ? (
+                <Image
+                objectFit="cover"
+                borderRadius={"10px"} 
+                src={`http://localhost:8000/profileImg/${item.user.profileImg}`}
+                alt="profile image"
         boxSize="100px"
-      />
-    ) : (
-      <Image
-        objectFit="cover"
-        src={defaultAvatar}
-        alt="default avatar"
+        aspectRatio={1}
+        />
+        ) : (
+          <Image
+          objectFit="cover"
+          src={defaultAvatar}
+          alt="default avatar"
         boxSize="100px"
-      />
+        />
     )}
                 <Box ml={4}>
                   <Heading as="h2" size="md">
@@ -189,7 +217,8 @@ export const ListAdmin = () => {
           </Button>
         </Flex>
             </Card>
-      ))}
+        ))}
+        </Stack>
       <UserProfileModal
         user={selectedUser}
         profile={profile}
@@ -201,8 +230,8 @@ export const ListAdmin = () => {
         onClose={() => {
           setIsModalOpenDel(false);
           setAdminToDelete(null); }}
-        onDelete={handleDeleteUser}/>
+          onDelete={handleDeleteUser}/>
       <PaginationAddress totalpage={page} />
-    </VStack>
+          </>
   );
 };
