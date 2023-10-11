@@ -1,4 +1,10 @@
-import { Navigate, Route, createRoutesFromElements, useLocation, useParams } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  createRoutesFromElements,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 import { Homepage } from "../pages/Home";
 import { Register } from "../pages/Register";
 import { Login } from "../pages/Login";
@@ -24,13 +30,13 @@ import ManualStockMutationForm from "../views/Admin/components/Mutation/stockMut
 import { MutationView } from "../views/Admin/Mutation";
 import { Mutation } from "../pages/Mutation";
 import { Order } from "../pages/Order";
-import {Dashboard} from "../views/Admin/Dashboard";
+import { Dashboard } from "../views/Admin/Dashboard";
 import { OrderDetailView } from "../views/Admin/components/Order/OrderDetail";
 import useAdminAuthentication from "../views/Error/components/privateRouteAdmin";
 import useUserAuthentication from "../views/Error/components/privateRouteUser";
 import { NotFound } from "../pages/Error";
 import { toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import useLoginAuthentication from "../views/Error/components/privateRoutelogin";
 import useProfileAuthentication from "../views/Error/components/privateProfileRoute";
 import useIdValidation from "../views/Error/components/privateProductRoute";
@@ -39,25 +45,22 @@ import { Wishlist } from "../pages/Wishlist";
 import { ProductReport } from "../views/Admin/ProductReport";
 import { SalesReportView } from "../views/Admin/SalesReport";
 
-
 const UserGuardedRoute = ({ element }) => {
-  const isUserAuthenticated = useUserAuthentication(); 
+  const isUserAuthenticated = useUserAuthentication();
 
   if (isUserAuthenticated()) {
     return element;
   } else {
-    return <NotFound/>; 
+    return <NotFound />;
   }
 };
 const ProfileGuardedRoute = ({ element }) => {
-  const isProfileAuthenticated = useProfileAuthentication(); 
+  const isProfileAuthenticated = useProfileAuthentication();
 
   if (isProfileAuthenticated()) {
     return element;
   } else {
-    
-
-    return <NotFound/>; 
+    return <NotFound />;
   }
 };
 const ProductDetailGuardedRoute = ({ element }) => {
@@ -65,10 +68,9 @@ const ProductDetailGuardedRoute = ({ element }) => {
   const product = useIdValidation(id);
 
   if (product === null) {
-    return <ProductNotFound />; 
+    return <ProductNotFound />;
   }
 
-  
   return element;
 };
 const LoginGuardedRoute = ({ element }) => {
@@ -76,7 +78,7 @@ const LoginGuardedRoute = ({ element }) => {
   const isUser = useUserAuthentication();
 
   if (isLoginAuthenticated()) {
-    if (isUser()) { 
+    if (isUser()) {
       return <Navigate to="/" />;
     } else {
       return <Navigate to="/admin" />;
@@ -86,28 +88,48 @@ const LoginGuardedRoute = ({ element }) => {
   }
 };
 
-
 const Routes = (
   <>
     <Route path="/" element={<Homepage />}>
       <Route path="" element={<HomepageView />} />
-      <Route path="profile" element={<ProfileGuardedRoute element={<ProfileView />}/>} />
-      <Route path="cart" element={<UserGuardedRoute element={<Cart />}/>} />
-      <Route path="wishlist" element={<UserGuardedRoute element={<Wishlist />}/>} />
+      <Route
+        path="profile"
+        element={<ProfileGuardedRoute element={<ProfileView />} />}
+      />
+      <Route path="cart" element={<UserGuardedRoute element={<Cart />} />} />
+      <Route
+        path="wishlist"
+        element={<UserGuardedRoute element={<Wishlist />} />}
+      />
       <Route path="/" element={<Product />}>
         <Route path="product" element={<AllProduct />} />
       </Route>
-      <Route path="/product/:id" element={<ProductDetailGuardedRoute element={<DetailProduct />}/>} />
+      <Route
+        path="/product/:id"
+        element={<ProductDetailGuardedRoute element={<DetailProduct />} />}
+      />
     </Route>
-    <Route path="/login" element={<LoginGuardedRoute element={<Login />}/>} />
-    <Route path="/register" element={<LoginGuardedRoute element={<Register />}/>} />
+    <Route path="/login" element={<LoginGuardedRoute element={<Login />} />} />
+    <Route
+      path="/register"
+      element={<LoginGuardedRoute element={<Register />} />}
+    />
     <Route path="/verified/:token" element={<Verified />} />
-    <Route path="/onboard" element={<LoginGuardedRoute element={<Onboarding />}/>} />
-    <Route path="/forgot-password" element={<LoginGuardedRoute element={<ForgotPass />}/>} />
+    <Route
+      path="/onboard"
+      element={<LoginGuardedRoute element={<Onboarding />} />}
+    />
+    <Route
+      path="/forgot-password"
+      element={<LoginGuardedRoute element={<ForgotPass />} />}
+    />
     <Route path="/reset-password/:token" element={<ResetPass />} />
-    <Route path="/checkout" element={<UserGuardedRoute element={<Checkout />}/>} />
+    <Route
+      path="/checkout"
+      element={<UserGuardedRoute element={<Checkout />} />}
+    />
 
-    <Route path="/admin"element={<Admin />} >
+    <Route path="/admin" element={<Admin />}>
       <Route path="" element={<Dashboard />} />
       <Route path="list-user" element={<UserCard />} />
       <Route path="list-admin" element={<WarehouseAdmin />} />
@@ -124,10 +146,8 @@ const Routes = (
       <Route path="order/detail-order/:id" element={<OrderDetailView />} />
       <Route path="product-report" element={<ProductReport />} />
       <Route path="sales-report" element={<SalesReportView />} />
-
-
     </Route>
-    <Route path="*" element={<NotFound/>}/>
+    <Route path="*" element={<NotFound />} />
   </>
 );
 export const routes = createRoutesFromElements(Routes);

@@ -1,9 +1,9 @@
-import { CartCheckout } from "./components/CardCheckout"
+import { CardCheckout } from "./components/CardCheckout"
 
 export const CheckoutView = () => {
     return(
         <>
-        <CartCheckout/>
+        <CardCheckout/>
         </>
     )
 }

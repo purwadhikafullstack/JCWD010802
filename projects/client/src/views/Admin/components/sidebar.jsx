@@ -180,7 +180,7 @@ export const Sidebar = () => {
           <NavItem icon={BiSolidCategoryAlt} to="/admin/list-category">
             Category
           </NavItem>
-          </Navlink>
+          </NavLink>
           <NavLink to="product-list">
             <NavItem icon={AiFillGift} to="/admin/product-list">
               Products
@@ -226,7 +226,7 @@ export const Sidebar = () => {
             <NavItem to="/admin/sales-report" icon={FaChartLine}>
               Sales report
             </NavItem>
-            </Navlink>
+            </NavLink>
       </Flex>
     </Box>
   );
