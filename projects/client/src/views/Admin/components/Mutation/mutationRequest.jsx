@@ -4,8 +4,8 @@ import { Reject } from './rejectButton';
 
 export const IncomingRequests = ({data,reload,setReload}) => {
     return(
-    <Box p={4}>
-      <Heading  fontSize="xl" mb={4}>
+        <Box p={4}>
+      <Heading   mb={4}>
         Incoming Request
       </Heading>
       {data.length === 0 ?(
