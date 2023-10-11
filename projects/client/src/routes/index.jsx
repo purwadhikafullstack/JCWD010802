@@ -67,7 +67,7 @@ const ProfileGuardedRoute = ({ element }) => {
   } else {
     
 
-    return <NotFound/>; 
+    return <Navigate to="/login" replace/>; 
   }
 };
 const ProductDetailGuardedRoute = ({ element }) => {

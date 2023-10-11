@@ -1,117 +1,100 @@
-import {
-  Flex,
-  Heading,
-  Image,
-  Stack,
-  StackDivider,
-  Text,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { AddToCart } from "../addToCart";
-import { useSelector } from "react-redux";
-import formatIDR from "../../../../helpers/formatIDR";
-import axios from "../../../../api/axios";
+import axios from "../../../../api/axios"
+import formatIDR from "../../../../helpers/formatIDR"
+import { useEffect, useState } from "react"
+import { useSelector } from "react-redux"
+import { Link, useParams } from "react-router-dom"
+import { Box, Divider, Flex, Heading, Image, Text } from "@chakra-ui/react"
+import { AddToCart } from "../addToCart"
+import { AddToCartMobile } from "../AddToChartMobile"
+
 
 export const DetailCard = () => {
-  const { id } = useParams();
-  const [detail, setDetail] = useState([]);
-  const [stock, setStock] = useState([]);
-  const [wish, setWish] = useState(false);
-  const profile = useSelector(state=>state.user.value)
-  const getDetail = async () => {
-    try {
-      const response = await axios.get(`/product/${id}`);
-      setDetail(response.data.result);
-    } catch (error) {
-      console.log(error);
+    const { id } = useParams()
+    const [detail, setDetail] = useState([])
+    const [stock, setStock] = useState([])
+    const profile = useSelector((state) => state.user.value)
+
+    const getDetail = async () => {
+        try {
+            const response = await axios.get(`/product/${id}`)
+            console.log(response.data.result);
+            setDetail(response.data.result)
+        } catch (error) {
+            console.log(error);
+        }
     }
-  };
-  const getStock = async () => {
-    try {
-      const response = await axios.get(`/stock/product/${id}`);
-      setStock(response.data.result);
-    } catch (error) {
-      console.log(error);
+    const getStock = async () => {
+        try {
+            const response = await axios.get(`/stock/product/${id}`)
+            setStock(response.data.result)
+        } catch (error) {
+            console.log(error);
+        }
     }
-  };
 
-  useEffect(() => {
-    getDetail();
-    getStock();
-  }, []);
+    const getStockColor = () => {
+        if (stock < 5) {
+          return 'red'; 
+        } else if (stock < 10) {
+          return 'orange'; 
+        } else {
+          return 'green'; 
+        }
+    };
+    
+    const stockColor = getStockColor();
+    
+    useEffect(() => {
+        getDetail()
+        getStock()
+    },[])
 
-  return (
-    <Flex
-      minH={"100vh"}
-      mb={3}
-      pt={"70px"}
-      direction={{ base: "column", md: "row" }}
-    >
-      <Flex
-        w={{ base: "100%", md: "50%" }}
-        justifyContent={{ base: "center" }}
-        m={{ base: "20px", md: "40px" }}
-      >
-        <Flex>
-          <Image
-            src={`http://localhost:8000/productImg/${detail.productImg}`}
-            borderRadius={"10px"}
-            shadow={"md"}
-            w={"500px"}
-            h={"500px"}
-            objectFit={"cover"}
-          />
-        </Flex>
-      </Flex>
-
-      <Flex
-        direction={{base:"column", lg:"row"}}
-        w={{ base: "100%", md: "50%" }} 
-        pt={{ base: "20px", md: "60px" }} 
-        // pl={{ base: "20px", md: "0" }} 
-      >
-
-        <Stack spacing={4}  pl={{ base: "20px", md: "0" }} >
-          <Heading fontSize={"5xl"}>{detail.name}</Heading>
-          <Text color={"gray.500"} fontSize={"xl"}>
-            Description :
-          </Text>
-          <Text color={"black"} fontSize={"lg"}>
-            {detail.description}
-          </Text>
-          <Text color={"gray.500"} fontSize={"xl"}>
-            Weight :
-          </Text>
-          <Text color={"black"} fontSize={"lg"}>
-            {detail.weight} Kg
-          </Text>
-          <Stack
-            spacing={4}
-            divider={
-              <StackDivider
-                borderColor={useColorModeValue("gray.100", "gray.700")}
-              />
-            }
-          >
-            <Flex alignItems="center">
-              <Text color={"gray.500"} fontSize={"xl"}>
-                Price :
-              </Text>
-              <Text fontWeight={600} fontSize={"xl"} p={2}>
-                {formatIDR(detail.price)}
-              </Text>
+    return (
+        <Flex minH="100vh" mb={3} p="120px 30px" justify="center" gap={10}
+        direction={{ base: "column", lg: "row"}}>
+            <Flex borderRadius="10px" shadow={{ base: "none", lg: "md"}} w={{ base: "full", lg: "300px"}} p={1} justify="center">
+                <Image src={`http://localhost:8000/productImg/${detail.productImg}`}
+                 objectFit="cover"/>
             </Flex>
-          </Stack>
-        </Stack>
-        {profile.roleId===2 ||profile.roleId===3?(
-          null
-          ):(
-            <AddToCart detail={detail} stock={stock}/>
-            
-        )}
-      </Flex>
-    </Flex>
-  );
-};
+            <Flex direction="column" maxW={{ base: "full", lg: "25%"}} gap={5} color="black">
+                <Flex direction={{ base: "column-reverse", lg: "column"}} gap={2}>
+                    <Flex gap={1} display={{ base: "flex", lg: "none"}}>
+                        <Text>Stock:</Text>
+                        <Text fontWeight={"bold"} color={stockColor}> {stock}</Text>
+                    </Flex>
+                    <Heading fontSize="22px">{detail?.name}</Heading>
+                    <Heading fontSize="25px">{formatIDR(detail?.price)}</Heading>
+                </Flex>
+                <Divider borderWidth={1} />
+                <Box>
+                    <Flex gap={1}>
+                        <Text color="gray.500">Condition:</Text>
+                        <Text>New</Text>
+                    </Flex>
+                    <Flex gap={1}>
+                        <Text color="gray.500">Min Purchase:</Text>
+                        <Text>1</Text>
+                    </Flex>
+                    <Flex gap={1}>
+                        <Text color="gray.500">Category:</Text>
+                        <Text as={Link} to={`/product?search=&sort=&category=${detail?.category?.id}`} fontWeight="bold" color="green">{detail?.category?.name}</Text>
+                    </Flex>
+                </Box>
+                <Box>
+                    <Text>Description:</Text>
+                    <Text mt="5px">{detail?.description}</Text>
+                </Box>
+            </Flex>
+            {profile.roleId===2 || profile.roleId===3 ? null :
+            <>
+            <Flex display={{ base: "none", lg: "flex"}}>
+                <AddToCart detail={detail} stock={stock} />
+            </Flex>
+            <Flex ml="-30px" display={{ base: "flex", lg: "none"}}>
+                <AddToCartMobile detail={detail} stock={stock} />
+            </Flex>
+            </>
+            }
+        </Flex>
+    )
+}

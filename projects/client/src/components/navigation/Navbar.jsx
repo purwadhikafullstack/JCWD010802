@@ -92,10 +92,15 @@ export const Navbar = () => {
         />
       </InputGroup>
       <Flex gap={3} align="center" display={{ base: "none", lg: "flex" }}>
+        {data?.roleId === 2 || data?.roleId === 3 ? null :
         <NavLink to={"cart"}>
           <CartNotif/>
         </NavLink>
+        }
+        {data?.roleId === 2 || data?.roleId === 3 ? null :
         <Text>|</Text>
+        }
+        
         {!data.name ? (
           <Flex align="center">
             <Button
@@ -119,10 +124,12 @@ export const Navbar = () => {
           </Flex>
         ) : (
           <Flex align="center" justifyContent="center" gap={3}>
+            {data?.roleId === 2 || data?.roleId === 3 ? null :
             <NavLink to="wishlist">
               <WishlistNav />
             </NavLink>
-            {data.roleId === 1?
+            }
+            {data?.roleId === 1?
             <Menu>
               <MenuButton as={Button} variant="ghost" _active={{ bg: "#517664"}} mr="10px">
                 <Avatar size="sm" />

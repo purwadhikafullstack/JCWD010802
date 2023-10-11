@@ -14,12 +14,13 @@ import {
 import formatIDR from '../../../helpers/formatIDR';
 import { Counter } from './counter';
 import { CartFooter } from './cartFooter';
-import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from 'react-router-dom';
 import { setCart } from '../../../redux/cartSlice';
 import { setPrice } from '../../../redux/totalPrice';
+import headersGen from '../../../api/headers';
+import axios from '../../../api/axios';
 
 export const AddToCart = ({ detail, stock }) => {
   const [count, setCount] = useState(0);
@@ -47,24 +48,17 @@ export const AddToCart = ({ detail, stock }) => {
   const data = useSelector((state) => state.user.value);
   const currentURL = window.location.href;
   const token = localStorage.getItem("token")
+  const headers = headersGen(token)
 
   const handleAddToCart = async () => {
     try {
       if(data.isVerified){
 
-        const response = await axios.post(`http://localhost:8000/api/cart/${detail.id}`,
+        const response = await axios.post(`/cart/${detail.id}`,
         { quantity: count },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers }
         );
-        const cartResponse = await axios.get(`http://localhost:8000/api/cart`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const cartResponse = await axios.get(`/cart`, { headers });
         setReload(!reload);
         dispatch(setCart(cartResponse.data.result))
         dispatch(setPrice(cartResponse.data.Cart.totalPrice))
@@ -103,8 +97,6 @@ export const AddToCart = ({ detail, stock }) => {
   return (
     <>
       <Box
-        mt={4}
-        mx={"auto"}
         borderWidth="1px"
         borderRadius="lg"
         overflow="hidden"
@@ -121,7 +113,7 @@ export const AddToCart = ({ detail, stock }) => {
         <Flex mt={2} justifyContent={"space-between"}>
           <Counter onCountChange={handleCountChange} stock={stock} />
           <Flex >
-            <Text>Total Stock:</Text>
+            <Text>Stock:</Text>
             <Text fontWeight={"bold"} color={stockColor} ml={1}> {stock}</Text>
           </Flex>
         </Flex>
