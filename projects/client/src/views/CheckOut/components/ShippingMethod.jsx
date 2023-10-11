@@ -94,7 +94,7 @@ export const ShippingMethod = ({ selectedAddress, totalWeight }) => {
         value={selectedCourier}
         onChange={handleCourierChange}
         variant='filled'
-        maxW={"27%"}
+        maxW={"40%"}
       >
         <option value="jne">JNE</option>
         <option value="tiki">TIKI</option>

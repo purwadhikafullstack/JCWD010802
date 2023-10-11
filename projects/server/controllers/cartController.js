@@ -1,4 +1,4 @@
-const { cartItem, product, cart } = require('../models');
+const { cartItem, product, cart,wishlist } = require('../models');
 const { Sequelize } = require('sequelize');
 
 const updateCartItemQuantity = async (cartItemId, newQuantity) => {
@@ -211,5 +211,114 @@ module.exports = {
       });
     }
   },
-};
+  addToWishlist: async (req, res) => {
+    try {
+      const { productId } = req.params;
+      const userId = req.user.id;
+
+      const existingProduct = await product.findOne({ where: { id: productId } });
+
+      if (!existingProduct) {
+        return res.status(404).send({
+          status: false,
+          message: 'Product not found',
+        });
+      }
+
+      const existingWishlistItem = await wishlist.findOne({
+        where: { productId, userId },
+      });
+
+      if (existingWishlistItem) {
+        return res.status(400).send({
+          status: false,
+          message: 'Product is already in the wishlist',
+        });
+      }
+
+      await wishlist.create({ productId, userId });
+
+      res.status(200).send({
+        status: true,
+        message: 'Product added to the wishlist',
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({
+        status: false,
+        message: 'Error adding product to the wishlist',
+        error: error.message,
+      });
+    }
+  },
+  getWishlist: async (req, res) => {
+    try {
+      const userId = req.user.id;
+      const page = +req.query.page || 1;
+      const limit = +req.query.limit || 5;
+      const offset = (page - 1) * limit;
+      const wishlistItems = await wishlist.findAll({
+        where: { userId },
+        include: [{ model: product }], 
+        limit,
+        offset,
+      });
+      const total = await wishlist.count()
+      res.status(200).send({ 
+        result: wishlistItems,
+        totalpage: Math.ceil(total / limit),
+      currentpage: page,
+      total_products: total, });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({ message: 'Error fetching wishlist', error: error.message });
+    }
+  },
+  removeWishlistItem: async (req, res) => {
+    try {
+      const { productId } = req.params;
+      const userId = req.user.id;
+
+      const existingWishlistItem = await wishlist.findOne({
+        where: { productId, userId },
+      });
+
+      if (!existingWishlistItem) {
+        return res.status(404).send({
+          status: false,
+          message: 'Product is not in the wishlist',
+        });
+      }
+
+      await existingWishlistItem.destroy();
+
+      res.status(200).send({
+        status: true,
+        message: 'Product removed from the wishlist',
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({
+        status: false,
+        message: 'Error removing product from the wishlist',
+        error: error.message,
+      });
+    }
+  },
+  isWishlist: async(req,res)=>{
+    try {
+      const { productId } = req.params
+      const userId = req.user.id
+  
+      const isInWishlist = await wishlist.findOne({
+        where: { productId, userId },
+      });
+  
+      res.status(200).json({ isInWishlist: !!isInWishlist });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Server error' });
+    }
+  },
+}
 

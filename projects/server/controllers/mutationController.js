@@ -1,4 +1,4 @@
-const { Op } = require("sequelize");
+const { Op,Sequelize } = require("sequelize");
 const { order, address, journal, stock, product, warehouse, stockMutation, requestHistory, cartItem, sequelize } = require("../models");
 const calculateDistance = require('../utils/calculateDistance');
 
@@ -65,7 +65,8 @@ module.exports = {
       const status = req.query.status || '';
       const sortDir = req.query.sortDir || 'asc';
       const productName = req.query.productName || '';
-  
+      const dateFilter = req.query.dateFilter || 'all'; 
+
       const whereClause = {}
       const productFilter = {}
   
@@ -74,6 +75,28 @@ module.exports = {
       }
       if (productName) {
         productFilter.productId= productName;
+      }
+      if (dateFilter === 'last7') {
+        const last7Days = new Date();
+        last7Days.setDate(last7Days.getDate() - 7);
+  
+        whereClause.createdAt = {
+          [Sequelize.Op.gte]: last7Days,
+        };
+      } else if (dateFilter === 'today') {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+  
+        whereClause.createdAt = {
+          [Sequelize.Op.gte]: today,
+          [Sequelize.Op.lte]: new Date()}
+      } else if (dateFilter === 'last30') {
+        const last30Days = new Date();
+        last30Days.setDate(last30Days.getDate() - 30);
+  
+        whereClause.createdAt = {
+          [Sequelize.Op.gte]: last30Days,
+        };
       }
       const order = [['createdAt', sortDir]]; 
   
@@ -138,6 +161,7 @@ allRequest : async (req, res) => {
     const status = req.query.status || '';
     const sortDir = req.query.sortDir || 'asc';
     const productName = req.query.productName || '';
+    const dateFilter = req.query.dateFilter || 'all'; 
 
 
     const whereClause = {
@@ -154,6 +178,28 @@ allRequest : async (req, res) => {
       }
       if (productName) {
         productFilter.productId= productName;
+      }
+      if (dateFilter === 'last7') {
+        const last7Days = new Date();
+        last7Days.setDate(last7Days.getDate() - 7);
+  
+        whereClause.createdAt = {
+          [Sequelize.Op.gte]: last7Days,
+        };
+      } else if (dateFilter === 'today') {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+  
+        whereClause.createdAt = {
+          [Sequelize.Op.gte]: today,
+          [Sequelize.Op.lte]: new Date()}
+      } else if (dateFilter === 'last30') {
+        const last30Days = new Date();
+        last30Days.setDate(last30Days.getDate() - 30);
+  
+        whereClause.createdAt = {
+          [Sequelize.Op.gte]: last30Days,
+        };
       }
       const order = [['createdAt', sortDir]]; 
   
