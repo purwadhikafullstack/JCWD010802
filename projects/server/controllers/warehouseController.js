@@ -100,8 +100,8 @@ module.exports = {
             });
             updatedData.kota = req.body.kota;
             updatedData.provinsi = req.body.provinsi;
-            updatedData.kotaName = city.data.rajaongkir.results.city_name;
-            updatedData.provinsiName = city.data.rajaongkir.results.province;
+            updatedData.nama_kota = city.data.rajaongkir.results.city_name;
+            updatedData.nama_provinsi = city.data.rajaongkir.results.province;
           }
       
           if (req.body.kode_pos) {

@@ -3,14 +3,14 @@ import { ResetPasswordForm } from "./components/resetPassForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import axios from 'axios';
 import { useParams } from "react-router-dom";
+import axios from "../../api/axios";
 export const ResetPassView = () => {
   const {token} = useParams()
 
 const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
   try {
-    const response = await axios.patch(`http://localhost:8000/api/auth/reset`, {
+    const response = await axios.patch(`/auth/reset`, {
       password: values.password,
     }, {
       headers: {
