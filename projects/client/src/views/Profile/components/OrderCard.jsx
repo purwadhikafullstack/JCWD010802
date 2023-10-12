@@ -5,6 +5,7 @@ import { ButtonConfirmOrder } from "./ButtonConfirmOrder"
 import { ButtonCancelOrder } from "./ButtonCancelOrder"
 import formatIDR from "../../../helpers/formatIDR"
 import dateFormater from "../../../helpers/dateFormater"
+import { ButtonOrderOption } from "./OrderOptionMobile"
 
 
 export const OrderCard = ({ data, reload }) => {
@@ -15,11 +16,20 @@ export const OrderCard = ({ data, reload }) => {
 
     return(
         <Flex w="full" direction="column" bg="white" p="20px 30px" borderRadius="10px" shadow="md">
-            <Flex align="center" gap={3} fontSize="14px">
+            <Flex align="center" gap={3} fontSize="14px" w="full" justifyContent="space-between">
+                <Flex align="center" gap={3}>
                 <Text fontWeight="bold">Belanja</Text>
                 <Text display={{ base: "none", md: "block"}}>{dateFormater(data?.createdAt)}</Text>
-                <Badge colorScheme={color}>{data?.status.name}</Badge>
+                <Badge colorScheme={color} maxW={{base: "150px", lg: "none"}}>
+                    <Text maxW={{ base: "140px", lg: "none"}} overflow="hidden"  whiteSpace="nowrap" textOverflow="ellipsis">
+                        {data?.status.name}
+                    </Text>
+                </Badge>
+                </Flex>
                 {/* <Text color="gray.500" display={{ base: "none", md: "block"}}>INV/20230528/MPL/3258437023</Text> */}
+                <Flex display={{ base: "flex", lg: "none"}}>
+                    <ButtonOrderOption data={data} reload={reload}  />
+                </Flex>
             </Flex>
             <Flex align={{base: "flex-start", md: "center"}} justifyContent="space-between" direction={{ base: "column", md: "row"}} mt="10px">
                 <Flex justifyContent="center" direction={{ base: "column", md: "row"}} gap={5}>
@@ -36,10 +46,10 @@ export const OrderCard = ({ data, reload }) => {
                     <Text>{formatIDR(data?.totalPrice)}</Text>
                 </Flex>
             </Flex>
-            <Flex justify="flex-end" gap={2}>
+            <Flex justify="flex-end" gap={2} display={{ base: "none", lg: "flex"}}>
+                <ButtonDetailOrder data={data} />
                 {data?.statusId === 1 ? <ButtonCancelOrder id={data?.id} reload={reload} /> : null}
                 {data?.statusId === 1 ? <ButtonPaymentProof id={data?.id} reload={reload}/> : null}
-                <ButtonDetailOrder data={data} />
                 {data?.statusId === 4 ? <ButtonConfirmOrder id={data?.id} reload={reload} /> : null}
             </Flex>
         </Flex>

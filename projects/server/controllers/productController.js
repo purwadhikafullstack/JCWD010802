@@ -216,7 +216,8 @@ module.exports = {
             const result = await product.findOne({
                 where: {
                     id: id
-                }
+                },
+                include: [{ model: categories }]
             })
             res.status(200).send({
                 msg: "Here's the product",

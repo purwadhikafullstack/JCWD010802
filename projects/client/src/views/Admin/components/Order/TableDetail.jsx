@@ -138,8 +138,10 @@ export const TableDetail = ({ id, data, reload }) => {
                 <Tr>
                     <Th className="left-header">Status</Th>
                     <Td className="right-data">
-                        <Badge colorScheme={getStatusBadgeColor(data?.status?.name)}>
-                            {data?.status?.name}
+                        <Badge colorScheme={getStatusBadgeColor(data?.status?.name)} maxW={{base: "180px", lg: "none"}}>
+                            <Text maxW={{ base: "150px", lg: "none"}} overflow="hidden"  whiteSpace="nowrap" textOverflow="ellipsis">
+                                {data?.status?.name}
+                            </Text>
                         </Badge>
                     </Td>
                 </Tr>

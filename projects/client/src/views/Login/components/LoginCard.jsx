@@ -1,7 +1,6 @@
 import * as Yup from "yup";
 import {
   Button,
-  Center,
   Flex,
   Heading,
   Text,
@@ -9,7 +8,6 @@ import {
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { InputField } from "../../../components/input/InputField";
-import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setValue } from "../../../redux/userSlice";
@@ -127,7 +125,7 @@ export const LoginCard = () => {
             >
               Submit
             </Button>
-            <Flex mt="5px" justifyContent={"space-between"}>
+            <Flex mt="5px" justifyContent={"space-between"} direction={{ base: "column", lg: "row"}}>
               <Flex gap={1}>
                 <Text mt="5px" fontSize="14px">
                   Dont have an account?
