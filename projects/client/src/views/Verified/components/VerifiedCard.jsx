@@ -51,7 +51,7 @@ export const VerifiedCard = () => {
       }, 2000);
     } catch (error) {
       toast({
-        title: "Login Failed!",
+        title: "Verification failed",
         description: error?.response?.data?.message,
         status: "error",
         duration: 1500,

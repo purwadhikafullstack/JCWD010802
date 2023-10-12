@@ -10,14 +10,15 @@ module.exports = {
     allCategory: async (req, res) => {
         try {
             const page = +req.query.page || 1;
-            const limit = +req.query.limit || 5;
+            const limit = +req.query.limit || 999999;
             const offset = (page - 1) * limit;
             const search = req.query.search || "";
             const sort = req.query.sort || "";
     
-            const filter = {
+            let filter = {
                 isDeleted: false,
             };
+    
             if (search) {
                 filter[Op.or] = [{
                     name: {
@@ -25,38 +26,40 @@ module.exports = {
                     },
                 }];
             }
-            const totalProduct = await product.findAll({
-                where: filter,
-                group: "CategoryId",
-                attributes: [
-                    "CategoryId",
-                    [Sequelize.fn("count", Sequelize.col("id")), "total"],
-                ],
-            });
-            const total = await category.count({
-                where: filter,
-            });
     
-            let order = [["createdAt", "DESC"]]; 
-            
+            let order = [["createdAt", "DESC"]];
+    
             if (sort === "asc") {
                 order = [["name", "ASC"]];
             } else if (sort === "desc") {
                 order = [["name", "DESC"]];
             }
     
-            const result = await category.findAll({
-                where: filter,
-                order,
-                limit,
-                offset,
+            const { count, rows } = await category.findAndCountAll({
+                where: filter, // Apply filtering
+                order, // Apply sorting
+                limit, // Apply limit
+                offset, // Apply offset for pagination
             });
     
+            const result = await Promise.all(
+                rows.map(async (cat) => {
+                    const productsInCategory = await product.count({
+                        where: {
+                            categoryId: cat.id,
+                        },
+                    });
+                    return {
+                        ...cat.dataValues,
+                        totalProduct: productsInCategory,
+                    };
+                })
+            );
+    
             res.status(200).send({
-                totalpage: Math.ceil(total / limit),
+                totalpage: Math.ceil(count / limit),
                 currentpage: page,
-                all_category: total,
-                totalProduct,
+                all_category: count,
                 result,
                 status: true,
             });
@@ -67,7 +70,7 @@ module.exports = {
                 message: err.message,
             });
         }
-    },    
+    },
     createCategory: async (req, res) => {
         try {
             const name = req.body.name;

@@ -24,7 +24,7 @@ import { BsSearch } from "react-icons/bs";
 import { useSelector } from "react-redux";
 
 export const StockHistory = () => {
-  const [history, setHistory] = useState();
+  const [history, setHistory] = useState([]);
   const [warehouse, setWarehouse] = useState([]);
   const [page, setPage] = useState([]);
   const navigate = useNavigate();
@@ -35,6 +35,7 @@ export const StockHistory = () => {
   const monthly = params.get("monthly") || "";
   const currentPage = Number(params.get("page")) || 1;
   const user = useSelector((state) => state.user.value);
+
   const getStockHistory = async () => {
     try {
       const response = await axios.get(
@@ -49,6 +50,7 @@ export const StockHistory = () => {
       console.log(error);
     }
   };
+
   const getWarehouse = async () => {
     try {
       const response = await axios.get(
@@ -59,25 +61,30 @@ export const StockHistory = () => {
       console.log(error);
     }
   };
+
   const handleSearch = (e) => {
     navigate(
       `?search=${e.target.value}&warehouseId=${warehouseId}&monthly=${monthly}&page=${currentPage}`
     );
   };
+
   const handleWarehouseChange = (e) => {
     navigate(
       `?warehouseId=${e.target.value}&monthly=${monthly}&page=${currentPage}`
     );
   };
+
   const handleMonthly = (e) => {
     navigate(
       `?warehouseId=${warehouseId}&monthly=${e.target.value}&page=${currentPage}`
     );
   };
+
   useEffect(() => {
     getStockHistory();
     getWarehouse();
   }, [search, warehouseId, currentPage, monthly]);
+
   return (
     <>
       <Flex
@@ -148,6 +155,7 @@ export const StockHistory = () => {
           <Tbody>
             {history?.map((item) => {
               const createdAtDate = item.updatedAt.split("T")[0];
+              const actionNote = item.requestHistoryId ? "Manual request" : item.orderId ? "Sales" : "Stock update";
               return (
                 <Tr>
                   {user.roleId === 3 ? (
@@ -155,7 +163,7 @@ export const StockHistory = () => {
                   ) : null}
                   <Td>{item.stock?.product?.name}</Td>
                   <Td>{item.quantity}</Td>
-                  <Td>{item.description}</Td>
+                  <Td>{actionNote}</Td>
                   <Td>{item.stock.quantity}</Td>
                   <Td>{createdAtDate}</Td>
                 </Tr>

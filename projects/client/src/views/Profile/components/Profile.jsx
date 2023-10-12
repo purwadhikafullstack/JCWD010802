@@ -3,17 +3,17 @@ import { InputField } from "../../../components/input/InputField";
 import { Form, Formik } from "formik";
 import { ChangeImage } from "./modal/modalProfile/modalImage";
 import { ChangePassword } from "./modal/modalProfile/modalPassword";
-import { ToastContainer, toast } from 'react-toastify';
-import { useSelector } from 'react-redux'
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
 import headersGen from "../../../api/headers";
 import axios from "../../../api/axios";
 
 export const ProfileCard = () => {
-  const profile = useSelector((state) => state.user.value)
+  const profile = useSelector((state) => state.user.value);
   const token = localStorage.getItem("token");
-  const headers = headersGen(token)
+  const headers = headersGen(token);
   const CreateSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     email: Yup.string().email().required("Email is required"),
@@ -23,12 +23,12 @@ export const ProfileCard = () => {
       await axios.patch(`/user/edit`, data, { headers });
       toast.success("Profile updated successfully", {
         position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2000
+        autoClose: 2000,
       });
     } catch (error) {
       toast.error("Error to updating profile", {
         position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2000
+        autoClose: 2000,
       });
       console.log(error);
     }
@@ -47,12 +47,16 @@ export const ProfileCard = () => {
       >
         <Flex justifyContent={"center"} alignItems={"center"} w="full">
           <VStack spacing={5}>
-            <Avatar size="2xl"src={`http://localhost:8000/profileImg/${profile.profileImg}`} name={profile.name}/>
+            <Avatar
+              size="2xl"
+              src={`http://localhost:8000/profileImg/${profile.profileImg}`}
+              name={profile.name}
+            />
             <ChangeImage />
           </VStack>
         </Flex>
       </Box>
-      
+
       <Box
         p={5}
         borderWidth="1px"
@@ -60,14 +64,14 @@ export const ProfileCard = () => {
         boxShadow="lg"
         display="flex"
         ml={{ base: "0", lg: 50 }}
-        w={'full'}
+        w={"full"}
         bgColor={"whiteAlpha.700"}
       >
         <Box>
           <Formik
             initialValues={{
               name: profile.name,
-              email: profile.email
+              email: profile.email,
             }}
             validationSchema={CreateSchema}
             onSubmit={(values, action) => {
@@ -83,7 +87,7 @@ export const ProfileCard = () => {
                   id="name"
                   className="name"
                   type="text"
-                  w={'full'}
+                  w={"full"}
                   mb="10px"
                   placeholder="Enter your name here"
                   variant="flushed"
@@ -94,7 +98,7 @@ export const ProfileCard = () => {
                   id="email"
                   className="email"
                   type="email"
-                  w={'full'}
+                  w={"full"}
                   mb="10px"
                   placeholder="Enter your email here"
                   variant="flushed"

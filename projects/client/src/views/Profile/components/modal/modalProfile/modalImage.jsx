@@ -42,21 +42,22 @@ export const ChangeImage = () => {
       });
       toast.success("Image profile updated successfully", {
         position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2000
+        autoClose: 2000,
       });
       onClose();
     } catch (err) {
       console.log(err);
-      toast.error("Error to updating image profile", {
+      toast.error("Error updating image profile", {
         position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2000
+        autoClose: 2000,
       });
     }
   };
+
   return (
     <Formik
       initialValues={{
-        file: "",
+        file: null,
       }}
       validationSchema={CreateSchema}
       onSubmit={(values, actions) => {
@@ -86,7 +87,26 @@ export const ChangeImage = () => {
                     />
                     <Input
                       onChange={(e) => {
-                        props.setFieldValue("file", e.target.files[0]);
+                        const selectedFile = e.target.files[0];
+                        if (selectedFile) {
+                          const allowedFileTypes = [
+                            "image/jpeg",
+                            "image/jpg",
+                            "image/png",
+                            "image/gif",
+                          ];
+                          if (allowedFileTypes.includes(selectedFile.type)) {
+                            props.setFieldValue("file", selectedFile);
+                          } else {
+                            toast.error(
+                              "Invalid file type. Please select a valid image file.",
+                              {
+                                position: toast.POSITION.TOP_RIGHT,
+                                autoClose: 2000,
+                              }
+                            );
+                          }
+                        }
                       }}
                       variant="flushed"
                       type="file"
@@ -94,6 +114,7 @@ export const ChangeImage = () => {
                       placeholder="Choose file"
                       mb={4}
                       bgColor={"white"}
+                      accept=".jpg, .jpeg, .png, .gif"
                     />
                   </FormControl>
                 </Box>

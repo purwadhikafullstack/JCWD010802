@@ -1,7 +1,6 @@
 const {  cart, address, user, journal, stock, product, warehouse, cartItem,orderItem,status } = require("../models");
 const calculateDistance = require('../utils/calculateDistance');
 const db = require("../models");
-const { Op } = require("sequelize");
 const orders = db.order
 const { Op , Sequelize} = require("sequelize");
 
