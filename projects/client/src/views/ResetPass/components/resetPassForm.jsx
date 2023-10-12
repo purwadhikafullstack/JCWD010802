@@ -11,8 +11,10 @@ export const ResetPasswordForm = ({ onSubmit }) => {
       initialValues={{ password: '', confirmPassword: '' }}
       validationSchema={Yup.object({
         password: Yup.string()
-          .min(8, 'Password must be at least 8 characters')
-          .required('Password is required'),
+        .min(6, "Password must be at least 6 characters")
+        .required("Password is required")
+        .matches(/^(?=.*[A-Z])/, "Must contain at least one Uppercase character")
+        .matches(/^(?=.*(\W|_))/, "Must contain at least one symbol"),
         confirmPassword: Yup.string()
           .oneOf([Yup.ref('password'), null], 'Passwords must match')
           .required('Confirm Password is required'),
