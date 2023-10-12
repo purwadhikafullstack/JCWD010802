@@ -2,7 +2,7 @@ import { Flex, Input, Select } from "@chakra-ui/react";
 import { ChartReport } from "../components/SalesReport/chartReport";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../../api/axios";
 import { useSelector } from "react-redux";
 import { TableSales } from "../components/SalesReport/tableSalesReport";
 
@@ -31,7 +31,7 @@ export const SalesReportView = () => {
   const getChartReport = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/sales/chart?warehouseId=${warehouseId}&categoryId=${categoryId}&productId=${productId}&date=${date}`,
+        `/sales/chart?warehouseId=${warehouseId}&categoryId=${categoryId}&productId=${productId}&date=${date}`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
@@ -44,7 +44,7 @@ export const SalesReportView = () => {
   const getTableSales = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/sales/table-sales?warehouseId=${warehouseId}&categoryId=${categoryId}&productId=${productId}&date=${date}`,
+        `/sales/table-sales?warehouseId=${warehouseId}&categoryId=${categoryId}&productId=${productId}&date=${date}`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
@@ -57,7 +57,7 @@ export const SalesReportView = () => {
   const getWarehouse = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/warehouse/list`
+        `/warehouse/list`
       );
       setWarehouse(response.data);
     } catch (error) {
@@ -67,7 +67,7 @@ export const SalesReportView = () => {
   const getCategory = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/category?limit=9999`
+        `/category?limit=9999`
       );
       setCategory(response.data.result);
     } catch (err) {
@@ -77,7 +77,7 @@ export const SalesReportView = () => {
   const getProduct = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/product?limit=9999`
+        `/product?limit=9999`
       );
       setProduct(response.data.result);
     } catch (error) {

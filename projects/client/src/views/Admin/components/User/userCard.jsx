@@ -44,7 +44,6 @@ export const UserCard = () => {
   const getUser = async () => {
     try {
       const response = await axios.get(`/user/list-user?search=${search}&page=${currentPage}&roleId=${roleId}&sort=${sort}`);
-
       setUser(response.data.result);
       setPage(response.data.totalPage);
     } catch (error) {

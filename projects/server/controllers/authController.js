@@ -53,10 +53,8 @@ module.exports = {
                 include: [{ model: warehouseAdmin }]
             })
 
-            if (!result) throw { message: "Email or Password Incorrect" }
-            if (password !== result.password) throw { message: "Email or Password Incorrect" }
-            // const isValid = await bcrypt.compare(password, result.password)
-            // if (!isValid) throw { message: "Email or Password Incorrect" }
+            const isValid = await bcrypt.compare(password, result.password)
+            if (!isValid) throw { message: "Email or Password Incorrect" }
 
             let payload = { id: result.id }
             const token = jwt.sign(payload, process.env.KEY_JWT, { expiresIn: '3d' })
