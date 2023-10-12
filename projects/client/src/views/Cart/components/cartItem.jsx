@@ -46,12 +46,16 @@ export const CartItem = ({ cart, reload, setReload }) => {
   };
 
   useEffect(() => {
-    if (cart.length > 0) {
+    if (!cart) {
+      return;
+    }
+      if (cart.length > 0) {
       cart.forEach((item) => {
         checkWishlist(item.product.id);
       });
     }
   }, [cart]);
+  
 
   const handleDelete = async (itemId) => {
     try {
@@ -112,14 +116,14 @@ export const CartItem = ({ cart, reload, setReload }) => {
      <Heading>Cart</Heading>
       <Divider borderWidth={4} mt={3} />
       {cart?.length === 0 || !cart ? (
-        <Center>
-          <Image
-            src="https://img.freepik.com/free-vector/add-cart-concept-illustration_114360-1435.jpg?w=740&t=st=1695704262~exp=1695704862~hmac=3b04c76b1390720ab571e66d6ac6ed8b08c68314607cb6f7c70349c5a6bfecd4"
-            boxSize={{ base: '100%', md: 'lg' }}
-          />
-          <Heading>Your cart is empty, Let's go shopping</Heading>
-        </Center>
-      ) : (
+          <Center p={4} borderRadius="md" display="flex" flexDirection={{ base: 'column', md: 'row' }}>
+            <Image
+              src="https://img.freepik.com/free-vector/add-cart-concept-illustration_114360-1435.jpg?w=740&t=st=1695704262~exp=1695704862~hmac=3b04c76b1390720ab571e66d6ac6ed8b08c68314607cb6f7c70349c5a6bfecd4"
+              boxSize={{ base: '100%', md: 'lg' }}
+            />
+            <Heading>Your cart is empty, Let's go shopping</Heading>
+          </Center>
+        ) : (
           cart.map((item) => (
             <Box p={4} borderRadius="md" display="flex" flexDirection={{ base: 'column', md: 'row' }}>
               <Image

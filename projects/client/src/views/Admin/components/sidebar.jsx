@@ -204,11 +204,6 @@ export const Sidebar = () => {
               </NavItem>
             </NavLink>
           )}
-          <NavLink to="">
-            <NavItem to="/admin/" icon={BsFillCartFill}>
-              Order
-            </NavItem>
-          </NavLink>
           <NavLink to="mutation">
             <NavItem to="/admin/mutation" icon={BiTransfer}>
               Request Stock
