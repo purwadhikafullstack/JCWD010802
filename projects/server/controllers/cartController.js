@@ -1,4 +1,4 @@
-const { cartItem, product, cart,wishlist } = require('../models');
+const { cartItem, product, cart,wishlist,stock } = require('../models');
 const { Sequelize } = require('sequelize');
 
 const updateCartItemQuantity = async (cartItemId, newQuantity) => {
@@ -37,10 +37,10 @@ const updateCartItemQuantity = async (cartItemId, newQuantity) => {
 
 
 module.exports = {
-  addToCart : async (req, res) => {
+  addToCart: async (req, res) => {
     try {
       const { quantity } = req.body;
-      const id = req.params.id
+      const id = req.params.id;
   
       const cekproduct = await product.findOne({ where: { id: id } });
   
@@ -50,22 +50,41 @@ module.exports = {
           message: 'Product not found',
         });
       }
-      const [userCart] = await cart.findOrCreate({where:{userId:req.user.id, isCheckOut:false}})
-      
+  
+      const [userCart] = await cart.findOrCreate({ where: { userId: req.user.id, isCheckOut: false } });
+  
       const existingCartItem = await cartItem.findOne({
-        where: { productId: id, cartId:userCart.id  },
-      })
+        where: { productId: id, cartId: userCart.id },
+      });
+  
+      const stockItems = await stock.findAll({ where: { productId: id } });
+      const totalStock = stockItems.reduce((total, item) => total + item.quantity, 0);
+  
       if (existingCartItem) {
+        if (quantity + existingCartItem.quantity > totalStock) {
+          return res.status(400).send({
+            status: false,
+            message: `You already have ${existingCartItem.quantity} item(s) in your cart, which is the maximum available quantity for this product.`,
+          });
+        }
+  
         const updatedQuantity = Sequelize.literal(`quantity + ${quantity}`);
         await existingCartItem.update({ quantity: updatedQuantity });
       } else {
-       
+        if (quantity > totalStock) {
+          return res.status(400).send({
+            status: false,
+            message: `The requested quantity exceeds the available stock for this product.`,
+          });
+        }
+  
         await cartItem.create({
-          cartId:userCart.id,
+          cartId: userCart.id,
           productId: id,
           quantity,
         });
       }
+  
       const cartItems = await cartItem.findAll({
         where: { cartId: userCart.id },
       });
@@ -78,9 +97,9 @@ module.exports = {
   
       await cart.update(
         { totalPrice: totalCartPrice },
-        { where: { id: userCart.id } } 
-      );      
-    
+        { where: { id: userCart.id } }
+      );
+  
       res.status(200).send({
         status: true,
         message: 'Product added to the cart',
@@ -94,7 +113,8 @@ module.exports = {
       });
     }
   },
-
+  
+  
   getUserCart: async (req, res) => {
     try {
       const userId = req.user.id;
@@ -195,9 +215,11 @@ module.exports = {
     try {
       const { id } = req.params;
       const { quantity } = req.body;
-
-      await updateCartItemQuantity(id, quantity);
-
+  
+      const newQuantity = quantity === 0 ? 1 : quantity;
+  
+      await updateCartItemQuantity(id, newQuantity);
+  
       res.status(200).json({
         status: true,
         message: 'Cart item quantity updated successfully',
@@ -211,6 +233,7 @@ module.exports = {
       });
     }
   },
+  
   addToWishlist: async (req, res) => {
     try {
       const { productId } = req.params;

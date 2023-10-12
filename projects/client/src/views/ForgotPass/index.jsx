@@ -1,4 +1,4 @@
-import { Box, Button, Heading, Image, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Heading, Image, Spinner, Text, VStack } from "@chakra-ui/react";
 import { ForgotPasswordForm } from "./components/forgotPassForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -7,9 +7,13 @@ import { IoArrowBack } from "react-icons/io5";
 import axios from "axios";
 import { NotFound } from "../../pages/Error";
 import { NavLink } from "react-router-dom";
+import { useState } from "react";
 export const ForgotPassPageView = () => {
   const token = localStorage.getItem("token");
+  const [isSubmitting, setIsSubmitting] = useState(false); 
+
   const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
+    setIsSubmitting(true); 
     try {
       const response = await axios.post(
         "http://localhost:8000/api/auth/forgot",
@@ -27,6 +31,7 @@ export const ForgotPassPageView = () => {
       console.error(error.response.data.message);
       setFieldError("email", error.response.data.message);
     } finally {
+      setIsSubmitting(false); 
       setSubmitting(false);
     }
   };
@@ -64,14 +69,15 @@ export const ForgotPassPageView = () => {
           </Text>
           <VStack>
             <ForgotPasswordForm onSubmit={handleSubmit} />
-            <Image
-              alignContent={"center"}
-              objectFit="cover"
-              src={
-                "https://img.freepik.com/free-vector/forgot-password-concept-illustration_114360-1095.jpg?size=626&ext=jpg&uid=R49827410&ga=GA1.2.1183367613.1692951927"
-              }
-              alt="#"
-            />
+            
+              <Image
+                alignContent={"center"}
+                objectFit="cover"
+                src={
+                  "https://img.freepik.com/free-vector/forgot-password-concept-illustration_114360-1095.jpg?size=626&ext=jpg&uid=R49827410&ga=GA1.2.1183367613.1692951927"
+                }
+                alt="#"
+              />
           </VStack>
         </Box>
       )}
