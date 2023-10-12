@@ -111,6 +111,7 @@ export const ProductReport = () => {
   useEffect(() => {}, [handleTabChange]);
   return (
     <>
+    
       <Tabs isLazy index={selectedTab} onChange={handleTabChange}>
         <TabList>
           <Tab>Stock History</Tab>
