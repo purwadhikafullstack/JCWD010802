@@ -7,139 +7,170 @@ const { Op , Sequelize} = require("sequelize");
 module.exports = {
     checkout: async (req, res) => {
         try {
-            const {
-                cartId,
-                addressId,
-                shippingMethod,
-                shippingCost,
-            } = req.body; 
-            const findCartItem = await cartItem.findAll({ where: { cartId: cartId } });
-            const findAddress = await address.findOne({ where: { id: addressId } });
-            const findCart = await cart.findOne({ where: { userId: req.user.id, isCheckOut: false } });
-            const warehouses = await warehouse.findAll({ include: { model: address } });
-    
-            let orderItemIds = [];     
-            if (warehouses.length === 0) {
-                return res.status(404).send({ error: 'No warehouses found.' });
-            }
-            let nearestWarehouse = null;
-            let shortestDistance = Infinity;
-            warehouses.forEach((warehouse) => {
-                const distance = calculateDistance(
-                    parseFloat(findAddress.lat),
-                    parseFloat(findAddress.lng),
-                    parseFloat(warehouse.address.lat),
-                    parseFloat(warehouse.address.lng)
-                );
-                if (distance < shortestDistance) {
-                    shortestDistance = distance;
-                    nearestWarehouse = warehouse.id;
-                }
-            });
-    
-            if (!nearestWarehouse) {
-                return res.status(404).json({ error: 'Nearest warehouse not found.' });
-            }
-            const productQuantityToSubtract = new Map();
-    
-            for (const item of findCartItem) {
-                const sproduct = await product.findByPk(item.productId);
-    
-                if (!sproduct) {
-                    return res.status(404).send({ error: 'Product not found.' });
-                }
-    
-                const stockEntry = await stock.findOne({
-                    where: {
-                        productId: sproduct.id,
-                        warehouseId: nearestWarehouse,
-                    },
-                });
-    
-                const items = await orderItem.create({
-                    productId: item.productId,
-                    quantity: item.quantity
-                });
-    
-                orderItemIds.push(items.id);
-    
-                const currentQuantityToSubtract = productQuantityToSubtract.get(sproduct.id) || 0;
-                productQuantityToSubtract.set(sproduct.id, currentQuantityToSubtract + item.quantity);
-            }
-            const expireDate = new Date()
-            expireDate.setDate(expireDate.getDate() + 1)
-            const response = await orders.create({
-                userId: req.user.id,
-                totalPrice: findCart.totalPrice,
-                shippingCost,
-                shippingMethod,
-                addressId,
-                cartId,
-                statusId: 1,
-                warehouseId: nearestWarehouse,
-                paymentExpiredAt: expireDate,
-            });
-    
-            
-            await orderItem.update(
-                { orderId: response.id },
-                {
-                    where: { id: orderItemIds }
-                }
+          const {
+            cartId,
+            addressId,
+            shippingMethod,
+            shippingCost,
+          } = req.body;
+      
+          const findCartItem = await cartItem.findAll({ where: { cartId: cartId } });
+          const findAddress = await address.findOne({ where: { id: addressId } });
+          const findCart = await cart.findOne({ where: { userId: req.user.id, isCheckOut: false } });
+          const warehouses = await warehouse.findAll({ include: { model: address } });
+      
+          let orderItemIds = [];
+      
+          if (warehouses.length === 0) {
+            return res.status(404).send({ error: 'No warehouses found.' });
+          }
+      
+          let nearestWarehouse = null;
+          let shortestDistance = Infinity;
+      
+          warehouses.forEach((warehouse) => {
+            const distance = calculateDistance(
+              parseFloat(findAddress.lat),
+              parseFloat(findAddress.lng),
+              parseFloat(warehouse.address.lat),
+              parseFloat(warehouse.address.lng)
             );
-    
-            for (const [productId, totalQuantity] of productQuantityToSubtract.entries()) {
-                const stockEntry = await stock.findOne({
-                    where: {
-                        productId: productId,
-                        warehouseId: nearestWarehouse,
-                    },
-                });
-    
-                if (stockEntry) {
-                    stockEntry.quantity -= totalQuantity;
-                    await stockEntry.save();
-    
-                    const newJournal = await journal.create({
-                        description: "reduce",
-                        quantity: -totalQuantity,
-                        stockId: stockEntry.id,
-                        orderId: response.id
-                    });
-                }
+      
+            if (distance < shortestDistance) {
+              shortestDistance = distance;
+              nearestWarehouse = warehouse.id;
             }
-    
-            const stockWarehouse = await stock.findAll({ where: { warehouseId: nearestWarehouse } });
-    
-            const cartCheckout = await cart.update(
-                { isCheckOut: true },
-                {
-                    where: {
-                        id: cartId
-                    }
-                }
-            );
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const day = String(today.getDate()).padStart(2, '0');
-            const formattedDate = `${year}${month}${day}`;
-                        const inv = await orders.update({
-                invoice:`INV/${response.id}/${formattedDate}`
-            },{where:{id:response.id}})
+          });
+      
+          if (!nearestWarehouse) {
+            return res.status(404).json({ error: 'Nearest warehouse not found.' });
+          }
+      
+          const productQuantityToSubtract = new Map();
+      
+          const insufficientStockItems = [];
+      
+          for (const item of findCartItem) {
+            const sproduct = await product.findByPk(item.productId);
+      
+            if (!sproduct) {
+              return res.status(404).send({ error: 'Product not found.' });
+            }
+      
+      
+            let totalStock = 0;
 
-            res.status(200).send({
-                response,
-                cartCheckout,
-                stockWarehouse,
-                status: true
+      for (const warehouse of warehouses) {
+        const stockEntries = await stock.findOne({
+          where: {
+            productId: sproduct.id,
+            warehouseId: warehouse.id,
+          },
+        });
+
+        totalStock += stockEntries ? stockEntries.quantity : 0;
+      }
+
+      if (totalStock < item.quantity) {
+        insufficientStockItems.push(sproduct.name);
+      }
+      
+            const items = await orderItem.create({
+              productId: item.productId,
+              quantity: item.quantity,
             });
-    
+      
+            orderItemIds.push(items.id);
+      
+            const currentQuantityToSubtract = productQuantityToSubtract.get(sproduct.id) || 0;
+            productQuantityToSubtract.set(sproduct.id, currentQuantityToSubtract + item.quantity);
+          }
+      
+          if (insufficientStockItems.length > 0) {
+            return res.status(400).send({
+              error: 'Insufficient stock for the following items:',
+              items: insufficientStockItems,
+            });
+          }
+      
+          const expireDate = new Date();
+          expireDate.setDate(expireDate.getDate() + 1);
+      
+          const response = await orders.create({
+            userId: req.user.id,
+            totalPrice: findCart.totalPrice,
+            shippingCost,
+            shippingMethod,
+            addressId,
+            cartId,
+            statusId: 1,
+            warehouseId: nearestWarehouse,
+            paymentExpiredAt: expireDate,
+          });
+      
+          await orderItem.update(
+            { orderId: response.id },
+            {
+              where: { id: orderItemIds },
+            }
+          );
+      
+          for (const [productId, totalQuantity] of productQuantityToSubtract.entries()) {
+            const stockEntry = await stock.findOne({
+              where: {
+                productId: productId,
+                warehouseId: nearestWarehouse,
+              },
+            });
+      
+            if (stockEntry) {
+              stockEntry.quantity -= totalQuantity;
+              await stockEntry.save();
+      
+              const newJournal = await journal.create({
+                description: 'reduce',
+                quantity: -totalQuantity,
+                stockId: stockEntry.id,
+                orderId: response.id,
+              });
+            }
+          }
+      
+          const stockWarehouse = await stock.findAll({ where: { warehouseId: nearestWarehouse } });
+      
+          const cartCheckout = await cart.update(
+            { isCheckOut: true },
+            {
+              where: {
+                id: cartId,
+              },
+            }
+          );
+      
+          const today = new Date();
+          const year = today.getFullYear();
+          const month = String(today.getMonth() + 1).padStart(2, '0');
+          const day = String(today.getDate()).padStart(2, '0');
+          const formattedDate = `${year}${month}${day}`;
+          const inv = await orders.update(
+            {
+              invoice: `INV/${response.id}/${formattedDate}`,
+            },
+            { where: { id: response.id } }
+          );
+      
+          res.status(200).send({
+            response,
+            cartCheckout,
+            stockWarehouse,
+            status: true,
+          });
         } catch (error) {
-            console.error(error);
-            res.status(500).send({ error: 'Internal server error.' });
+          console.error(error);
+          res.status(500).send({ error: 'Internal server error.' });
         }
-    },
+      },
+      
     
     userOrder: async (req, res) => {
         try {
@@ -444,7 +475,7 @@ module.exports = {
                 quantity: item.quantity,
                 stockId: findStock.id,
                 orderId: id
-            })
+            }) 
             })
             const result = await orders.update({ statusId: 6 }, {
                 where: { id }

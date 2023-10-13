@@ -74,7 +74,7 @@ module.exports = {
                 )
             const data = fs.readFileSync('./templates/changing.html', 'utf-8')
             const tempCompile = await handlebars.compile(data)
-            const tempResult = tempCompile({ data: updatedUser.name })
+            const tempResult = tempCompile({ data: updatedUser.name, description: "User password has been changed" })
             await mailer.sendMail({
                 from: "fathir17.fa@gmail.com",
                 to: passExist.email,
@@ -109,7 +109,7 @@ module.exports = {
             })
             const data = fs.readFileSync('./templates/changing.html', 'utf-8')
             const tempCompile = await handlebars.compile(data)
-            const tempResult = tempCompile({ data: tempData.name })
+            const tempResult = tempCompile({ data: tempData.name, description: "Profile image has been changed" })
             await mailer.sendMail({
                 from: "fathir17.fa@gmail.com",
                 to: tempData.email,
@@ -118,7 +118,7 @@ module.exports = {
             })
             res.status(200).send({
                 status: true,
-                msg: "Success change avatar",
+                msg: "Success change profile image",
             })
         } catch (err) {
             res.status(400).send(err)

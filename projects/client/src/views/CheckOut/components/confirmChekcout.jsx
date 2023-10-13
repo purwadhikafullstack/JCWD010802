@@ -41,7 +41,8 @@ export const ConfirmCheckout = ({ addressId }) => {
     });
     dispatch(setCartOut())
     } catch (error) {
-      console.error("Checkout failed:", error);
+      console.log("Checkout failed:", error);
+      toast.error(`${error.response.data.error} ${error.response.data.items}` ,{position: 'top-center'});
     }
   };
 

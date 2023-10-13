@@ -207,16 +207,15 @@ module.exports = {
     }
   },
   getStock: async (req, res) => {
-    const id = req.params.id; // Assuming you pass the product ID in the request parameters
-
+    const id = req.params.id; 
     try {
-      // Query the database to get the total stock of the specified product by ID
       const productStock = await product.findOne({
-        where: { id: id }, // Filter by product ID
+        where: { id: id }, 
         attributes: ["id", "name"],
         include: [
           {
             model: stock,
+            where:{isDeleted:false},
             attributes: [
               [
                 db.sequelize.fn("SUM", db.sequelize.col("quantity")),
@@ -229,7 +228,6 @@ module.exports = {
       });
 
       if (!productStock) {
-        // Product with the specified ID was not found
         return res.status(404).send({
           status: false,
           message: "Product not found",

@@ -33,20 +33,19 @@ export const CategoryCard = () => {
 
   const getCategory = async () => {
     try {
-      const CATEGORY_URL = `/category`
+      const CATEGORY_URL = `/category?limit=5`;
       const params = {
         search,
         sort,
-        page: currentPage
-      }
-      const response = await axios.get(CATEGORY_URL, { params })
+        page: currentPage,
+      };
+      const response = await axios.get(CATEGORY_URL, { params });
       setCategory(response.data.result);
       setPage(response.data.totalpage);
     } catch (err) {
       console.log(err);
     }
   };
-  console.log(process.env.BASE_URL);
   const handleSearch = (result) => {
     navigate(`?search=${result.target.value}`);
   };
@@ -54,7 +53,7 @@ export const CategoryCard = () => {
     getCategory();
   }, [reload, search, sort, currentPage]);
   return (
-    <Flex flexDirection="column" py={5} gap={3} px={5} >
+    <Flex flexDirection="column" py={5} gap={3} px={5}>
       <Flex w={"full"} justifyContent={"space-between"}>
         <Flex gap={3}>
           <InputGroup>
@@ -77,7 +76,7 @@ export const CategoryCard = () => {
         <AddCategory reload={reload} setReload={setReload} />
       </Flex>
 
-      <VStack spacing={4} width={{base:"100%",md:"50%"}} >
+      <VStack spacing={4} width={{ base: "100%", md: "50%" }}>
         {category?.map((item, index) => (
           <Card
             key={item.id}
@@ -89,12 +88,18 @@ export const CategoryCard = () => {
             position="relative"
             display="flex"
             flexDirection="column"
-            bgColor={"#cacfd6"}
+            bgColor={"white"}
           >
             <Flex justifyContent={"flex-end"}>
-            <ButtonOptionCategory id={item.id} name={item.name} image={item.categoryImg} reload={reload} setReload={setReload}/>
+              <ButtonOptionCategory
+                id={item.id}
+                name={item.name}
+                image={item.categoryImg}
+                reload={reload}
+                setReload={setReload}
+              />
             </Flex>
-            <Flex alignItems="center" direction={{base:"column",md:"row"}}>
+            <Flex alignItems="center" direction={{ base: "column", md: "row" }}>
               <Image
                 objectFit="cover"
                 src={`${process.env.REACT_APP_BASE_URL}/categoryImg/${item.categoryImg}`}
@@ -106,13 +111,13 @@ export const CategoryCard = () => {
                 <Heading as="h2" size="md">
                   {item.name}
                 </Heading>
-                <Text>Total product :</Text>
+                <Text>Total product : {item.totalProduct}</Text>
               </Box>
             </Flex>
           </Card>
         ))}
       </VStack>
-        <Pagination totalpage={page} />
+      <Pagination totalpage={page} />
     </Flex>
   );
 };

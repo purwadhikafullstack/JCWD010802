@@ -1,13 +1,13 @@
 import { Box, Heading, Image, VStack } from "@chakra-ui/react";
 import { ResetPasswordForm } from "./components/resetPassForm";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "../../api/axios";
 export const ResetPassView = () => {
   const {token} = useParams()
-
+const navigate = useNavigate()
 const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
   try {
     const response = await axios.patch(`/auth/reset`, {
@@ -18,13 +18,16 @@ const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
       },
     });
     if (response.status === 200) {
-      toast.success('Please Check Your Email', {
+      toast.success('Password has been change!', {
         position: 'top-center',
-        autoClose: 3000, 
-      })}
-    console.log(response.data.message);
+      })
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+    }
   } catch (error) {
-    console.error(error.response.data.message);
+    console.log(error.response.data.message);
+    toast.error(error.response.data.message)
     setFieldError('confirmPassword', error.response.data.message);
   } finally {
     setSubmitting(false);
