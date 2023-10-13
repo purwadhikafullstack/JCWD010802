@@ -40,6 +40,7 @@ module.exports = {
                     userId: req.user.id,
                 },
             });
+    
             let result;
             if (isAdmin) {
                 result = await journal.findAll({
@@ -94,6 +95,23 @@ module.exports = {
                     offset,
                 });
             }
+            console.log('Resul[0]',result[0].stock);
+            const jurnalMapping = result.map((item)=> item.quantity)
+            const stockBulanIni = jurnalMapping.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+            console.log(stockBulanIni,jurnalMapping);
+            let totalStock;
+            totalStock = result[0].stock.quantity - stockBulanIni
+            console.log('Total stock', totalStock);
+            result.forEach(item => {
+                if (item.description === 'Add') {
+                    item.stock.quantity = totalStock + item.quantity;
+                } else if (item.description === 'Reduce') {
+                    item.stock.quantity = totalStock - item.quantity;
+                }
+                console.log(item.stock.quantity);
+                totalStock = item.stock.quantity
+            });
+    
             const total = await journal.count({
                 include: {
                     model: stock,
@@ -186,7 +204,7 @@ module.exports = {
                             },
                             {
                                 model: warehouse,
-                                attributes: ['id', 'name'], 
+                                attributes: ['id', 'name'],
                             },
                         ],
                     },
@@ -217,8 +235,8 @@ module.exports = {
                                 },
                             },
                             {
-                                model: warehouse, 
-                                attributes: ['id', 'name'], 
+                                model: warehouse,
+                                attributes: ['id', 'name'],
                             },
                         ],
                     },
@@ -232,17 +250,18 @@ module.exports = {
                     offset,
                 });
             }
-    
             const filteredResults = monthly ? results.filter((result) => {
                 const updatedAt = new Date(result.updatedAt || result.createdAt);
                 return updatedAt >= startDate && updatedAt <= endDate;
             }) : results;
     
             const productTotals = {};
+    
             filteredResults.forEach((result) => {
                 const productName = result.stock.product.name;
                 const description = result.description;
                 const quantity = result.quantity;
+    
                 if (!productTotals[productName]) {
                     productTotals[productName] = {
                         tambah: 0,
@@ -251,12 +270,15 @@ module.exports = {
                         latestUpdatedAt: null,
                     };
                 }
-                if (description === "tambah") {
+    
+                if (description === "Add") {
                     productTotals[productName].tambah += quantity;
-                } else if (description === "kurang") {
-                    productTotals[productName].kurang += quantity;
+                } else if (description === "Reduce") {
+                    productTotals[productName].kurang -= quantity;
                 }
-                productTotals[productName].quantity = result.stock.quantity;
+
+                productTotals[productName].quantity = result.stock.quantity + productTotals[productName].tambah + productTotals[productName].kurang;
+    
                 const updatedAt = new Date(result.updatedAt || result.createdAt);
                 if (
                     !productTotals[productName].latestUpdatedAt ||
@@ -316,5 +338,6 @@ module.exports = {
             });
         }
     },
+    
     
 };
