@@ -12,6 +12,7 @@ import { PaginationAddress } from "../pagination";
 import { useSelector } from "react-redux";
 import { Filtering } from "./components/filteringProductStock";
 
+
 export const StockHistory = ({
   history,
   page,
@@ -24,7 +25,6 @@ export const StockHistory = ({
   handleMonthly,
   handleReset,
 }) => {
-  console.log(history);
   const user = useSelector((state) => state.user.value);
   return (
     <>
@@ -53,7 +53,8 @@ export const StockHistory = ({
           </Thead>
           <Tbody>
             {history?.map((item) => {
-              const createdAtDate = item.updatedAt?.split("T")[0];
+              const createdAtDate = item.updatedAt.split("T")[0];
+              const actionNote = item.requestHistoryId ? "Manual request" : item.orderId ? "Sales" : "Stock update";
               return (
                 <Tr>
                   {user.roleId === 3 ? (
@@ -61,8 +62,8 @@ export const StockHistory = ({
                   ) : null}
                   <Td>{item.stock?.product?.name}</Td>
                   <Td>{item.quantity}</Td>
-                  <Td>{item.description}</Td>
-                  <Td>{item.stock?.quantity}</Td>
+                  <Td>{actionNote}</Td>
+                  <Td>{item.stock.quantity}</Td>
                   <Td>{createdAtDate}</Td>
                 </Tr>
               );
