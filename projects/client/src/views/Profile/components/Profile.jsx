@@ -9,11 +9,17 @@ import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
 import headersGen from "../../../api/headers";
 import axios from "../../../api/axios";
+import { setLogOut } from "../../../redux/userSlice";
+import { setCartOut } from "../../../redux/cartSlice";
+import { setPriceOut } from "../../../redux/totalPrice";
+import { useNavigate } from "react-router-dom";
 
 export const ProfileCard = () => {
   const profile = useSelector((state) => state.user.value);
   const token = localStorage.getItem("token");
   const headers = headersGen(token);
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const CreateSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     email: Yup.string().email().required("Email is required"),
@@ -32,6 +38,24 @@ export const ProfileCard = () => {
       });
       console.log(error);
     }
+  };
+  const onLogOut = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("warehouseId");
+    toast({
+      title: "Sign Out Success",
+      description: "See you next time!",
+      status: "success",
+      duration: 1200,
+      isClosable: true,
+      position: "top",
+    });
+    setTimeout(() => {
+      dispatch(setLogOut());
+      dispatch(setCartOut());
+      dispatch(setPriceOut());
+      navigate("/login");
+    }, 1500);
   };
 
   return (
@@ -121,6 +145,10 @@ export const ProfileCard = () => {
         </Box>
       </Box>
       <ToastContainer />
+      <Button w="full" color="white" bg="red" mt="20px" display={{ base: "block", lg: "none"}}
+      onClick={onLogOut}>
+        Logout
+      </Button>
     </Flex>
   );
 };

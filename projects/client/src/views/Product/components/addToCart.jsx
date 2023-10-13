@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from 'react-router-dom';
 import { setCart } from '../../../redux/cartSlice';
 import { setPrice } from '../../../redux/totalPrice';
+import headersGen from '../../../api/headers';
 import axios from '../../../api/axios';
 
 export const AddToCart = ({ detail, stock }) => {
@@ -47,6 +48,7 @@ export const AddToCart = ({ detail, stock }) => {
   const data = useSelector((state) => state.user.value);
   const currentURL = window.location.href;
   const token = localStorage.getItem("token")
+  const headers = headersGen(token)
 
   const handleAddToCart = async () => {
     try {
@@ -54,17 +56,9 @@ export const AddToCart = ({ detail, stock }) => {
 
         const response = await axios.post(`/cart/${detail.id}`,
         { quantity: count },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers }
         );
-        const cartResponse = await axios.get(`/cart`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const cartResponse = await axios.get(`/cart`, { headers });
         setReload(!reload);
         dispatch(setCart(cartResponse.data.result))
         dispatch(setPrice(cartResponse.data.Cart.totalPrice))
@@ -105,8 +99,6 @@ export const AddToCart = ({ detail, stock }) => {
   return (
     <>
       <Box
-        mt={4}
-        mx={"auto"}
         borderWidth="1px"
         borderRadius="lg"
         overflow="hidden"
@@ -123,8 +115,8 @@ export const AddToCart = ({ detail, stock }) => {
         </Text>
         <Flex mt={2} justifyContent={"space-between"} flexWrap="wrap"> 
           <Counter onCountChange={handleCountChange} stock={stock} />
-          <Flex>
-            <Text>Total Stock:</Text>
+          <Flex >
+            <Text>Stock:</Text>
             <Text fontWeight={"bold"} color={stockColor} ml={1}> {stock}</Text>
           </Flex>
         </Flex>

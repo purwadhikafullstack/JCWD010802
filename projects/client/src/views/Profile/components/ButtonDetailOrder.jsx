@@ -14,7 +14,7 @@ export const ButtonDetailOrder = ({ data }) => {
     }
     return (
         <>
-            <Button onClick={openModal} bg={"#517664"} color={'white'} _hover={{bg:"#2d3319"}}>Detail</Button>
+            <Button onClick={openModal} color={'#517664'} variant="ghost">Detail</Button>
             <DetailOrder isOpen={isOpen} onClose={closeModal} data={data} />
         </>
     )

@@ -60,7 +60,7 @@ const ProfileGuardedRoute = ({ element }) => {
   if (isProfileAuthenticated()) {
     return element;
   } else {
-    return <NotFound />;
+    return <Navigate to="/login" replace/>; 
   }
 };
 const ProductDetailGuardedRoute = ({ element }) => {

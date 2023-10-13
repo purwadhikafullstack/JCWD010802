@@ -16,12 +16,12 @@ export const Footer = () => {
   return (
     <Flex justify="center" bg="#9fd8cb">
       <Flex
-        mb={{ base: "60px", lg: "0" }}
+        mb={{ base: "120px", lg: "0" }}
         p={{ base: "20px", lg: "40px" }}
-        justifyContent="space-between"
+        justifyContent={{ base: "flex-start", lg: "space-between"}}
         direction={{ base: "column", md: "row" }}
         bg="#9fd8cb"
-        w={{ base: "max-content", lg: "1200px" }}
+        w={{ base: "full", lg: "1200px" }}
         gap={{ base: 5, md: 10 }}
       >
         <Box>
