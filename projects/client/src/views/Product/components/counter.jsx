@@ -44,7 +44,7 @@ export const Counter = ({ stock, onCountChange }) => {
         border={"1px"}
         borderRadius={"lg"}
         borderColor={"gray.200"}
-        w={"120px"}
+        w={"150px"}
       >
         <IconButton
           aria-label="Decrement"

@@ -75,22 +75,12 @@ export const AddToCart = ({ detail, stock }) => {
         }, 2500);;
     } }catch (error) {
       console.error(error);
-      if (error.response) {
-        toast({
-          title: 'Error',
-          description: error.response.data.message, 
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
+      console.log(error);
+      if (error) {
+        toast.error(error.response.data.message,{ position: 'top-center'
+      })
       } else {
-        toast({
-          title: 'Error',
-          description: 'Failed to add item to cart',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
+        toast.error("Failed to add product to wishlist");
       }
     }
   };

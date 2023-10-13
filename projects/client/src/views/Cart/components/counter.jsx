@@ -75,7 +75,7 @@ export const CartCounter = ({ initialCount, onCountChange, productId, cartId }) 
       setInputError(true);
     }
   };
-
+  
   return (
     <Box>
       <Flex align="center" border="1px" borderRadius="lg" borderColor="gray.200" minW="120px" justifyContent="center">
@@ -91,7 +91,7 @@ export const CartCounter = ({ initialCount, onCountChange, productId, cartId }) 
         <Box borderRadius="lg" display="inline-block" mx={3}>
           <Input
             type="text"
-            value={count === 0 ? '' : count}
+            value={count === "" ? 1 : count}
             onChange={handleInputChange}
             min="0"
             max={stock}

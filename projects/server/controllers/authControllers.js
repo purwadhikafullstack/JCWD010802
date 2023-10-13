@@ -13,6 +13,7 @@ module.exports = {
     forgotPassword: async (req, res) => {
         try {
             const { email } = req.body;
+            const findUser = await user.findOne({where:{email:email}})
     
             const existingToken = await forgotToken.findOne({
                 where: {
@@ -20,10 +21,10 @@ module.exports = {
                     createdAt: {
                         [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000), 
                     },
-                    userId: null, 
+                    userId: findUser.id, 
                 },
             });
-    
+
             if (existingToken) {
                 throw { message: "Only 1 password reset request at a time" };
             }
@@ -41,6 +42,10 @@ module.exports = {
             const payload = { id: result.id };
             const token = jwt.sign(payload, process.env.KEY_JWT, { expiresIn: '1d' });
     
+            await forgotToken.create({
+                token: token,
+                userId: result.id, 
+            });
             const data = await fs.readFileSync('./reset.html', 'utf-8');
             const tempCompile = await handlebars.compile(data);
             const tempResult = tempCompile({ token });
@@ -52,10 +57,6 @@ module.exports = {
                 html: tempResult,
             });
     
-            await forgotToken.create({
-                token: token,
-                userId: result.id, 
-            });
     
             res.status(200).send({ message: "Please check your email", token });
         } catch (error) {
@@ -76,15 +77,14 @@ module.exports = {
                         }
                     }
                     )
-                    const findToken = forgotToken.findOne(
-                        {where:{userId:result.id}}
+                    const findToken = await forgotToken.findOne(
+                        {where:{userId:req.user.id}}
                     )
             await findToken.destroy()
-                    res.status(200).send({result, message:"Change password success"})
-            
+                    res.status(200).send({ message:"Change Password Success"})
         } catch (error) {
                 console.log(error);
-                res.status(400).send(error)
+                res.status(400).send({message:"Reset Password Failed"})
             }
     }
 }

@@ -1,7 +1,7 @@
 const  axios  = require("axios");
 const db = require("../models")
 const addresses = db.address
-const {warehouse} = require("../models");
+const {warehouse,stock} = require("../models");
 
 module.exports = {
     getWarehouse : async(req,res) => {
@@ -169,6 +169,7 @@ module.exports = {
             } 
                 await warehouse.update({isDeleted : true},
                     {where:{id:id}});
+                await  stock.update({isDeleted: true},{where:{warehouseId:id}})
                 res.status(200).send({
                     status: true,
                     message: 'Success delete your warehouse',

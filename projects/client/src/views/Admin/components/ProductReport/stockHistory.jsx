@@ -64,6 +64,7 @@ export const StockHistory = ({
                   <Td>{item.quantity}</Td>
                   <Td>{actionNote}</Td>
                   <Td>{item.stock.quantity}</Td>
+
                   <Td>{createdAtDate}</Td>
                 </Tr>
               );

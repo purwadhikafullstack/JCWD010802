@@ -75,9 +75,9 @@ getAdminProfile: async (req,res) => {
             },
         ];
     }
-      const total = await warehouseAdmin.count({where:condition})
+      const total = await warehouseAdmin.count({where:condition,  include: [{model: warehouse,where:{isDeleted:false},include:[{model:address}]},{model: user,where:cari}]})
     
-      const result = await warehouseAdmin.findAll({ limit, offset:offset ,where:condition,  include: [{model: warehouse,include:[{model:address}]},{model: user,where:cari}]})
+      const result = await warehouseAdmin.findAll({ limit, offset:offset ,where:condition,  include: [{model: warehouse,where:{isDeleted:false},include:[{model:address}]},{model: user,where:cari}]})
       res.status(200).send({
         totalPage: Math.ceil(total / limit),
         currentPage: page,
