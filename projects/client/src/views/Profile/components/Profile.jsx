@@ -4,7 +4,7 @@ import { Form, Formik } from "formik";
 import { ChangeImage } from "./modal/modalProfile/modalImage";
 import { ChangePassword } from "./modal/modalProfile/modalPassword";
 import { ToastContainer, toast } from "react-toastify";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
 import headersGen from "../../../api/headers";
