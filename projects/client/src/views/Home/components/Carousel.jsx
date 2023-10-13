@@ -1,7 +1,21 @@
 import { Box, Flex, Image, Skeleton, Text } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
+import axios from "../../../api/axios";
+import headersGen from "../../../api/headers";
 
 export const Carousel = ({ isLoaded }) => {
+  const [slides, setSlides] = useState()
+  const token = localStorage.getItem("token")
+  const headers = headersGen(token)
+
+  const getSlides = async () => {
+    try {
+      const response = await axios.get("/banner", { headers })
+      setSlides(response.data.result)
+    } catch (error) {
+      console.log(error);
+    }
+  }
   const arrowStyles = {
     cursor: "pointer",
     pos: "absolute",
@@ -19,22 +33,9 @@ export const Carousel = ({ isLoaded }) => {
       bg: "black",
     },
   };
-  const slides = [
-    {
-      img: "https://i.postimg.cc/WpCRzjKm/Blue-Dynamic-Fashion-Special-Sale-Banner.png",
-    },
-    {
-      img: "https://i.postimg.cc/y6yHf2r0/Green-and-Peach-Modern-Dots-The-Latest-Gadget-Available-Banner.png",
-    },
-    {
-      img: "https://i.postimg.cc/WbFxwfqS/big-sale-discounts-products.jpg",
-    },
-    {
-      img: "https://i.postimg.cc/kGzJh6yH/7995902.jpg",
-    },
-  ];
+  
   const [currentSlide, setCurrentSlide] = useState(0);
-  const slidesCount = slides.length;
+  const slidesCount = slides?.length;
 
   const prevSlide = () => {
     setCurrentSlide((s) => (s === 0 ? slidesCount - 1 : s - 1));
@@ -53,6 +54,10 @@ export const Carousel = ({ isLoaded }) => {
     // Clear the interval when the component unmounts
     return () => clearInterval(interval);
   }, [currentSlide]);
+
+  useEffect(() => {
+    getSlides()
+  },[])
 
   return (
     <Flex
@@ -80,7 +85,7 @@ export const Carousel = ({ isLoaded }) => {
             transition="transform 0.5s ease"
             w={`${slidesCount * 100}%`}
           >
-            {slides.map((slide, sid) => (
+            {slides?.map((slide, sid) => (
               <Box
                 key={`slide-${sid}`}
                 boxSize="full"
@@ -89,7 +94,7 @@ export const Carousel = ({ isLoaded }) => {
                 w="100%"
               >
                 <Image
-                  src={slide.img}
+                  src={`${process.env.REACT_APP_BASE_URL}/bannerImg/${slide?.bannerImg}`}
                   alt="carousel image"
                   boxSize="full"
                   objectFit="cover"

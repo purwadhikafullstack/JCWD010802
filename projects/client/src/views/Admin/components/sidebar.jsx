@@ -35,7 +35,7 @@ import {
 import { HiMiniPresentationChartBar } from "react-icons/hi2";
 import { PiPackageFill } from "react-icons/pi";
 import { AiFillGift } from "react-icons/ai";
-import { BsGearFill, BsFillCartFill } from "react-icons/bs";
+import { BsGearFill, BsFillCartFill, BsFillImageFill } from "react-icons/bs";
 import {
   Link,
   NavLink,
@@ -172,6 +172,11 @@ export const Sidebar = () => {
             <NavLink to="warehouse">
               <NavItem icon={FaWarehouse} to="/admin/warehouse">
                 Warehouse
+              </NavItem>
+            </NavLink>
+            <NavLink to="banner">
+              <NavItem icon={BsFillImageFill} to="/admin/banner">
+                Banners
               </NavItem>
             </NavLink>
           </>

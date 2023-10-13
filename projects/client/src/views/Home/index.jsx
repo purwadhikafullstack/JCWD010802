@@ -5,6 +5,7 @@ import { NewProduct } from "./components/NewProduct"
 import { Category } from "./components/Category"
 import { useEffect, useState } from "react"
 import axios from "../../api/axios"
+import { CarouselLoading } from "./components/CarouselLoading"
 
 export const HomepageView = () => {
   const [category, setCategory] = useState()
@@ -48,7 +49,7 @@ export const HomepageView = () => {
 }, [category, topProduct, newProduct]);
   return (
     <Flex bg="#edf3f8" minH="100vh" direction="column" pt="80px" alignItems="center">
-      <Carousel isLoaded={isLoaded} />
+      {isLoaded ? <Carousel isLoaded={isLoaded} /> : <CarouselLoading />}
       <Category data={category} isLoaded={isLoaded} />
       <NewProduct data={newProduct} isLoaded={isLoaded} />
       <TopProduct data={topProduct} isLoaded={isLoaded} />

@@ -4,7 +4,7 @@ import { Form, Formik } from "formik";
 import { ChangeImage } from "./modal/modalProfile/modalImage";
 import { ChangePassword } from "./modal/modalProfile/modalPassword";
 import { ToastContainer, toast } from "react-toastify";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
 import headersGen from "../../../api/headers";
@@ -73,7 +73,7 @@ export const ProfileCard = () => {
           <VStack spacing={5}>
             <Avatar
               size="2xl"
-              src={`http://localhost:8000/profileImg/${profile.profileImg}`}
+              src={`${process.env.REACT_APP_BASE_URL}/profileImg/${profile.profileImg}`}
               name={profile.name}
             />
             <ChangeImage />

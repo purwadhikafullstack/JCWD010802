@@ -125,14 +125,28 @@ export const EditProduct = ({ isOpen, onClose, category, product, reload }) => {
                             />
                             <FormControl>
                                 <FormLabel textColor={"black"}>Image</FormLabel>
-                                <ErrorMessage
-                                component="div"
-                                name="file"
-                                style={{ color: "red" }}
-                                />
                                 <Input
                                 onChange={(e) => {
-                                    props.setFieldValue("file", e.target.files[0]);
+                                    const selectedFile = e.target.files[0];
+                                    if (selectedFile) {
+                                        const allowedFileTypes = [
+                                            "image/jpeg",
+                                            "image/jpg",
+                                            "image/png",
+                                            "image/gif",
+                                        ];
+                                        if (allowedFileTypes.includes(selectedFile.type)) {
+                                            props.setFieldValue("file", selectedFile);
+                                        } else {
+                                            toast.error(
+                                                "Invalid file type. Please select a valid image file.",
+                                                {
+                                                    position: toast.POSITION.TOP_RIGHT,
+                                                    autoClose: 2000,
+                                                }
+                                                );
+                                            }
+                                        }
                                 }}
                                 variant="flushed"
                                 type="file"
@@ -140,6 +154,12 @@ export const EditProduct = ({ isOpen, onClose, category, product, reload }) => {
                                 placeholder="Choose file"
                                 mb={4}
                                 bgColor={"white"}
+                                accept=".jpg, .jpeg, .png, .gif"
+                                />
+                                <ErrorMessage
+                                component="div"
+                                name="file"
+                                style={{ color: "red" }}
                                 />
                             </FormControl>
                             <Flex justifyContent="flex-end" gap={2}>

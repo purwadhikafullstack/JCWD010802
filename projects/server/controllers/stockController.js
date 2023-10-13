@@ -64,8 +64,7 @@ module.exports = {
           limit,
           offset
       });
-  
-      // Menghapus duplikat berdasarkan productId dan menjaga total kuantitas
+
       const groupedStock = result.reduce((grouped, item) => {
           const { productId, quantity, warehouseId, id } = item;
           if (!grouped[productId]) {
