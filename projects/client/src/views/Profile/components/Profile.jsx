@@ -71,7 +71,7 @@ export const ProfileCard = () => {
       >
         <Flex justifyContent={"center"} alignItems={"center"} w="full">
           <VStack spacing={5}>
-            <Avatar size="2xl"src={`http://localhost:8000/profileImg/${profile.profileImg}`} name={profile.name}/>
+            <Avatar size="2xl"src={`${process.env.REACT_APP_BASE_URL}/profileImg/${profile.profileImg}`} name={profile.name}/>
             <ChangeImage />
           </VStack>
         </Flex>

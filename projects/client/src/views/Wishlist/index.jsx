@@ -93,7 +93,7 @@ import axios from "../../api/axios";
                   _hover={{ transform: "scale(1.05)" }}
                   >
                   <Image
-                    src={`http://localhost:8000/productImg/${item.product.productImg}`}
+                    src={`${process.env.REACT_APP_BASE_URL}/productImg/${item.product.productImg}`}
                     w={"180px"}
                     h={"180px"}
                     borderRadius={"10px"}

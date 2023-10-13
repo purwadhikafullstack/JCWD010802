@@ -2,6 +2,8 @@ const db = require("../models")
 const product = db.product
 const user = db.user
 const categories = db.category
+const stock = db.stock
+const warehouse = db.warehouse
 const { Op } = require("sequelize");
 
 module.exports = {
@@ -127,6 +129,15 @@ module.exports = {
                 description,
                 categoryId: catLike.id,
                 productImg,
+            })
+            const allWarehouse = await warehouse.findAll({ where: { isDeleted: false } })
+            allWarehouse.forEach(async (item) => {
+                await stock.create({
+                    productId: result.id,
+                    warehouseId: item.id,
+                    isDeleted: false,
+                    quantity: 0
+                })
             })
             res.status(201).send({
                 msg: "Success to create new product",

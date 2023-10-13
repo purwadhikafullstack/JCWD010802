@@ -97,7 +97,7 @@ export const CategoryCard = () => {
             <Flex alignItems="center" direction={{base:"column",md:"row"}}>
               <Image
                 objectFit="cover"
-                src={`http://localhost:8000/categoryImg/${item.categoryImg}`}
+                src={`${process.env.REACT_APP_BASE_URL}/categoryImg/${item.categoryImg}`}
                 shadow={"lg"}
                 alt="#"
                 boxSize="100px"

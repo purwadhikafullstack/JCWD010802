@@ -21,16 +21,16 @@ export const Carousel = ({ isLoaded }) => {
   };
   const slides = [
     {
-      img: "https://i.postimg.cc/WpCRzjKm/Blue-Dynamic-Fashion-Special-Sale-Banner.png",
+      img: "https://i.ibb.co/rcFHXLL/Blue-Dynamic-Fashion-Special-Sale-Banner.png",
     },
     {
-      img: "https://i.postimg.cc/y6yHf2r0/Green-and-Peach-Modern-Dots-The-Latest-Gadget-Available-Banner.png",
+      img: "https://i.ibb.co/vwVBk5f/7995902.jpg",
     },
     {
-      img: "https://i.postimg.cc/WbFxwfqS/big-sale-discounts-products.jpg",
+      img: "https://i.ibb.co/hcsQNZy/Green-and-Peach-Modern-Dots-The-Latest-Gadget-Available-Banner.png",
     },
     {
-      img: "https://i.postimg.cc/kGzJh6yH/7995902.jpg",
+      img: "https://i.ibb.co/x7R6L8K/big-sale-discounts-products.jpg",
     },
   ];
   const [currentSlide, setCurrentSlide] = useState(0);

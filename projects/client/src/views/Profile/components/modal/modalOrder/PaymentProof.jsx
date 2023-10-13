@@ -64,7 +64,7 @@ export const PaymentProof = ({ isOpen, onClose, id, reload }) => {
                                     />
                                 </FormControl>
                                 <Flex w="full" gap={2} justify="flex-end">
-                                    <Button onClick={onClose} >Close</Button>
+                                    <Button bg={"red"} color={"white"} onClick={onClose} >Close</Button>
                                     <Button bg={"#517664"} color={'white'} _hover={{bg:"#2d3319"}} type="submit">Submit</Button>
                                 </Flex>
                             </Flex>

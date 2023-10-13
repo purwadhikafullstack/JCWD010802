@@ -24,13 +24,13 @@ export const ProductTable = ({ reload, product, category }) => {
                             <Tr key={item.id}>
                                 <Td>
                                     <Flex align="center" gap={2}>
-                                        <Avatar size="md" src={`http://localhost:8000/productImg/${item.productImg}`} />
+                                        <Avatar size="md" src={`${process.env.REACT_APP_BASE_URL}/productImg/${item.productImg}`} />
                                         <Text  maxW="200px" whiteSpace="nowrap" textOverflow="ellipsis" overflow="hidden">{item.name}</Text>
                                     </Flex>
                                 </Td>
                                 <Td>{formatIDR(item.price)}</Td>
                                 <Td>{item.category.name}</Td>
-                                <Td>{item.weight} kg</Td>
+                                <Td>{item.weight} g</Td>
                                 <Td display={user.roleId === 3 ? "block" : "none"}>
                                     <Flex align="center" gap={1}>
                                         <EditProductButton product={item} category={category} reload={reload} />

@@ -16,12 +16,13 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { PaginationAddress } from "../pagination";
 import { BsSearch } from "react-icons/bs";
 import { useSelector } from "react-redux";
+import headersGen from "../../../../api/headers";
+import axios from "../../../../api/axios";
 
 export const ProductWarehouse = () => {
   const [history, setHistory] = useState();
@@ -35,14 +36,13 @@ export const ProductWarehouse = () => {
   const monthly = params.get("monthly") || "";
   const currentPage = Number(params.get("page")) || 1;
   const user = useSelector((state) => state.user.value);
+  const token = localStorage.getItem("token")
+  const headers = headersGen(token)
 
   const getProductWarehouse = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/report/product?search=${search}&warehouseId=${warehouseId}&monthly=${monthly}&page=${currentPage}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
+      const response = await axios.get(`/report/product?search=${search}&warehouseId=${warehouseId}&monthly=${monthly}&page=${currentPage}`,
+        { headers }
       );
       setHistory(response.data.groupedResults);
       setPage(response.data.totalpage);
@@ -52,9 +52,7 @@ export const ProductWarehouse = () => {
   };
   const getWarehouse = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/api/warehouse/list`
-      );
+      const response = await axios.get(`/warehouse/list`);
       setWarehouse(response.data);
     } catch (error) {
       console.log(error);

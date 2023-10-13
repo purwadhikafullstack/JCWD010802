@@ -45,7 +45,7 @@ export const AdminProducts = () => {
 
     const getCategories = async () => {
         try {
-            const response = await axios.get("http://localhost:8000/api/category?limit=9999")
+            const response = await axios.get("/category?limit=9999")
             setCategory(response.data.result)
         } catch (error) {
             console.log(error);

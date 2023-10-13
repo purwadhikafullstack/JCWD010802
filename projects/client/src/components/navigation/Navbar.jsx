@@ -66,7 +66,7 @@ export const Navbar = () => {
     >
       <HStack spacing={3} mr={1} display={{ base: "none", lg: "flex" }}>
         <Box onClick={onClickHome} >
-          <Image src="https://i.postimg.cc/rs836p0m/web-logo.png" h="140px" />
+          <Image src="https://i.ibb.co/mqYvhvC/web-logo.png" h="140px" />
         </Box>
         <Button
           variant="ghost"
@@ -141,7 +141,7 @@ export const Navbar = () => {
             </Menu> :
             <Menu>
               <MenuButton as={Button} variant="ghost" _active={{ bg: "#517664"}} mr="10px" _hover={{ bg: " #517664"}}>
-                <Avatar size="md" src={`http://localhost:8000/profileImg/${data.profileImg}`}/>
+                <Avatar size="md" src={`${process.env.REACT_APP_BASE_URL}/profileImg/${data.profileImg}`}/>
               </MenuButton>
               <MenuList color="#517664">
                 <NavLink to={"/profile"}>

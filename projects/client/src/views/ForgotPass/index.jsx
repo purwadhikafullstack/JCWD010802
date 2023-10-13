@@ -3,19 +3,16 @@ import { ForgotPasswordForm } from "./components/forgotPassForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IoArrowBack } from "react-icons/io5";
-
-import axios from "axios";
 import { NotFound } from "../../pages/Error";
 import { NavLink } from "react-router-dom";
+import axios from "../../api/axios";
+
 export const ForgotPassPageView = () => {
   const token = localStorage.getItem("token");
   const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/auth/forgot",
-        {
-          email: values.email,
-        }
+      const response = await axios.post("/auth/forgot",
+        { email: values.email }
       );
       if (response.status === 200) {
         toast.success("Please Check Your Email", {

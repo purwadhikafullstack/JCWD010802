@@ -342,21 +342,21 @@ module.exports = {
                 statusFilter["id"] = +statusId
             }
 
-            const filter = {};
+            const filter = { userId: req.user.id };
             if (search) {
                 filter[Op.or] = [
-                    { name: { [Op.like]: `%${search}%`, }, },];
+                    { invoice: { [Op.like]: `%${search}%`, }, },];
             }
             const isUserExist = await user.findOne({
                 where: { id: req.user.id }
             })
             if (!isUserExist) throw { message: "User not found!" }
             const result = await orders.findAll({
-                where: { userId: req.user.id },
+                where: filter,
                 attributes: { exclude: ['updatedAt'] },
                 include: [
                     { model: orderItem, attributes: { exclude: ['createdAt', 'updatedAt'] }, 
-                    include: [ { model: product, attributes: { exclude: ['createdAt', 'updatedAt', 'isDeleted', 'isActive']}, where: filter}] },
+                    include: [ { model: product, attributes: { exclude: ['createdAt', 'updatedAt', 'isDeleted', 'isActive']}, }] },
                     { model: status, where: statusFilter }
                 ],
                 limit,
@@ -366,11 +366,11 @@ module.exports = {
                 ]
             })
             const total = await orders.count({
-                where: { userId: req.user.id },
+                where: filter,
                 attributes: { exclude: ['updatedAt'] },
                 include: [
                     { model: orderItem, attributes: { exclude: ['createdAt', 'updatedAt'] }, 
-                    include: [ { model: product, attributes: { exclude: ['createdAt', 'updatedAt', 'isDeleted', 'isActive']}, where: filter}] },
+                    include: [ { model: product, attributes: { exclude: ['createdAt', 'updatedAt', 'isDeleted', 'isActive']}}] },
                     { model: status, where: statusFilter }
                 ]
             })
