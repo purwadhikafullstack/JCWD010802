@@ -61,11 +61,11 @@ export const UserProfileModal = ({ user, profile, isOpen, onClose }) => {
                 Address :
               </Text>
               <UnorderedList mt={2}>
-                {profile.map((item, index) => (
+                {profile?.map((item, index) => (
                   <ListItem key={index} color={"#2d3319"}>
                     <Text color={"#2d3319"}>
-                      {item.address.address}, {item.address.nama_kota},{" "}
-                      {item.address.nama_provinsi}
+                      {item?.address?.address}, {item?.address?.nama_kota},{" "}
+                      {item?.address?.nama_provinsi}
                     </Text>
                     {item.isPrimary && (
                       <Badge

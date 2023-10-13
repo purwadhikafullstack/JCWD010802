@@ -12,6 +12,7 @@ import { PaginationAddress } from "../pagination";
 import { useSelector } from "react-redux";
 import { Filtering } from "./components/filteringProductStock";
 
+
 export const StockHistory = ({
   history,
   page,
@@ -54,7 +55,6 @@ export const StockHistory = ({
             {history?.map((item) => {
               const createdAtDate = item.updatedAt.split("T")[0];
               const actionNote = item.requestHistoryId ? "Manual request" : item.orderId ? "Sales" : "Stock update";
-
               return (
                 <Tr>
                   {user.roleId === 3 ? (

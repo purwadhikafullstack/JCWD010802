@@ -1,138 +1,42 @@
 import {
-  Box,
-  Flex,
-  Icon,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Select,
   Table,
   TableCaption,
   TableContainer,
   Tbody,
   Td,
-  Text,
   Th,
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { PaginationAddress } from "../pagination";
-import { BsSearch } from "react-icons/bs";
 import { useSelector } from "react-redux";
+import { Filtering } from "./components/filteringProductStock";
 
-export const ProductWarehouse = () => {
-  const [history, setHistory] = useState();
-  const [warehouse, setWarehouse] = useState([]);
-  const [page, setPage] = useState([]);
-  const navigate = useNavigate();
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const search = params.get("search") || "";
-  const warehouseId = params.get("warehouseId") || "";
-  const monthly = params.get("monthly") || "";
-  const currentPage = Number(params.get("page")) || 1;
+export const ProductWarehouse = ({
+  history,
+  page,
+  search,
+  warehouse,
+  warehouseId,
+  monthly,
+  handleSearch,
+  handleWarehouseChange,
+  handleMonthly,
+  handleReset,
+}) => {
   const user = useSelector((state) => state.user.value);
-
-  const getProductWarehouse = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8000/api/report/product?search=${search}&warehouseId=${warehouseId}&monthly=${monthly}&page=${currentPage}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
-      setHistory(response.data.groupedResults);
-      setPage(response.data.totalpage);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const getWarehouse = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8000/api/warehouse/list`
-      );
-      setWarehouse(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const handleSearch = (e) => {
-    navigate(
-      `?search=${e.target.value}&warehouseId=${warehouseId}&monthly=${monthly}&page=${currentPage}`
-    );
-  };
-  const handleWarehouseChange = (e) => {
-    navigate(
-      `?warehouseId=${e.target.value}&monthly=${monthly}&page=${currentPage}`
-    );
-  };
-  const handleMonthly = (e) => {
-    navigate(
-      `?warehouseId=${warehouseId}&monthly=${e.target.value}&page=${currentPage}`
-    );
-  };
-  useEffect(() => {
-    getProductWarehouse();
-    getWarehouse();
-  }, [search, warehouseId, currentPage, monthly]);
   return (
     <>
-      <Flex
-        gap={5}
-        maxW={"100vw"}
-        justifyContent={"space-between"}
-        alignItems={"center"}
-      >
-        <Flex maxW={"50vw"} gap={5} mt={6}>
-          {user.roleId === 3 ? (
-            <Select
-              id="warehouseSelect"
-              value={warehouseId}
-              onChange={handleWarehouseChange}
-              maxWidth="200px"
-              borderColor={"2px solid black"}
-            >
-              <option value="">Select a warehouse</option>
-              {warehouse?.map((warehouse) => (
-                <option key={warehouse.id} value={warehouse.id}>
-                  {warehouse.name}
-                </option>
-              ))}
-            </Select>
-          ) : null}
-          <InputGroup>
-            <Input
-              variant="outline"
-              placeholder="Search"
-              _placeholder={{ color: "black" }}
-              defaultValue={search}
-              type={"search"}
-              color={"black"}
-              onChange={handleSearch}
-              borderColor={"2px solid black"}
-            />
-            <InputLeftElement>
-              <Icon as={BsSearch} color={"gray.500"} />
-            </InputLeftElement>
-          </InputGroup>
-        </Flex>
-        <Flex maxW={"30vw"}>
-          <Box>
-            <Text as={"sup"} fontWeight={"bold"}>
-              Filter by month :
-            </Text>
-            <Input
-              type="month"
-              onChange={handleMonthly}
-              borderColor={"2px solid black"}
-            ></Input>
-          </Box>
-        </Flex>
-      </Flex>
+      <Filtering
+        search={search}
+        warehouse={warehouse}
+        warehouseId={warehouseId}
+        monthly={monthly}
+        handleSearch={handleSearch}
+        handleWarehouseChange={handleWarehouseChange}
+        handleMonthly={handleMonthly}
+        handleReset={handleReset}
+      />
       <TableContainer>
         <Table variant="striped" colorScheme="green">
           <TableCaption>STOCK REPORT ALL PRODUCT</TableCaption>

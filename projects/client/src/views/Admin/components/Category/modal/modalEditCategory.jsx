@@ -20,7 +20,15 @@ import "react-toastify/dist/ReactToastify.css";
 import { InputField } from "../../../../../components/input/InputField";
 import axios from "../../../../../api/axios";
 
-export const ModalEditCategory = ({ id, name, image, isOpen, onClose, reload, setReload }) => {
+export const ModalEditCategory = ({
+  id,
+  name,
+  image,
+  isOpen,
+  onClose,
+  reload,
+  setReload,
+}) => {
   const finalRef = React.useRef(null);
   const CreateSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
@@ -33,15 +41,15 @@ export const ModalEditCategory = ({ id, name, image, isOpen, onClose, reload, se
       const formData = new FormData();
       formData.append("name", name);
       formData.append("file", file);
-      const response = await axios.patch(`/category/edit/${id}`, formData,
-        { "Content-Type": "multipart/form-data", }
-      );
+      const response = await axios.patch(`/category/edit/${id}`, formData, {
+        "Content-Type": "multipart/form-data",
+      });
       setReload(!reload);
       onClose();
-      toast.success('Category updated successfully');
+      toast.success("Category updated successfully");
     } catch (err) {
       console.log(err);
-      toast.error('Error updating category', {
+      toast.error("Error updating category", {
         position: toast.POSITION.TOP_RIGHT,
       });
     }
@@ -91,7 +99,26 @@ export const ModalEditCategory = ({ id, name, image, isOpen, onClose, reload, se
                       />
                       <Input
                         onChange={(e) => {
-                          props.setFieldValue("file", e.target.files[0]);
+                          const selectedFile = e.target.files[0];
+                          if (selectedFile) {
+                            const allowedFileTypes = [
+                              "image/jpeg",
+                              "image/jpg",
+                              "image/png",
+                              "image/gif",
+                            ];
+                            if (allowedFileTypes.includes(selectedFile.type)) {
+                              props.setFieldValue("file", selectedFile);
+                            } else {
+                              toast.error(
+                                "Invalid file type. Please select a valid image file.",
+                                {
+                                  position: toast.POSITION.TOP_RIGHT,
+                                  autoClose: 2000,
+                                }
+                              );
+                            }
+                          }
                         }}
                         variant="flushed"
                         type="file"
@@ -99,6 +126,7 @@ export const ModalEditCategory = ({ id, name, image, isOpen, onClose, reload, se
                         placeholder="Choose file"
                         mb={4}
                         bgColor={"transparent"}
+                        accept=".jpg, .jpeg, .png, .gif"
                       />
                     </FormControl>
                   </Box>
