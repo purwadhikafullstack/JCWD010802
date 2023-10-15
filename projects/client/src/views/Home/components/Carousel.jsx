@@ -1,16 +1,13 @@
 import { Box, Flex, Image, Skeleton, Text } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import axios from "../../../api/axios";
-import headersGen from "../../../api/headers";
 
 export const Carousel = ({ isLoaded }) => {
   const [slides, setSlides] = useState()
-  const token = localStorage.getItem("token")
-  const headers = headersGen(token)
 
   const getSlides = async () => {
     try {
-      const response = await axios.get("/banner", { headers })
+      const response = await axios.get("/banner")
       setSlides(response.data.result)
     } catch (error) {
       console.log(error);
