@@ -17,7 +17,7 @@ const mutationController = require("./mutationController")
 const dashboardController = require("./dashboardController")
 const adminOrderController = require("./adminOrderController")
 const salesReportController = require("./salesReportController")
-
+const bannerController = require("./bannerController")
 
 module.exports = {
     userControllers,
@@ -41,4 +41,5 @@ module.exports = {
     mutationController,
     dashboardController,
     adminOrderController,
+    bannerController
 }

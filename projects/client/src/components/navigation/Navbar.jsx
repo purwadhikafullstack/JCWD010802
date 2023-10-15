@@ -8,6 +8,7 @@ import { setPriceOut } from "../../redux/totalPrice";
 import { CartNotif } from "./cartNotif";
 import { WishlistNav } from "./WishlistNav";
 import { BiSearchAlt2 } from "react-icons/bi";
+import Logo from "../../assets/Navbar/web-logo.png"
 
 export const Navbar = () => {
   const data = useSelector((state) => state.user.value);
@@ -66,7 +67,7 @@ export const Navbar = () => {
     >
       <HStack spacing={3} mr={1} display={{ base: "none", lg: "flex" }}>
         <Box onClick={onClickHome} >
-          <Image src="https://i.ibb.co/mqYvhvC/web-logo.png" h="140px" />
+          <Image src={Logo} h="140px" />
         </Box>
         <Button
           variant="ghost"
@@ -100,7 +101,7 @@ export const Navbar = () => {
         <Text>|</Text>
         }
         
-        {!data.name ? (
+        {!data?.name ? (
           <Flex align="center">
             <Button
               variant="ghost"
@@ -131,7 +132,7 @@ export const Navbar = () => {
             {data?.roleId === 1?
             <Menu>
               <MenuButton as={Button} variant="ghost" _active={{ bg: "#517664"}} mr="10px">
-                <Avatar size="sm" />
+                <Avatar src={`${process.env.REACT_APP_BASE_URL}/profileImg/${data?.profileImg}`} size="sm" />
               </MenuButton>
               <MenuList color="#517664">
                 <MenuItem as={Link} to={"/profile"}>Profile</MenuItem>
@@ -141,7 +142,7 @@ export const Navbar = () => {
             </Menu> :
             <Menu>
               <MenuButton as={Button} variant="ghost" _active={{ bg: "#517664"}} mr="10px" _hover={{ bg: " #517664"}}>
-                <Avatar size="md" src={`${process.env.REACT_APP_BASE_URL}/profileImg/${data.profileImg}`}/>
+                <Avatar size="sm" src={`${process.env.REACT_APP_BASE_URL}/profileImg/${data?.profileImg}`}/>
               </MenuButton>
               <MenuList color="#517664">
                 <NavLink to={"/profile"}>

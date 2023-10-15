@@ -4,6 +4,8 @@ import { AddressCard } from "./components/Address";
 import { OrderList } from "./components/OrderList";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { NotFound } from "../../pages/Error";
+
 
 export const ProfileView = () => {
   const data = useSelector(state=>state.user.value)
@@ -22,6 +24,9 @@ export const ProfileView = () => {
         }
     };
     const activeTab = getTabFromHash(hash);
+    const user = useSelector((state) => state.user.value);
+    if (user.isVerified) {
+
   return (
    <Flex p={5} justify={{base: "flex-start", lg: "center"}} bgColor={"#edf3f8"} direction={{base:"column", md:"row"}} minH={"100vh"} pt={"100px"}>
     <Tabs isFitted variant='enclosed' index={activeTab}>
@@ -47,5 +52,9 @@ export const ProfileView = () => {
       </TabPanels>
     </Tabs>
     </Flex>
-  );
+  )}else{
+    return (
+    <NotFound/>)
+  }
+
 };

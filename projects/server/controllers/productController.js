@@ -161,20 +161,27 @@ module.exports = {
                 weight,
                 description
             } = req.body;
-            const {
-                id
-            } = req.params
-            const productImg = req.file.filename
+            const { id } = req.params
+            let productImg;
             const catLike = await categories.findOne({
                 where: {
                     id: categoryId
                 }
             })
+            const findProduct = await product.findOne({ where: { id } })
+            
             if (!catLike) {
                 return res.status(400).send({
                     message: 'Category not found'
                 })
             };
+
+            if (req.file) {
+                productImg = req.file.filename
+            } else {
+                productImg = findProduct.productImg
+            }
+            
             const result = await product.update({
                 name,
                 price,

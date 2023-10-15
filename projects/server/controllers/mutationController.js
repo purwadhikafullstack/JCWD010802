@@ -251,7 +251,7 @@ allRequest : async (req, res) => {
         where: { id: id },
         include: [{ model: stock, include: { model: product } }],
       });
-  
+  console.log(id);
       if (!findRequest) {
         return res.status(404).send("Request not found");
       }

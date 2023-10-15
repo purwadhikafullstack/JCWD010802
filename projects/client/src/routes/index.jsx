@@ -44,6 +44,7 @@ import { ProductNotFound } from "../views/Error/components/productNotFound";
 import { Wishlist } from "../pages/Wishlist";
 import { ProductReport } from "../views/Admin/ProductReport";
 import { SalesReportView } from "../views/Admin/SalesReport";
+import { Banner } from "../views/Admin/Banner";
 
 const UserGuardedRoute = ({ element }) => {
   const isUserAuthenticated = useUserAuthentication();
@@ -54,15 +55,7 @@ const UserGuardedRoute = ({ element }) => {
     return <NotFound />;
   }
 };
-const ProfileGuardedRoute = ({ element }) => {
-  const isProfileAuthenticated = useProfileAuthentication();
 
-  if (isProfileAuthenticated()) {
-    return element;
-  } else {
-    return <Navigate to="/login" replace/>; 
-  }
-};
 const ProductDetailGuardedRoute = ({ element }) => {
   const { id } = useParams();
   const product = useIdValidation(id);
@@ -75,14 +68,9 @@ const ProductDetailGuardedRoute = ({ element }) => {
 };
 const LoginGuardedRoute = ({ element }) => {
   const isLoginAuthenticated = useLoginAuthentication();
-  const isUser = useUserAuthentication();
 
   if (isLoginAuthenticated()) {
-    if (isUser()) {
       return <Navigate to="/" />;
-    } else {
-      return <Navigate to="/admin" />;
-    }
   } else {
     return element;
   }
@@ -94,7 +82,7 @@ const Routes = (
       <Route path="" element={<HomepageView />} />
       <Route
         path="profile"
-        element={<ProfileGuardedRoute element={<ProfileView />} />}
+         element={<ProfileView />} 
       />
       <Route path="cart" element={<UserGuardedRoute element={<Cart />} />} />
       <Route
@@ -146,6 +134,7 @@ const Routes = (
       <Route path="order/detail-order/:id" element={<OrderDetailView />} />
       <Route path="product-report" element={<ProductReport />} />
       <Route path="sales-report" element={<SalesReportView />} />
+      <Route path="banner" element={<Banner />} />
     </Route>
     <Route path="*" element={<NotFound />} />
   </>
