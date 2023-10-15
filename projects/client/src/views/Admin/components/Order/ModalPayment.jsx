@@ -9,7 +9,7 @@ export const ModalPayment = ({ isOpen, onClose, image }) => {
                 <ModalHeader>Payment Proof</ModalHeader>
                 <ModalBody>
                     <Flex justify="center">
-                        <Image src={`http://localhost:8000/paymentImg/${image}`} />
+                        <Image src={`${process.env.REACT_APP_BASE_URL}/paymentImg/${image}`} />
                     </Flex>
                 </ModalBody>
                 <ModalFooter>

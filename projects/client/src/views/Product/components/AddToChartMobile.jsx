@@ -21,7 +21,7 @@ export const AddToCartMobile = ({ detail, stock }) => {
     const handleAddToCart = async () => {
         try {
             if(data.isVerified){
-                 const response = await axios.post(`/cart/${detail.id}`,
+                 await axios.post(`/cart/${detail.id}`,
                 { quantity: 1 },
                 { headers }
                 );
@@ -62,6 +62,7 @@ export const AddToCartMobile = ({ detail, stock }) => {
     };
     return (
         <Flex w="100vw" position="fixed" bottom={"60px"} h={"60px"} bg={"white"} zIndex={999} p="20px" align="center" justifyContent="space-between">
+            <ToastContainer />
             <IconButton icon={<AiOutlineHeart />} variant="outline" borderColor={"#517664"} />
             <Button
                 bg={"white"} color={'#517664'} borderColor={"#517664"}

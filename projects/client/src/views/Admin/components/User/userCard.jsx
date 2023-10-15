@@ -148,7 +148,7 @@ const handleResetFilter = () => {
       boxSize="100%" 
       aspectRatio={1}
       borderRadius={"10px"}       
-      src={`http://localhost:8000/profileImg/${item.profileImg}`}
+      src={`${process.env.REACT_APP_BASE_URL}/profileImg/${item.profileImg}`}
         alt="profile image"
       />
     ) : (

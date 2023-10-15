@@ -9,7 +9,7 @@ export const CategoryCard = ({ data, onClick, isLoaded }) => {
                 <Flex direction="column" bg="white" alignItems="center" p="10px" minW="161px"
                 borderRadius="10px" shadow="md" key={item.name} onClick={() => onClick(item.id)}>
                     <Box>
-                        <Image src={`http://localhost:8000/categoryImg/${item.categoryImg}`} w="full" h="100px" objectFit="contain" />
+                        <Image src={`${process.env.REACT_APP_BASE_URL}/categoryImg/${item.categoryImg}`} w="full" h="100px" objectFit="contain" />
                     </Box>
                     <Box mt="10px">
                         <Text fontSize="14px" fontWeight="bold">{item.name}</Text>

@@ -18,8 +18,8 @@ module.exports = {
       const page = +req.query.page || 1;
       const limit = +req.query.limit || 10;
       const offset = (page - 1) * limit;
-      const filter = {};
-      const warehouseFilter = {}
+      const filter = { isDeleted: false };
+      const warehouseFilter = { isDeleted: false }
       if (idWarehouse) {
         warehouseFilter.warehouseId = idWarehouse
       }
@@ -96,7 +96,7 @@ module.exports = {
       } else {
         result = await stock.findAll({
           include: [{ model: product, where: filter }, { model: warehouse }],
-          where: { warehouseId: checkAdmin.warehouseId },
+          where: { warehouseId: checkAdmin.warehouseId, isDeleted: false },
           order,
           limit,
           offset,
