@@ -164,7 +164,7 @@ export const ListAdmin = () => {
                 <Image
                 objectFit="cover"
                 borderRadius={"10px"} 
-                src={`http://localhost:8000/profileImg/${item.user.profileImg}`}
+                src={`${process.env.REACT_APP_BASE_URL}/profileImg/${item.user.profileImg}`}
                 alt="profile image"
         boxSize="100px"
         aspectRatio={1}

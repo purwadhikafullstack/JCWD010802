@@ -21,7 +21,7 @@ export const DetailProductOrder = ({ data }) => {
                 <Flex alignItems="center">
                     <Image
                         objectFit="cover"
-                        src={`http://localhost:8000/productImg/${item.product.productImg}`}
+                        src={`${process.env.REACT_APP_BASE_URL}/productImg/${item.product.productImg}`}
                         alt="#"
                         boxSize="100px" 
                         />

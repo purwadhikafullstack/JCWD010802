@@ -37,9 +37,9 @@ export const CancelOrder = ({ isOpen, onClose, id, reload }) => {
                     <Heading fontSize="22px">Are you sure you want to cancel your order?</Heading>
                 </ModalBody>
                 <ModalFooter>
-                    <Flex w="full" justifyContent="flex-end">
-                        <Button onClick={handleCancel}>Confirm</Button>
-                        <Button onClick={onClose}>Cancel</Button>
+                    <Flex w="full" justifyContent="flex-end" gap={2}>
+                        <Button bg={"red"} color={"white"} onClick={onClose}>Close</Button>
+                        <Button bg={"#517664"} color={'white'} _hover={{bg:"#2d3319"}} onClick={handleCancel}>Confirm</Button>
                     </Flex>
                 </ModalFooter>
             </ModalContent>

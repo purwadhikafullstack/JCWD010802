@@ -17,7 +17,7 @@ export const ProductCardModal = ({ data }) => {
             <Flex alignItems="center">
                 <Image
                     objectFit="cover"
-                    src={`http://localhost:8000/productImg/${data.product.productImg}`}
+                    src={`${process.env.REACT_APP_BASE_URL}/productImg/${data.product.productImg}`}
                     alt="#"
                     boxSize="100px" 
                     />

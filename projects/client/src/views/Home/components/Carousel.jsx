@@ -30,7 +30,7 @@ export const Carousel = ({ isLoaded }) => {
       bg: "black",
     },
   };
-  
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const slidesCount = slides?.length;
 

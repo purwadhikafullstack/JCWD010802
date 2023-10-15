@@ -55,15 +55,7 @@ const UserGuardedRoute = ({ element }) => {
     return <NotFound />;
   }
 };
-const ProfileGuardedRoute = ({ element }) => {
-  const isProfileAuthenticated = useProfileAuthentication();
 
-  if (isProfileAuthenticated()) {
-    return element;
-  } else {
-    return <Navigate to="/login" replace/>; 
-  }
-};
 const ProductDetailGuardedRoute = ({ element }) => {
   const { id } = useParams();
   const product = useIdValidation(id);
@@ -76,14 +68,9 @@ const ProductDetailGuardedRoute = ({ element }) => {
 };
 const LoginGuardedRoute = ({ element }) => {
   const isLoginAuthenticated = useLoginAuthentication();
-  const isUser = useUserAuthentication();
 
   if (isLoginAuthenticated()) {
-    if (isUser()) {
       return <Navigate to="/" />;
-    } else {
-      return <Navigate to="/admin" />;
-    }
   } else {
     return element;
   }
@@ -95,7 +82,7 @@ const Routes = (
       <Route path="" element={<HomepageView />} />
       <Route
         path="profile"
-        element={<ProfileGuardedRoute element={<ProfileView />} />}
+         element={<ProfileView />} 
       />
       <Route path="cart" element={<UserGuardedRoute element={<Cart />} />} />
       <Route

@@ -52,14 +52,14 @@ export const DetailCard = () => {
     return (
         <Flex minH="100vh" mb={3} p="120px 30px" justify="center" gap={10}
         direction={{ base: "column", lg: "row"}}>
-            <Flex borderRadius="10px" shadow={{ base: "none", lg: "md"}} w={{ base: "full", lg: "300px"}} p={1} justify="center">
-                <Image src={`http://localhost:8000/productImg/${detail.productImg}`}
+            <Flex borderRadius="10px" shadow={{ base: "none", lg: "md"}} w={{ base: "full", lg: "300px"}} h={{ base: "inherit", lg: "300px"}} p={1} justify="center">
+                <Image src={`${process.env.REACT_APP_BASE_URL}/productImg/${detail.productImg}`}
                  objectFit="cover"/>
             </Flex>
             <Flex direction="column" maxW={{ base: "full", lg: "25%"}} gap={5} color="black">
                 <Flex direction={{ base: "column-reverse", lg: "column"}} gap={2}>
                     <Flex gap={1} display={{ base: "flex", lg: "none"}}>
-                        <Text>Stock:</Text>
+                        <Text>Stock: </Text>
                         <Text fontWeight={"bold"} color={stockColor}> {stock}</Text>
                     </Flex>
                     <Heading fontSize="22px">{detail?.name}</Heading>

@@ -43,7 +43,7 @@ export const StockView = () => {
     }
     const getWarehouse = async () => {
         try {
-            const response = await axios.get("/warehouse")
+            const response = await axios.get("/warehouse/?limit=9999999")
             setWarehouse(response.data.result);
         } catch (error) {
             

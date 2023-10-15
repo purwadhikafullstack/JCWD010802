@@ -74,7 +74,7 @@ export const CheckoutList = ({ selectedAddress }) => {
         <>
           <Flex key={item.id}>
             <Image
-              src={`http://localhost:8000/productImg/${item.product.productImg}`}
+              src={`${process.env.REACT_APP_BASE_URL}/productImg/${item.product.productImg}`}
               w={"100px"}
               h={"100px"}
               borderRadius={"10px"}

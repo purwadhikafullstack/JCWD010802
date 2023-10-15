@@ -99,7 +99,7 @@ export const AddToCart = ({ detail, stock }) => {
         width={{ base: "100%", md: "320px" }} 
         bg={'white'}
       >
-        <Image src={`http://localhost:8000/productImg/${detail.productImg}`} alt='#' h="70px" objectFit="fill" w={"70px"} borderRadius={"10%"}/>
+        <Image src={`${process.env.REACT_APP_BASE_URL}/productImg/${detail.productImg}`} alt='#' h="70px" objectFit="fill" w={"70px"} borderRadius={"10%"}/>
         <Text mt={2} fontSize="lg" fontWeight="semibold">
           {detail.name}
         </Text>

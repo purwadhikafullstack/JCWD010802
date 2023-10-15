@@ -24,7 +24,7 @@ export const ProductTable = ({ reload, product, category }) => {
                             <Tr key={item.id}>
                                 <Td>
                                     <Flex align="center" gap={2}>
-                                        <Avatar size="md" src={`http://localhost:8000/productImg/${item.productImg}`} />
+                                        <Avatar size="md" src={`${process.env.REACT_APP_BASE_URL}/productImg/${item.productImg}`} />
                                         <Text  maxW="200px" whiteSpace="nowrap" textOverflow="ellipsis" overflow="hidden">{item.name}</Text>
                                     </Flex>
                                 </Td>

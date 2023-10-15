@@ -13,7 +13,7 @@ export const ProductCardAdmin = ({ data, category, reload }) => {
                 <Flex direction="column" w="180px" bg="white" alignItems="center" p="10px" minW="180px"
                 borderRadius="10px" shadow="md" key={item.name}>
                     <Box>
-                        <Image src={`http://localhost:8000/productImg/${item.productImg}`} w="full" h="200px" objectFit="contain" />
+                        <Image src={`${process.env.REACT_APP_BASE_URL}/productImg/${item.productImg}`} w="full" h="200px" objectFit="contain" />
                     </Box>
                     <Box>
                         <Text fontSize="14px">{item.name}</Text>
