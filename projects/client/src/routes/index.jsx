@@ -44,6 +44,7 @@ import { ProductNotFound } from "../views/Error/components/productNotFound";
 import { Wishlist } from "../pages/Wishlist";
 import { ProductReport } from "../views/Admin/ProductReport";
 import { SalesReportView } from "../views/Admin/SalesReport";
+import { Banner } from "../views/Admin/Banner";
 
 const UserGuardedRoute = ({ element }) => {
   const isUserAuthenticated = useUserAuthentication();
@@ -133,6 +134,7 @@ const Routes = (
       <Route path="order/detail-order/:id" element={<OrderDetailView />} />
       <Route path="product-report" element={<ProductReport />} />
       <Route path="sales-report" element={<SalesReportView />} />
+      <Route path="banner" element={<Banner />} />
     </Route>
     <Route path="*" element={<NotFound />} />
   </>

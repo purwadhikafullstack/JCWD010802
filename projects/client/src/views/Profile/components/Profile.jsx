@@ -73,7 +73,7 @@ export const ProfileCard = () => {
           <VStack spacing={5}>
             <Avatar
               size="2xl"
-              src={`http://localhost:8000/profileImg/${profile.profileImg}`}
+              src={`${process.env.REACT_APP_BASE_URL}/profileImg/${profile.profileImg}`}
               name={profile.name}
             />
             <ChangeImage />
