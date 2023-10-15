@@ -1,25 +1,59 @@
 require("dotenv/config");
+const db = require('../models')
 const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
+const schedule = require('node-schedule');
+const {userRouters, adminRouters, warehouseRouter, authRouters, authRouter, userRouter, addressRouter, rajaongkirRouter, productRouter, stockRouter, categoryRouter, cartRouter, shippingRouter, productReportRouter, salesReportRouter, orderRouter, adminOrderRouter,mutationRouter, dashboardRouter, bannerRouter} = require('../routers')
+const { checkPaymentProof } = require("../schedulers/autoCancel");
+const runAutoCancel = require("../schedulers/autoCancel");
+const runAutoConfirm = require("../schedulers/autoConfirm");
 
 const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(
-  cors({
-    origin: [
-      process.env.WHITELISTED_DOMAIN &&
-        process.env.WHITELISTED_DOMAIN.split(","),
-    ],
-  })
+  cors(
+  //   {
+  //   origin: [
+  //     process.env.WHITELISTED_DOMAIN &&
+  //       process.env.WHITELISTED_DOMAIN.split(","),
+  //   ],
+  // }
+  )
 );
 
 app.use(express.json());
+app.use(cors());
+app.use(express.static("./public"));
 
 //#region API ROUTES
 
 // ===========================
 // NOTE : Add your routes here
+app.use('/api/auth', authRouter);
+app.use('/api/user', userRouter);
+app.use('/api/address', addressRouter);
+app.use('/api/location', rajaongkirRouter); //---Perbaiki 
+app.use('/api/product', productRouter);
+app.use('/api/category', categoryRouter)
+app.use('/api/user/',userRouters)
+app.use('/api/admin/',adminRouters)
+app.use('/api/warehouse/',warehouseRouter)
+app.use('/api/auth/',authRouters)
+app.use("/api/stock", stockRouter)
+app.use("/api/cart", cartRouter)
+app.use("/api/ship", shippingRouter)
+app.use("/api/report", productReportRouter)
+app.use("/api/sales", salesReportRouter)
+app.use("/api/mutation", mutationRouter)
+app.use("/api/dashboard", dashboardRouter)
+app.use("/api/userOrder", orderRouter)
+app.use("/api/adminOrder", adminOrderRouter)
+app.use("/api/banner", bannerRouter)
+
+// Scheduler
+schedule.scheduleJob('* * * * *', runAutoCancel)
+schedule.scheduleJob('* * * * *', runAutoConfirm)
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
@@ -69,6 +103,7 @@ app.listen(PORT, (err) => {
   if (err) {
     console.log(`ERROR: ${err}`);
   } else {
+        // db.sequelize.sync({alter:true})
     console.log(`APP RUNNING at ${PORT} ✅`);
   }
 });
