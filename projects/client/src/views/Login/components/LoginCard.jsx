@@ -1,6 +1,8 @@
+import axios from "../../../api/axios";
 import * as Yup from "yup";
 import {
   Button,
+  Checkbox,
   Flex,
   Heading,
   Text,
@@ -13,12 +15,17 @@ import { useDispatch } from "react-redux";
 import { setValue } from "../../../redux/userSlice";
 import { setCart } from "../../../redux/cartSlice";
 import { setPrice } from "../../../redux/totalPrice";
-import axios from "../../../api/axios";
+import { useState } from "react";
 
 export const LoginCard = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const toast = useToast();
   const navigate = useNavigate();
+
+  const SeePsw = () => {
+    setShowPassword(!showPassword);
+  };
 
   const loginSchema = Yup.object().shape({
     email: Yup.string().email("Email is invalid").required("Email is required"),
@@ -111,11 +118,18 @@ export const LoginCard = () => {
               name="password"
               id="password"
               className="password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               mb="10px"
               placeholder="Enter your password here"
               bg="white"
             />
+            <Checkbox
+              textColor={"black"}
+              isChecked={showPassword}
+              onChange={SeePsw}
+            >
+              Show Password
+            </Checkbox>
             <Button
               type="submit"
               mt="15px"
