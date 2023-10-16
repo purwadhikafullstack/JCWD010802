@@ -9,5 +9,6 @@ router.post("/login", checkLogin, authController.login)
 router.get("/keeplogin", verifyToken, authController.keepLogin)
 router.put("/resend", authController.resendVerif)
 router.patch('/verified', verifyToken, checkVerified, authController.verified)
+router.get('/:token', authController.getVerifyToken)
 
 module.exports = router
