@@ -13,8 +13,7 @@ export const Banner = () => {
 
     const getBanner = async () => {
         try {
-            const response = await axios.get("/banner", { headers })
-            console.log(response);
+            const response = await axios.get("/banner")
             setBanner(response.data.result)
         } catch (error) {
             console.log(error);
