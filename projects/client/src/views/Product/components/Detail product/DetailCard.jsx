@@ -6,6 +6,7 @@ import { Link, useParams } from "react-router-dom"
 import { Box, Divider, Flex, Heading, Image, Text } from "@chakra-ui/react"
 import { AddToCart } from "../addToCart"
 import { AddToCartMobile } from "../AddToChartMobile"
+import { toast } from "react-toastify"
 
 
 export const DetailCard = () => {
@@ -21,6 +22,7 @@ export const DetailCard = () => {
             setDetail(response.data.result)
         } catch (error) {
             console.log(error);
+            toast.error("Failed to load product detail!")
         }
     }
     const getStock = async () => {
@@ -29,6 +31,7 @@ export const DetailCard = () => {
             setStock(response.data.result)
         } catch (error) {
             console.log(error);
+            toast.error("Failed to load resources!")
         }
     }
 

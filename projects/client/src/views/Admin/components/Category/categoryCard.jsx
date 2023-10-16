@@ -19,6 +19,7 @@ import { SortCategory } from "./sort/sortCategory";
 import { AddCategory } from "./modal/modalAddCategory";
 import { Pagination } from "../../../../components/pagination/pagination";
 import axios from "../../../../api/axios";
+import { toast } from "react-toastify";
 
 export const CategoryCard = () => {
   const [category, setCategory] = useState();
@@ -44,6 +45,8 @@ export const CategoryCard = () => {
       setPage(response.data.totalpage);
     } catch (err) {
       console.log(err);
+      toast.error("Failed to load caregories!")
+
     }
   };
   const handleSearch = (result) => {

@@ -7,6 +7,7 @@ import { PaginationAddress } from "../pagination";
 import { UserCard } from "./userCard";
 import { useLocation } from "react-router-dom";
 import axios from "../../../../api/axios";
+import { toast } from "react-toastify";
 
 export const ListUser = () => {
     const [user, setUser] = useState([]);
@@ -28,6 +29,8 @@ export const ListUser = () => {
 
       } catch (error) {
         console.log(error);
+        toast.error("Failed to load users!")
+
       }
     };
     const getProfile = async (userId) => {
@@ -36,6 +39,8 @@ export const ListUser = () => {
         setProfile(response.data.result);
       } catch (error) {
         console.log(error);
+        toast.error("Failed to load user profile!")
+
       }
     };
     const handleProfileClick = (user) => {

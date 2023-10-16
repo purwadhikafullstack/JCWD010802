@@ -15,6 +15,7 @@ import {
   Badge,
 } from "@chakra-ui/react";
 import axios from "../../../../api/axios";
+import { toast } from "react-toastify";
 
 export const UserProfileModal = ({ user, profile, isOpen, onClose }) => {
   const [cities, setCities] = useState([]);
@@ -25,6 +26,8 @@ export const UserProfileModal = ({ user, profile, isOpen, onClose }) => {
       setCities(response.data.city.rajaongkir.results);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load cities!")
+
     }
   };
   const getProvince = async (data) => {
@@ -33,6 +36,8 @@ export const UserProfileModal = ({ user, profile, isOpen, onClose }) => {
       setProvince(response.data.province.rajaongkir.results);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load provinces!")
+
     }
   };
   useEffect(() => {

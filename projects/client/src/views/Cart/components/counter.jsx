@@ -6,6 +6,7 @@ import { setCart } from '../../../redux/cartSlice';
 import { setPrice } from '../../../redux/totalPrice';
 import headersGen from '../../../api/headers';
 import axios from '../../../api/axios';
+import { toast } from 'react-toastify';
 
 export const CartCounter = ({ initialCount, onCountChange, productId, cartId }) => {
   const [count, setCount] = useState(initialCount || 0);
@@ -23,6 +24,7 @@ export const CartCounter = ({ initialCount, onCountChange, productId, cartId }) 
       setStock(response.data.result);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load product stock!")
     }
   };
 

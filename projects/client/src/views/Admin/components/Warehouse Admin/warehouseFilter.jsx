@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../../../api/axios";
+import { toast } from "react-toastify";
 
 export const WarehouseFilter = ({ onChange }) => {
   const [warehouse, setWarehouse] = useState([]);
@@ -12,6 +13,7 @@ export const WarehouseFilter = ({ onChange }) => {
           setWarehouse(response.data);
         } catch (error) {
             console.log(error);
+            toast.error("Failed to load warehouse!")
         }
     };
     

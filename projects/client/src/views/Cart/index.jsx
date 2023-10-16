@@ -5,7 +5,7 @@ import { CartCheckout } from "./components/cartCheckout";
 import axios from "../../api/axios";
 import headersGen from "../../api/headers";
 import { useSelector } from "react-redux";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 
 export const CartView = () => {
     const token = localStorage.getItem("token");
@@ -28,6 +28,7 @@ console.log(total);
             }
         } catch (error) {
             console.error(error);
+            toast.error("Failed to load user cart!")
         }
     }
 

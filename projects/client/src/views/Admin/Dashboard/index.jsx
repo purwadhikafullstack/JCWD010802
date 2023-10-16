@@ -17,6 +17,7 @@ import formatIDR from '../../../helpers/formatIDR';
 import {
   useMediaQuery, 
 } from '@chakra-ui/react';
+import { toast } from 'react-toastify';
 export const Dashboard = () => {
   const [data, setData] = useState({
     totalUser: 0,
@@ -37,6 +38,7 @@ export const Dashboard = () => {
       setData(response.data);
     } catch (error) {
       console.error(error);
+      toast.error("Failed to load dashboard information!")
     }
   };
 

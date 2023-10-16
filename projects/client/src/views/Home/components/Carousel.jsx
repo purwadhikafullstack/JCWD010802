@@ -1,6 +1,7 @@
 import { Box, Flex, Image, Skeleton, Text } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import axios from "../../../api/axios";
+import { toast } from "react-toastify";
 
 export const Carousel = ({ isLoaded }) => {
   const [slides, setSlides] = useState()
@@ -11,6 +12,7 @@ export const Carousel = ({ isLoaded }) => {
       setSlides(response.data.result)
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load resources!")
     }
   }
   const arrowStyles = {
