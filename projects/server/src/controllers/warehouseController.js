@@ -1,7 +1,7 @@
 const  axios  = require("axios");
 const db = require("../models")
 const addresses = db.address
-const {warehouse,stock} = require("../models");
+const {warehouse,stock,product} = require("../models");
 
 module.exports = {
     getWarehouse : async(req,res) => {
@@ -53,8 +53,18 @@ module.exports = {
             if (response.status === 200 && response.data.results.length > 0) {
                 const { lat, lng } = response.data.results[0].geometry;
                 const result = await addresses.create({ address, kota,nama_kota: city.data.rajaongkir.results.city_name, provinsi, nama_provinsi: city.data.rajaongkir.results.province, kode_pos, lat, lng: lng });
-
+                const isWarehouseExist = await warehouse.findOne({ where: { name} })
+                if (isWarehouseExist) throw { message: "Warehouse Name Must be Unique" }
                 const newWarehouse = await warehouse.create({name, image:image, addressId:result.id })
+                const allProduct = await product.findAll({ where: { isDeleted: false } })
+                allProduct.forEach(async (item) => {
+                await stock.create({
+                    productId: item.id,
+                    warehouseId: newWarehouse.id,
+                    isDeleted: false,
+                    quantity: 0
+                })
+            })
                
                 res.status(200).send({
                     status: true,
@@ -87,7 +97,8 @@ module.exports = {
               message: 'Warehouse not found',
             });
           }
-      
+          const isWarehouseExist = await warehouse.findOne({ where: { name:req.body.name} })
+          if (isWarehouseExist) throw { message: "Warehouse Name Must be Unique" }
           const updatedData = {}; 
       
           if (req.body.address) {
