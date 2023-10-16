@@ -28,11 +28,6 @@ module.exports = {
     },
     getBanner: async (req, res) => {
         try {
-            const isAdmin = await user.findOne({
-                where: { id: req.user.id }
-            })
-            if (isAdmin.roleId < 3) throw { message: "Only admin can change banners" }
-
             const result = await banner.findAll({ where: { isDeleted: false } })
 
             res.status(200).send({
