@@ -112,7 +112,6 @@ module.exports = {
             await dbtoken.create({ token })
 
             const data = fs.readFileSync('./templates/register.html', 'utf-8')
-            console.log(data);
             const tempCompile = await handlebars.compile(data)
             const tempResult = tempCompile({ token })
 

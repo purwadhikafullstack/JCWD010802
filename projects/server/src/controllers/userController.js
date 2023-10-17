@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt')
 const mailer = require('../middlewares/mailer')
 const fs = require('fs')
 const handlebars = require('handlebars')
+const path = require('path');
+
 
 module.exports = {
     getUser: async (req, res) => {
@@ -34,7 +36,7 @@ module.exports = {
                 {name: name, email:email},
                 {where: {id: req.user.id}}
             )
-            const data = await fs.readFileSync('./templates/changing.html', 'utf-8')
+            const data = fs.readFileSync(path.join(__dirname, '../templates/changing.html'), "utf-8");
             const tempCompile = await handlebars.compile(data)
             const tempResult = tempCompile({data:name, description: "User profile has been changed"})
             await mailer.sendMail({
@@ -72,7 +74,7 @@ module.exports = {
             const updatedUser = await user.findOne( 
                 {where: {id : req.user.id}},
                 )
-            const data = fs.readFileSync('./templates/changing.html', 'utf-8')
+            const data = fs.readFileSync(path.join(__dirname, '../templates/changing.html'), "utf-8");
             const tempCompile = await handlebars.compile(data)
             const tempResult = tempCompile({ data: updatedUser.name, description: "User password has been changed" })
             await mailer.sendMail({
@@ -107,7 +109,7 @@ module.exports = {
                     id: req.user.id
                 }
             })
-            const data = fs.readFileSync('./templates/changing.html', 'utf-8')
+            const data = fs.readFileSync(path.join(__dirname, '../templates/changing.html'), "utf-8");
             const tempCompile = await handlebars.compile(data)
             const tempResult = tempCompile({ data: tempData.name, description: "Profile image has been changed" })
             await mailer.sendMail({
