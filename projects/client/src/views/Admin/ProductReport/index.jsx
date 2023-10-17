@@ -68,21 +68,21 @@ export const ProductReport = () => {
   const handleSearch = (e) => {
     setResetSearch(e.target.value);
     navigate(
-      `?search=${e.target.value}&warehouseId=${resetWarehouseId}&monthly=${resetMonthly}&page=1`
+      `?search=${e.target.value}&warehouseId=${resetWarehouseId}&monthly=${resetMonthly}&page=${currentPage}`
     );
   };
 
   const handleWarehouseChange = (e) => {
     setResetWarehouseId(e.target.value);
     navigate(
-      `?search=${resetSearch}&warehouseId=${e.target.value}&monthly=${resetMonthly}&page=1`
+      `?search=${resetSearch}&warehouseId=${e.target.value}&monthly=${resetMonthly}&page=${currentPage}`
     );
   };
 
   const handleMonthly = (e) => {
     setResetMonthly(e.target.value);
     navigate(
-      `?search=${resetSearch}&warehouseId=${resetWarehouseId}&monthly=${e.target.value}&page=1`
+      `?search=${resetSearch}&warehouseId=${resetWarehouseId}&monthly=${e.target.value}&page=${currentPage}`
     );
   };
 
@@ -90,7 +90,7 @@ export const ProductReport = () => {
     setResetSearch("");
     setResetWarehouseId("");
     setResetMonthly("");
-    navigate(`?page=1`);
+    navigate(`?`);
   };
 
   useEffect(() => {

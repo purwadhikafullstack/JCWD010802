@@ -61,7 +61,7 @@ export const ProductWarehouse = ({
                   <Td>{item.productName}</Td>
                   <Td>{item.totals.tambah}</Td>
                   <Td>{item.totals.kurang}</Td>
-                  <Td>{item.totals.quantity}</Td>
+                  <Td>{item.entries[0].stock.quantity}</Td>
                   <Td>{createdAtDate}</Td>
                 </Tr>
               );
