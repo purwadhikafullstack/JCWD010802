@@ -6,12 +6,15 @@ const { Op } = require("sequelize");
 module.exports = {
     addAdmin : async(req,res) => {
         try {
-            const { name, email } = req.body;
+            const { name, email,password } = req.body;
             const isEmailExist = await user.findOne({ where: { email} })
             if (isEmailExist) throw { message: "Email already used" }
+            const salt = await bcrypt.genSalt(10);
+                const hashPassword = await bcrypt.hash(password, salt);
             const result = await user.create({
               name,
               email,
+              password:hashPassword,
               roleId:2,
               isVerified: 1
             });

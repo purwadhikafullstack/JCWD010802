@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Grid, GridItem, Button, Flex } from "@chakra-ui/react";
+import { Container, Grid, GridItem, Button, Flex, Text } from "@chakra-ui/react";
 import { WarehouseCard} from '../components/Warehouse/warehouseCard';
 import { AddWarehouseModal} from '../components/Warehouse/addWarehouseModal';
 import { useLocation } from 'react-router-dom';
@@ -46,6 +46,7 @@ export const WarehousePageView = () => {
           + Add Warehouse
         </Button>
         </Flex>
+        {warehouse.length > 0?(
         <Grid
           templateColumns={{ base: '1fr', sm: '1fr 1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }}
           gap={4} py={4}
@@ -56,6 +57,9 @@ export const WarehousePageView = () => {
             </GridItem>
           ))}
         </Grid>
+        ):(
+          <Text>No Warehouse</Text>
+        )}
       </Container>
 
       <AddWarehouseModal

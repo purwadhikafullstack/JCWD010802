@@ -44,7 +44,6 @@ export const WarehouseCard = ({ data,setReload,reload }) => {
       minW={"200px"}
     >
       <VStack>
-
       <Heading size="md" mb="2">
         {data.name}
       </Heading>
@@ -53,7 +52,7 @@ export const WarehouseCard = ({ data,setReload,reload }) => {
     </VStack>
     <Flex h={"50px"}>
 
-      <Text color="gray.500" fontSize={"16px"}>{data.address.address}, {data.address.nama_kota}, {data.address.nama_provinsi}, {data.address.kode_pos}</Text>
+      <Text color="gray.500" fontSize={"16px"}>{data.address?.address}, {data.address?.nama_kota}, {data.address?.nama_provinsi}, {data.address?.kode_pos}</Text>
     </Flex>
      
         <Divider my="3" />

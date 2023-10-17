@@ -8,6 +8,8 @@ require('dotenv').config()
 const fs = require('fs')
 const handlebars = require('handlebars')
 const transporter = require('../middlewares/transporter')
+const path = require("path");
+
 
 module.exports = {
     forgotPassword: async (req, res) => {
@@ -46,7 +48,7 @@ module.exports = {
                 token: token,
                 userId: result.id, 
             });
-            const data = await fs.readFileSync('./reset.html', 'utf-8');
+            const data = await fs.readFileSync(path.join(__dirname,'../template/reset.html'), 'utf-8');
             const tempCompile = await handlebars.compile(data);
             const tempResult = tempCompile({ token });
     

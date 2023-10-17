@@ -215,16 +215,6 @@ const handleResetFilter = () => {
                       {item.email}
                     </Text>
                   </ListItem>
-                  <ListItem>
-                    <Text fontWeight={600} color={"black"} size="sm">
-                      Phone Number
-                    </Text>
-                  </ListItem>
-                  <ListItem>
-                    <Text fontWeight={600} color={"black"} size="sm">
-                      BirthDate
-                    </Text>
-                  </ListItem>
                 </UnorderedList>
               </Stack>
             </Box>

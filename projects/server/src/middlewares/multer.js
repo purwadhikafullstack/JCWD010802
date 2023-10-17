@@ -2,7 +2,7 @@ const multer = require('multer')
 const fs = require('fs')
 
 module.exports = {
-    multerUpload: (directory = "./public", name = "PIMG") => {
+    multerUpload: (directory = __dirname + "../public", name = "PIMG") => {
         const storage = multer.diskStorage({
             destination: (req, file, cb) => {
                 cb(null, directory)
