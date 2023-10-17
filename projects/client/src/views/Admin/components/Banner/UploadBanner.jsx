@@ -16,7 +16,7 @@ export const UploadBanner = ({ data, headers, id, reload }) => {
             const data = new FormData()
             data.append("file", value.file)
             data.append("currentId", id)
-            await axios.post("/banner", data, { headers })
+            await axios.patch("/banner", data, { headers })
             reload()
             toast.success('successfully upload banner', {
                 position: 'top-right',
@@ -25,6 +25,22 @@ export const UploadBanner = ({ data, headers, id, reload }) => {
         } catch (error) {
             console.log(error);
             toast.error('Failed to upload banner. Please try again later.', {
+                position: "top-right",
+                autoClose: 3000
+            });
+        }
+    }
+    const handleDelete = async (id) => {
+        try {
+            const response = await axios.put(`/banner/${id}`, {}, { headers })
+            reload()
+            toast.success('successfully delete banner', {
+                position: 'top-right',
+                autoClose: 3000, 
+            });
+        } catch (error) {
+            console.log(error);
+            toast.error('Failed to delete banner. Please try again later.', {
                 position: "top-right",
                 autoClose: 3000
             });
@@ -79,9 +95,14 @@ export const UploadBanner = ({ data, headers, id, reload }) => {
                         style={{ color: "red" }}
                         />  
                     </FormControl>
-                    <Button type="submit" bg="#517664" color="white" _hover={{ bg: "#2d3319" }} w="100px">
-                        Confirm
-                    </Button>
+                    <Flex direction={{ base: "column", lg: "row"}} gap={2}>
+                        <Button type="submit" bg="#517664" color="white" _hover={{ bg: "#2d3319" }} w="100px">
+                            Confirm
+                        </Button>
+                        <Button bg="red" w="100px" color="white" onClick={() => handleDelete(id)}>
+                            Delete
+                        </Button>
+                    </Flex>
                     </Flex>
                 </Flex>
             )}

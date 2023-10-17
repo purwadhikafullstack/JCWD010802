@@ -15,8 +15,9 @@ export const ForgotPassPageView = () => {
   const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     setIsSubmitting(true); 
     try {
+      const feURL = window.location.origin
       const response = await axios.post("/auth/forgot",
-        { email: values.email }
+        { email: values.email, feURL }
       );
       if (response.status === 200) {
         toast.success("Please Check Your Email", {
