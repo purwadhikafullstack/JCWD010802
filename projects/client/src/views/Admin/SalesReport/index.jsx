@@ -6,7 +6,7 @@ import axios from "../../../api/axios";
 import { useSelector } from "react-redux";
 import { TableSales } from "../components/SalesReport/tableSalesReport";
 import { BsTrash3 } from "react-icons/bs";
-
+import { toast } from "react-toastify";
 
 export const SalesReportView = () => {
   const location = useLocation();
@@ -41,6 +41,7 @@ export const SalesReportView = () => {
       setChart(response.data.result);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load report data!")
     }
   };
 
@@ -55,6 +56,7 @@ export const SalesReportView = () => {
       setTable(response.data.result);
     } catch (err) {
       console.log(err);
+      toast.error("Failed to load sales data!")
     }
   };
 

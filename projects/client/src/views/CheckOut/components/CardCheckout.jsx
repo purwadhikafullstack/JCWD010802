@@ -40,6 +40,7 @@ const cart =useSelector(state=>state.cart.value)
       setSelectedAddress(primary);
     } catch (error) {
       console.error(error);
+      toast.error("Failed to load addresses!")
     }
   };  
 

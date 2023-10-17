@@ -21,6 +21,7 @@ import { EditAddress } from "../../Profile/components/modal/modalAddress/modalEd
 import { PrimaryAddress } from "../../Profile/components/modal/modalAddress/modalPrimaryAddress";
 import axios from "../../../api/axios";
 import headersGen from "../../../api/headers";
+import { toast } from "react-toastify";
 
 export const AddressCheckout = ({ handleClick, selectedId }) => {
   const location = useLocation();
@@ -53,6 +54,7 @@ export const AddressCheckout = ({ handleClick, selectedId }) => {
       setPage(response.data.totalpage);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load addresses!")
     }
   };
   const getCity = async (data) => {
@@ -61,6 +63,7 @@ export const AddressCheckout = ({ handleClick, selectedId }) => {
       setCities(response.data.city.rajaongkir.results);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load cities!")
     }
   };
   const getProvince = async (data) => {
@@ -69,6 +72,7 @@ export const AddressCheckout = ({ handleClick, selectedId }) => {
       setProvince(response.data.province.rajaongkir.results);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load provinces!")
     }
   };
   const handleSearch = (result) => {

@@ -41,7 +41,6 @@ export const PaymentProof = ({ isOpen, onClose, id, reload }) => {
       console.log(error);
     }
   };
-
   return (
     <>
       <ToastContainer />

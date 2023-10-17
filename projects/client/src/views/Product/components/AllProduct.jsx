@@ -5,6 +5,7 @@ import { Pagination } from "../../../components/pagination/pagination";
 import { DrawerSorting } from "./Drawer/DrawerSort";
 import { ProductCardUser } from "../../../components/product/ProductCardUser";
 import axios from "../../../api/axios";
+import { toast } from "react-toastify";
 
 export const AllProduct = () => {
   const location = useLocation();
@@ -29,6 +30,7 @@ export const AllProduct = () => {
       setPage(response.data.totalpage);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load products!")
     }
   };
   const handleClick = (id) => {

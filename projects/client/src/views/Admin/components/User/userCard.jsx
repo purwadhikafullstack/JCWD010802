@@ -26,6 +26,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { UserSort } from "./userSort";
 import axios from "../../../../api/axios";
+import { toast } from "react-toastify";
 
 export const UserCard = () => {
   const [user, setUser] = useState([]);
@@ -48,6 +49,8 @@ export const UserCard = () => {
       setPage(response.data.totalPage);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load users!")
+
     }
   };
 
@@ -57,6 +60,8 @@ export const UserCard = () => {
       setProfile(response.data.result);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load user profile!")
+
     }
   };
   const handleProfileClick = (user) => {
@@ -148,7 +153,7 @@ const handleResetFilter = () => {
       boxSize="100%" 
       aspectRatio={1}
       borderRadius={"10px"}       
-      src={`http://localhost:8000/profileImg/${item.profileImg}`}
+      src={`${process.env.REACT_APP_BASE_URL}/profileImg/${item.profileImg}`}
         alt="profile image"
       />
     ) : (

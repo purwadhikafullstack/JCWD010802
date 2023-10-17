@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import formatIDR from "../../../helpers/formatIDR";
 import headersGen from "../../../api/headers";
 import axios from "../../../api/axios";
+import { toast } from "react-toastify";
 
 export const CheckoutList = ({ selectedAddress }) => {
   const token = localStorage.getItem("token");
@@ -35,6 +36,7 @@ export const CheckoutList = ({ selectedAddress }) => {
       setSubtotal(calculatedSubtotal);
     } catch (error) {
       console.error(error);
+      toast.error("Failed to load cart!")
     }
   };
 
@@ -74,7 +76,7 @@ export const CheckoutList = ({ selectedAddress }) => {
         <>
           <Flex key={item.id}>
             <Image
-              src={`http://localhost:8000/productImg/${item.product.productImg}`}
+              src={`${process.env.REACT_APP_BASE_URL}/productImg/${item.product.productImg}`}
               w={"100px"}
               h={"100px"}
               borderRadius={"10px"}

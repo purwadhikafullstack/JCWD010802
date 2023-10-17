@@ -1,13 +1,13 @@
-require("dotenv/config");
-const db = require('../models')
+const path = require("path")
+require("dotenv").config({path: path.resolve(__dirname, "../.env")})
+const db = require('./models')
 const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
 const schedule = require('node-schedule');
-const {userRouters, adminRouters, warehouseRouter, authRouters, authRouter, userRouter, addressRouter, rajaongkirRouter, productRouter, stockRouter, categoryRouter, cartRouter, shippingRouter, productReportRouter, salesReportRouter, orderRouter, adminOrderRouter,mutationRouter, dashboardRouter} = require('../routers')
-const { checkPaymentProof } = require("../schedulers/autoCancel");
-const runAutoCancel = require("../schedulers/autoCancel");
-const runAutoConfirm = require("../schedulers/autoConfirm");
+const { userRouters, adminRouters, warehouseRouter, authRouters, authRouter, userRouter, addressRouter, rajaongkirRouter, productRouter, stockRouter, categoryRouter, cartRouter, shippingRouter, productReportRouter, salesReportRouter, orderRouter, adminOrderRouter,mutationRouter, dashboardRouter, bannerRouter } = require('./routers')
+const runAutoCancel = require("./schedulers/autoCancel");
+const runAutoConfirm = require("./schedulers/autoConfirm");
 
 const PORT = process.env.PORT || 8000;
 const app = express();
@@ -49,6 +49,7 @@ app.use("/api/mutation", mutationRouter)
 app.use("/api/dashboard", dashboardRouter)
 app.use("/api/userOrder", orderRouter)
 app.use("/api/adminOrder", adminOrderRouter)
+app.use("/api/banner", bannerRouter)
 
 // Scheduler
 schedule.scheduleJob('* * * * *', runAutoCancel)

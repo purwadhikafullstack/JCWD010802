@@ -5,6 +5,7 @@ import { ProductWarehouse } from "../components/ProductReport/productWarehouse";
 import { StockHistory } from "../components/ProductReport/stockHistory";
 import axios from "../../../api/axios";
 import { useCallback } from "react";
+import { toast } from "react-toastify";
 
 export const ProductReport = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -36,6 +37,7 @@ export const ProductReport = () => {
       setPageStock(response.data.totalpage);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load stock histories!")
     }
   };
   const getProductWarehouse = async () => {
@@ -50,6 +52,7 @@ export const ProductReport = () => {
       setPageProduct(response.data.totalpage);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load product stock!")
     }
   };
   const getWarehouse = async () => {

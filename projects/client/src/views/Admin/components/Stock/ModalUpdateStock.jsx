@@ -26,7 +26,7 @@ export const ModalUpdateStock = ({ data, isOpen, onClose, triggerReload }) => {
     })
     const handleSubmit = async (value) => {
         try {
-            const response = await axios.patch('http://localhost:8000/api/stock', value, { headers })
+            await axios.patch('/api/stock', value, { headers })
             onClose()
             triggerReload()
             toast.success('successfully updated stock', {

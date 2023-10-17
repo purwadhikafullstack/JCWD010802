@@ -127,7 +127,7 @@ export const CartItem = ({ cart, reload, setReload }) => {
           cart.map((item) => (
             <Box p={4} borderRadius="md" display="flex" flexDirection={{ base: 'column', md: 'row' }}>
               <Image
-                src={`http://localhost:8000/productImg/${item.product.productImg}`}
+                src={`${process.env.REACT_APP_BASE_URL}/productImg/${item.product.productImg}`}
                 alt={item.product.name}
                 h={{ base: '150px', md: '100px' }}
                 w={{ base: '150px', md: '100px' }}

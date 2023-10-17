@@ -9,6 +9,7 @@ import { CategorySort } from "../components/Products/categorySort";
 import { Pagination } from "../../../components/pagination/pagination";
 import { useSelector } from "react-redux";
 import { SortingProduct } from "../components/Products/SortingProduct";
+import { toast } from "react-toastify";
 
 
 
@@ -40,15 +41,17 @@ export const AdminProducts = () => {
             setTotalPage(response.data.totalpage)
         } catch (error) {
             console.log(error);
+            toast.error("Failed to load products!")
         }
     }
 
     const getCategories = async () => {
         try {
-            const response = await axios.get("http://localhost:8000/api/category?limit=9999")
+            const response = await axios.get("/category?limit=9999")
             setCategory(response.data.result)
         } catch (error) {
             console.log(error);
+            toast.error("Failed to load categories!")
         }
     }
     const triggerReload = () => {

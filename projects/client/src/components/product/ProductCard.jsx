@@ -16,7 +16,7 @@ export const ProductCard = ({ name, price, image, category, onClick, isLoaded })
         >
           <Box>
             <Image
-              src={`http://localhost:8000/productImg/${image}`}
+              src={`${process.env.REACT_APP_BASE_URL}/productImg/${image}`}
               w="full"
               h={{ base: "120px", lg: "200px"}}
               objectFit="contain"

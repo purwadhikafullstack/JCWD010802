@@ -6,11 +6,18 @@ import {
   SimpleGrid,
   GridItem,
   HStack,
+  Flex,
+  Stack,
+  Center,
 } from '@chakra-ui/react';
-import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, Legend,BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { StatCard } from '../components/Dashboard/statCard';
 import axios from '../../../api/axios';
-
+import formatIDR from '../../../helpers/formatIDR';
+import {
+  useMediaQuery, 
+} from '@chakra-ui/react';
+import { toast } from 'react-toastify';
 export const Dashboard = () => {
   const [data, setData] = useState({
     totalUser: 0,
@@ -21,6 +28,8 @@ export const Dashboard = () => {
     totalVerifiedUsers: 0,
     totalUnverifiedUsers: 0,
     categoriesWithProductCount: [],
+    productSales:[],
+    categorySales:[]
   });
 
   const getData = async () => {
@@ -29,12 +38,14 @@ export const Dashboard = () => {
       setData(response.data);
     } catch (error) {
       console.error(error);
+      toast.error("Failed to load dashboard information!")
     }
   };
 
   useEffect(() => {
     getData();
   }, []);
+  const [isSmallerScreen] = useMediaQuery('(max-width: 768px');
 
   const COLORS = [
     "#0088FE",
@@ -63,7 +74,15 @@ export const Dashboard = () => {
     name: category.name,
     value: category.productCount,
   }));
-
+  const productSalesData = data.productSales.map((category, index) => ({
+    name: category.product.name,
+    sales: category.totalQuantity * category.product.price,
+  }));
+  const categorySalesData = data.categorySales.map((category, index) => ({
+    name: category.product.category.name,
+    sales: category.totalSales
+  }));
+  
   const userVerificationPieData = [
     { name: 'Verified Users', value: data.totalVerifiedUsers },
     { name: 'Unverified Users', value: data.totalUnverifiedUsers },
@@ -83,7 +102,9 @@ export const Dashboard = () => {
       </text>
     );
   };
+  const maxDataValue = Math.max(...data.categorySales.map(item => item.totalSales));
 
+console.log(maxDataValue);
   return (
     <Box p={4}>
       <Heading as="h1" size="xl" mb={4}>
@@ -106,17 +127,18 @@ export const Dashboard = () => {
           <StatCard label="Total Category" value={data.totalCategory} />
         </GridItem>
       </SimpleGrid>
-      <HStack>
-        <Box>
+      <Center justifyContent={"center"}>
+        <Stack mt={5}>
+          <Text textAlign={"center"}>Verified User</Text>
           {userVerificationPieData.length > 0 ? (
-            <PieChart width={400} height={400}>
+            <PieChart width={400} height={300}>
               <Pie
                 dataKey="value"
                 isAnimationActive={false}
                 data={userVerificationPieData}
                 outerRadius={80}
                 fill="#8884d8"
-                label
+                label={renderCustomizedLabel}
                 labelLine={false}
               >
                 {userVerificationPieData.map((entry, index) => (
@@ -132,10 +154,11 @@ export const Dashboard = () => {
           ) : (
             <Text>Loading...</Text>
           )}
-        </Box>
-        <Box>
+        </Stack>
+        <Stack mt={5}>
+          <Text textAlign={"center"}>Product by Category</Text>
           {categoryPieData.length > 0 ? (
-            <PieChart width={450} height={400}>
+            <PieChart width={450} height={300}>
               <Pie
                 dataKey="value"
                 isAnimationActive={false}
@@ -158,8 +181,50 @@ export const Dashboard = () => {
           ) : (
             <Text>Loading...</Text>
           )}
-        </Box>
-      </HStack>
+        </Stack>
+
+      </Center>
+      <Center>
+
+      <Stack  mt={5}>
+      <Text textAlign={"center"}>Category Sales</Text>
+          {categorySalesData.length > 0 ? (
+            <BarChart width={1000} height={500} data={categorySalesData} margin={{ top: 20, right: 30, left: 100, bottom: 100 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" angle={-45} textAnchor="end" />
+              <YAxis
+  allowDataOverflow={true}
+  tickFormatter={formatIDR}
+  domain={[0,maxDataValue]}
+/>
+              <Tooltip formatter={(value) => [formatIDR(value), 'Sales']} />
+              <Bar dataKey="sales"  fill="#8884d8" barSize={20}/>
+            </BarChart>
+          ) : (
+            <Text>Loading...</Text>
+            )}
+        </Stack>
+            </Center>
+      <Center>
+
+      <Stack  mt={5}>
+      <Text textAlign={"center"}>Product Sales</Text>
+          {productSalesData.length > 0 ? (
+            <BarChart width={1000} height={500} data={productSalesData} margin={{ top: 20, right: 30, left: 100, bottom: 100 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" angle={-45} textAnchor="end" />
+              <YAxis
+  allowDataOverflow={true}
+  tickFormatter={formatIDR}
+/>
+              <Tooltip formatter={(value) => [formatIDR(value), 'Sales']} />
+              <Bar dataKey="sales"  fill="#8884d8" barSize={20}/>
+            </BarChart>
+          ) : (
+            <Text>Loading...</Text>
+            )}
+        </Stack>
+            </Center>
     </Box>
   );
 };

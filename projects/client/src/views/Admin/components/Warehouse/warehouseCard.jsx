@@ -20,7 +20,6 @@ export const WarehouseCard = ({ data,setReload,reload }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); 
   const handleEditClick = () => {
     setIsEditModalOpen(true);
-    console.log(data);
   };
 
   const handleDeleteClick = () => {
@@ -49,7 +48,7 @@ export const WarehouseCard = ({ data,setReload,reload }) => {
       <Heading size="md" mb="2">
         {data.name}
       </Heading>
-      <Image src={`http://localhost:8000/warehouseImg/${data.image}`}  height={"140px"} width={"140px"}
+      <Image src={`${process.env.REACT_APP_BASE_URL}/warehouseImg/${data?.image}`}  height={"140px"} width={"140px"}
     objectFit='cover' borderRadius={"10px"}/>
     </VStack>
     <Flex h={"50px"}>

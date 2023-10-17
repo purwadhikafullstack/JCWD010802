@@ -4,6 +4,7 @@ import { TableDetail } from "./TableDetail"
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import axios from "../../../../api/axios"
+import { toast } from "react-toastify"
 
 export const OrderDetailView = () => {
     const { id } = useParams()
@@ -16,6 +17,8 @@ export const OrderDetailView = () => {
             setData(response.data.result)
         } catch (error) {
             console.log(error);
+            toast.error("Failed to load order detail!")
+
         }
     }
     const triggerReload = () => {

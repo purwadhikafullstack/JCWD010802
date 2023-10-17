@@ -52,6 +52,7 @@ export const AdminEditForm = ({ admin, onUpdateAdmin}) => {
     catch (error) {
       console.error(error); 
       setSubmitting(false);
+      toast.error(`${error?.response?.data?.error?.message}`)
     }
   };
 

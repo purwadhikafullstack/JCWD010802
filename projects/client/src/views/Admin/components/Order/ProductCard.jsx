@@ -10,7 +10,7 @@ export const ProductCardOrder = ({ data }) => {
             <Flex w="full" mt="10px" bg="white" p="10px 15px" borderRadius="10px" shadow="md"
             justify="space-between" direction={{ base: "column", lg: "row"}} key={item.id}>
                 <Flex>
-                    <Image src={`http://localhost:8000/productImg/${item.product.productImg}`} h="120px" />
+                    <Image src={`${process.env.REACT_APP_BASE_URL}/productImg/${item.product.productImg}`} h="120px" />
                     <Flex direction="column" justify="center">
                         <Heading fontSize="16px">{item.product.name}</Heading>
                         <Text fontSize="14px">Quantity: {item.quantity}</Text>

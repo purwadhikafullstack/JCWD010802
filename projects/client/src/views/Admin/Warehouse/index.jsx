@@ -5,6 +5,7 @@ import { AddWarehouseModal} from '../components/Warehouse/addWarehouseModal';
 import { useLocation } from 'react-router-dom';
 import { Pagination } from '../../../components/pagination/pagination';
 import axios from '../../../api/axios';
+import { toast } from 'react-toastify';
 
 
 export const WarehousePageView = () => {
@@ -23,6 +24,7 @@ export const WarehousePageView = () => {
       setPage(response.data.totalpage);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load warehouses!")
     }
   };
   const openAddModal = () => {

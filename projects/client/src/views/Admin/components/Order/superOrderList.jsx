@@ -17,13 +17,15 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  Icon
+  Icon,
+  TableContainer
 } from '@chakra-ui/react';
 import convertToUppercase from '../../../../helpers/upperCase';
 import formatIDR from '../../../../helpers/formatIDR';
 import { useNavigate } from 'react-router-dom';
 import { PaginationAddress } from '../pagination';
 import { BsSearch } from 'react-icons/bs';
+import { FilterComponent, SuperFilterComponent } from './mobileFilter';
 
 export const SuperOrderList = ({ 
   order,
@@ -67,8 +69,26 @@ dateFilter,onFilterDate,search,handleSearch }) => {
 
   return (
     <>
-     <Flex justifyContent={"flex-end"}>
-<Flex p={5} w={"50%"}>
+    <SuperFilterComponent
+          search={search}
+          handleSearch={handleSearch}
+          filterWarehouse={filterWarehouse}
+          onFilterWarehouse={onFilterWarehouse}
+          filterShipping={filterShipping}
+          onFilterShipping={onFilterShipping}
+          filterStatus={filterStatus}
+          onFilterStatus={onFilterStatus}
+          dateFilter={dateFilter}
+          onFilterDate={onFilterDate}
+          sortDirection={sortDirection}
+          onSortDirection={onSortDirection}
+          handleResetFilter={handleResetFilter}
+          warehouse={warehouse}
+          statusList={statusList}
+        />
+     <Flex display={{ base: 'none', md: "block" }} 
+>
+<Flex p={5} w={"50%"}  >
     <InputGroup>
             <Input
                 variant="outline"
@@ -81,14 +101,14 @@ dateFilter,onFilterDate,search,handleSearch }) => {
                   handleSearch(e.target.value);
                 }}                
                 borderColor={"2px solid black"}
-                w="40%"
+                w="80%"
                 />
             <InputLeftElement>
                 <Icon as={BsSearch} color={"gray.500"} />
             </InputLeftElement>
         </InputGroup>
                 </Flex>
-    <HStack p={5} w={"60%"} gap={2}>
+    <Flex p={5} w={"100%"} gap={2} justifyContent={"flex-end"}>
         <Select
             placeholder="Warehouse"
             value={filterWarehouse}
@@ -164,13 +184,15 @@ dateFilter,onFilterDate,search,handleSearch }) => {
         >
           Clear Filter
         </Button>
-        </HStack>
+        </Flex>
         </Flex>
         {order.length === 0 ? (
           <Center>
           <Heading>No Order</Heading>
         </Center>
       ) : (
+        <TableContainer>
+
     <Table variant="simple">
       <Thead>
         <Tr>
@@ -203,7 +225,7 @@ dateFilter,onFilterDate,search,handleSearch }) => {
             <Td>
               <Badge
                 colorScheme={getStatusBadgeColor(order.status.name)}
-              >
+                >
                 {order.status.name}
               </Badge>
             </Td>
@@ -211,6 +233,7 @@ dateFilter,onFilterDate,search,handleSearch }) => {
         ))}
       </Tbody>
     </Table>
+        </TableContainer>
       )}
         <PaginationAddress totalpage={totalpage} />
 

@@ -4,6 +4,7 @@ import { OrderCard } from "./OrderCard"
 import { PaginationProfile } from "./PaginationProfile"
 import headersGen from "../../../api/headers"
 import axios from "../../../api/axios"
+import { toast } from "react-toastify"
 
 
 export const OrderList = () => {
@@ -26,6 +27,7 @@ export const OrderList = () => {
             setTotalPage(response.data.totalpage)
         } catch (error) {
             console.log(error);
+            toast.error("Failed to load orders!")
         }
     }
     const getStatus = async () => {
@@ -34,6 +36,7 @@ export const OrderList = () => {
             setStatus(response.data.result)
         } catch (error) {
             console.log(error);
+            toast.error("Failed to load status!")
         }
     }
     const triggerReload = () => {
