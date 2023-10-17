@@ -8,7 +8,8 @@ export const OnboardCard = () => {
     const regis = useSelector((state) => state.regis.value)
     const data = {
         email: regis.email,
-        regisToken: regis.token
+        regisToken: regis.token,
+        feURL: window.location.origin
     }
 
     const onResend = async () => {

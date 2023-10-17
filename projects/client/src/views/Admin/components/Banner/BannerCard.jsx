@@ -1,5 +1,6 @@
 import { Flex, Image, Text } from "@chakra-ui/react"
 import { UploadBanner } from "./UploadBanner"
+import { AddBanner } from "./AddBanner"
 
 
 export const BannerCard = ({ data, headers, reload }) => {
@@ -18,6 +19,7 @@ export const BannerCard = ({ data, headers, reload }) => {
                 {data?.map((item) => (
                     <UploadBanner data={item?.bannerImg} headers={headers} id={item?.id} reload={reload} />
                 ))}
+                {data?.length < 4 ? <AddBanner headers={headers} reload={reload} /> : null}
             </Flex>
         </Flex>
     )
