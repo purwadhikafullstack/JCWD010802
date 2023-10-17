@@ -26,7 +26,9 @@ const SignupSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
   password: Yup.string()
     .min(6, "Password must be at least 6 characters")
-    .required("Password is required"),
+    .required("Password is required")
+    .matches(/^(?=.*[A-Z])/, "Must contain at least one Uppercase character")
+    .matches(/^(?=.*(\W|_))/, "Must contain at least one symbol"),
   warehouse: Yup.string().required("Warehouse is required"),
 });
 
@@ -57,6 +59,7 @@ export const AddAdmin = ({ isOpen, onClose, setReload, reload }) => {
       setReload(!reload);
     } catch (error) {
       console.log(error);
+      toast.error(`${error?.response?.data?.message}`)
     }
   };
 
@@ -66,6 +69,7 @@ export const AddAdmin = ({ isOpen, onClose, setReload, reload }) => {
       setWarehouse(response.data);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load resources!")
     }
   };
 

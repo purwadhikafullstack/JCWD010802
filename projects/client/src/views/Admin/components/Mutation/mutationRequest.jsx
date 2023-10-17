@@ -1,4 +1,4 @@
-import { Box, Center, Table, Thead, Tbody, Tr, Th, Td, Heading, HStack } from '@chakra-ui/react';
+import { Box, Center, Table, Thead, Tbody, Tr, Th, Td, Heading, HStack, TableContainer } from '@chakra-ui/react';
 import { Accept } from './acceptButton';
 import { Reject } from './rejectButton';
 
@@ -15,6 +15,7 @@ export const IncomingRequests = ({data,reload,setReload}) => {
         </Heading>
         </Center>
     ):(
+<TableContainer>
 
         <Table variant="simple">
           <Thead>
@@ -43,6 +44,7 @@ export const IncomingRequests = ({data,reload,setReload}) => {
             ))}
           </Tbody>
         </Table>
+    </TableContainer>
     )}
     </Box>
 )

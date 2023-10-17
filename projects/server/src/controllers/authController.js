@@ -61,7 +61,8 @@ module.exports = {
                 where: { email },
                 include: [{ model: warehouseAdmin }]
             })
-
+            const deletedUser = await user.findOne({where:{email,isDeleted:true}})
+            if (deletedUser) throw {message:"Your Account is Banned"}
             const isValid = await bcrypt.compare(password, result.password)
             if (!isValid) throw { message: "Email or Password Incorrect" }
 

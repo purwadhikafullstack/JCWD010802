@@ -5,6 +5,7 @@ import { useSelector } from "react-redux"
 import { OrderList } from "../components/Order/orderList"
 import { Heading } from "@chakra-ui/react"
 import axios from "../../../api/axios"
+import { toast } from "react-toastify"
 export const OrderView = () => {
 const [superOrder, setSuperOrder] = useState([])
 const [order, setOrder] = useState([])
@@ -44,6 +45,7 @@ const search = params.get("search") || "";
             setPageSuperOrders(response.data.totalpage); 
         } catch (error) {
             console.log(error);
+            toast.error("Failed to load orders!")
         }
     }
     const getOrder = async()=>{
@@ -53,6 +55,7 @@ const search = params.get("search") || "";
             setPageAllOrders(response.data.totalpage); 
         } catch (error) {
             console.log(error);
+            toast.error("Failed to load orders!")
         }
     }
     const getWarehouse = async () => {

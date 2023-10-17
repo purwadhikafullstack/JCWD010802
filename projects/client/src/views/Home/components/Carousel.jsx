@@ -1,6 +1,7 @@
 import { Box, Flex, Image, Skeleton, Text } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import axios from "../../../api/axios";
+import { toast } from "react-toastify";
 
 export const Carousel = ({ isLoaded }) => {
   const [slides, setSlides] = useState()
@@ -11,6 +12,7 @@ export const Carousel = ({ isLoaded }) => {
       setSlides(response.data.result)
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load resources!")
     }
   }
   const arrowStyles = {
@@ -42,13 +44,11 @@ export const Carousel = ({ isLoaded }) => {
     setCurrentSlide((s) => (s === slidesCount - 1 ? 0 : s + 1));
   };
 
-  // Add an effect to automatically transition to the next slide
   useEffect(() => {
     const interval = setInterval(() => {
       nextSlide();
-    }, 5000); // Change the interval duration as needed (e.g., 5000ms for 5 seconds)
+    }, 5000); 
     
-    // Clear the interval when the component unmounts
     return () => clearInterval(interval);
   }, [currentSlide]);
 

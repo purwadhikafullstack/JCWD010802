@@ -19,7 +19,6 @@ function App() {
 
     if (token) {
       const response = await axios.get("/auth/keeplogin", { headers })
-      console.log(response);
       dispatch(setValue(response.data.result))
     } else {
       localStorage.removeItem("token")

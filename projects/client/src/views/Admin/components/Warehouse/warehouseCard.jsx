@@ -20,7 +20,6 @@ export const WarehouseCard = ({ data,setReload,reload }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); 
   const handleEditClick = () => {
     setIsEditModalOpen(true);
-    console.log(data);
   };
 
   const handleDeleteClick = () => {

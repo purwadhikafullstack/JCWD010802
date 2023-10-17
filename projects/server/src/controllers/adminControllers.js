@@ -7,6 +7,8 @@ module.exports = {
     addAdmin : async(req,res) => {
         try {
             const { name, email } = req.body;
+            const isEmailExist = await user.findOne({ where: { email} })
+            if (isEmailExist) throw { message: "Email already used" }
             const result = await user.create({
               name,
               email,
@@ -134,7 +136,8 @@ getAdminProfile: async (req,res) => {
     try {
         const id = req.params.id;
         const updateFields = {};
-      
+        const isEmailExist = await user.findOne({ where: { email: req.body.email } })
+            if (isEmailExist) throw { message: "Email already used" }
         
         if (req.body.name) {
             updateFields.name = req.body.name;

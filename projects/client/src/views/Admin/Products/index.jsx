@@ -9,6 +9,7 @@ import { CategorySort } from "../components/Products/categorySort";
 import { Pagination } from "../../../components/pagination/pagination";
 import { useSelector } from "react-redux";
 import { SortingProduct } from "../components/Products/SortingProduct";
+import { toast } from "react-toastify";
 
 
 
@@ -40,6 +41,7 @@ export const AdminProducts = () => {
             setTotalPage(response.data.totalpage)
         } catch (error) {
             console.log(error);
+            toast.error("Failed to load products!")
         }
     }
 
@@ -49,6 +51,7 @@ export const AdminProducts = () => {
             setCategory(response.data.result)
         } catch (error) {
             console.log(error);
+            toast.error("Failed to load categories!")
         }
     }
     const triggerReload = () => {

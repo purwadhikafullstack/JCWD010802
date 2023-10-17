@@ -17,13 +17,15 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  Icon
+  Icon,
+  TableContainer
 } from '@chakra-ui/react';
 import convertToUppercase from '../../../../helpers/upperCase';
 import formatIDR from '../../../../helpers/formatIDR';
 import { useNavigate } from 'react-router-dom';
 import { PaginationAddress } from '../pagination';
 import { BsSearch } from 'react-icons/bs';
+import { FilterComponent } from './mobileFilterOrder';
 
 export const OrderList = ({ 
   order,
@@ -65,7 +67,21 @@ export const OrderList = ({
 
   return (
     <>
-     <Flex justifyContent={"flex-end"}>
+     <FilterComponent
+          search={search}
+          handleSearch={handleSearch}
+          filterShipping={filterShipping}
+          onFilterShipping={onFilterShipping}
+          filterStatus={filterStatus}
+          onFilterStatus={onFilterStatus}
+          dateFilter={dateFilter}
+          onFilterDate={onFilterDate}
+          sortDirection={sortDirection}
+          onSortDirection={onSortDirection}
+          handleResetFilter={handleResetFilter}
+          statusList={statusList}
+        />
+     <Flex justifyContent={"flex-end"} display={{ base: 'none', md: "block" }}>
      <Flex p={5} w={"50%"}>
     <InputGroup>
             <Input
@@ -79,14 +95,14 @@ export const OrderList = ({
                   handleSearch(e.target.value);
                 }}                
                 borderColor={"2px solid black"}
-                w="40%"
+                w="80%"
                 />
             <InputLeftElement>
                 <Icon as={BsSearch} color={"gray.500"} />
             </InputLeftElement>
         </InputGroup>
                 </Flex>
-    <HStack p={5} w={"60%"} gap={2}>
+    <Flex p={5} w={"100%"} gap={2} justifyContent={"flex-end"}>
           <Select
             placeholder="Status"
             value={filterStatus}
@@ -146,13 +162,15 @@ export const OrderList = ({
         >
           Clear Filter
         </Button>
-        </HStack>
+        </Flex>
         </Flex>
         {order.length === 0 ? (
           <Center>
           <Heading>No Order</Heading>
         </Center>
       ) : (
+        <TableContainer>
+
     <Table variant="simple">
       <Thead>
         <Tr>
@@ -167,8 +185,8 @@ export const OrderList = ({
       <Tbody>
         {order.map((order) => (
           <Tr
-            key={order.id}
-            onClick={() => handleRowClick(order.id)} 
+          key={order.id}
+          onClick={() => handleRowClick(order.id)} 
             style={{ cursor: 'pointer' }} 
           >
             <Td>{order.invoice}</Td>
@@ -193,6 +211,7 @@ export const OrderList = ({
         ))}
       </Tbody>
     </Table>
+        </TableContainer>
       )}
         <PaginationAddress totalpage={totalpage} />
 

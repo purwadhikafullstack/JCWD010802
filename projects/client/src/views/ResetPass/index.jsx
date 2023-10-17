@@ -33,7 +33,6 @@ const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     setSubmitting(false);
   }
 };
-console.log(token);
     return (
         <Box p={8} mt={5}>
             <Heading textAlign={"center"} mb={3} color={"#9fd8cb"} fontSize={"5xl"}>

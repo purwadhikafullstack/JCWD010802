@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { AddWarehouse } from './addWarehouse';
 import axios from '../../../../api/axios';
+import { toast } from 'react-toastify';
 
 
 
@@ -23,6 +24,8 @@ export const AddWarehouseModal = ({ isOpen, onClose, setReload, reload }) => {
       setCities(response.data.city.rajaongkir.results);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load cities!")
+
     }
   };
   const getProvince = async (data) => {
@@ -31,6 +34,8 @@ export const AddWarehouseModal = ({ isOpen, onClose, setReload, reload }) => {
       setProvince(response.data.province.rajaongkir.results);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load provinces!")
+
     }
   };
   useEffect(() => {

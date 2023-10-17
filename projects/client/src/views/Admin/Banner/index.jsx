@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import headersGen from "../../../api/headers"
 import axios from "../../../api/axios"
 import { BannerCard } from "../components/Banner/BannerCard"
+import { toast } from "react-toastify"
 
 
 export const Banner = () => {
@@ -17,6 +18,7 @@ export const Banner = () => {
             setBanner(response.data.result)
         } catch (error) {
             console.log(error);
+            toast.error("Failed to load resources!")
         }
     }
     const triggerReload = () => {
