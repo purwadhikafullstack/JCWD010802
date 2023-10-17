@@ -14,6 +14,7 @@ export const RegisterCard = () => {
 
     const onRegister = async (data) => {
         try {
+            data.feURL = window.location.origin
             const response = await axios.post("/auth/register", data)
             dispatch(setEmail({email: data.email, token: response.data.token}))
             Swal.fire({

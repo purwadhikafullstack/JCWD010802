@@ -51,7 +51,7 @@ export const WarehousePageView = () => {
           templateColumns={{ base: '1fr', sm: '1fr 1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }}
           gap={4} py={4}
         >
-          {warehouse.map((warehouse, index) => (
+          {warehouse?.map((warehouse, index) => (
             <GridItem key={index}>
               <WarehouseCard data={warehouse} reload={reload} setReload={setReload} />
             </GridItem>

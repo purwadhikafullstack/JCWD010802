@@ -1,4 +1,4 @@
-const { order, orderItem, user, status, product, stock, warehouse, requestHistory,journal ,address} = require("../models")
+const { order, orderItem, user, status, product, stock, warehouse, requestHistory, journal ,address} = require("../models")
 const calculateDistance = require("../utils/calculateDistance")
 
 module.exports = {
@@ -19,9 +19,13 @@ module.exports = {
 
         const orderDetails = await orderItem.findAll({
             where: { orderId: isOrderExist.id },
-            attributes: ['productId', 'quantity'],
         });
-        const warehouses = await warehouse.findAll({include:[{model:address}]});
+        const warehouses = await warehouse.findAll({
+            where: {
+                isDeleted: false
+            },
+            include:[{ model:address }]
+        });
 
         for (const orderDetail of orderDetails) {
             const { productId, quantity } = orderDetail;
@@ -33,7 +37,7 @@ module.exports = {
                 },
             });
 
-            if (checkStock.quantity < 0) {
+            if (checkStock?.quantity < 0) {
                 const orderDetails = await orderItem.findAll({
                     where: { orderId: isOrderExist.id },
                     attributes: ['productId', 'quantity'],

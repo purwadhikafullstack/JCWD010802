@@ -12,7 +12,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
-import { TbFilterCog } from "react-icons/tb";
+import { GiHamburgerMenu } from "react-icons/gi";
 import { Sorting } from "../SortBy/Sorting";
 import { CategorySort } from "../SortBy/CategorySort";
 import { MinMaxSort } from "../SortBy/MinMaxPriceSort";
@@ -37,15 +37,15 @@ export const DrawerSorting = () => {
 
   return (
     <>
-      <HStack
+      <Button
         onClick={onOpen}
         ref={btnRef}
         cursor={"pointer"}
         display={{ base: "block", md: "none" }}
+        bgColor={"white"}
       >
-        <TbFilterCog size={"25px"} />
-        <Text fontWeight={"semibold"}>Filter</Text>
-      </HStack>
+        <GiHamburgerMenu />
+      </Button>
       <Drawer
         isOpen={isOpen}
         placement="bottom"

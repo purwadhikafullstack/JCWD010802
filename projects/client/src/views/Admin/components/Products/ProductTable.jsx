@@ -30,7 +30,7 @@ export const ProductTable = ({ reload, product, category }) => {
                                 </Td>
                                 <Td>{formatIDR(item.price)}</Td>
                                 <Td>{item.category.name}</Td>
-                                <Td>{item.weight} g</Td>
+                                <Td>{item.weight} kg</Td>
                                 <Td display={user.roleId === 3 ? "block" : "none"}>
                                     <Flex align="center" gap={1}>
                                         <EditProductButton product={item} category={category} reload={reload} />

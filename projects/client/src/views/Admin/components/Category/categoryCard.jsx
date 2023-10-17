@@ -19,6 +19,7 @@ import { SortCategory } from "./sort/sortCategory";
 import { AddCategory } from "./modal/modalAddCategory";
 import { Pagination } from "../../../../components/pagination/pagination";
 import axios from "../../../../api/axios";
+import { DrawerSortingCategory } from "./Drawer/DrawerSort";
 import { toast } from "react-toastify";
 
 export const CategoryCard = () => {
@@ -57,8 +58,9 @@ export const CategoryCard = () => {
   }, [reload, search, sort, currentPage]);
   return (
     <Flex flexDirection="column" py={5} gap={3} px={5}>
-      <Flex w={"full"} justifyContent={"space-between"}>
-        <Flex gap={3}>
+      <Flex w={"full"} gap={3}>
+        <DrawerSortingCategory />
+        <Flex gap={3} display={{base: 'none', lg: "flex"}}>
           <InputGroup>
             <Input
               variant="outline"
