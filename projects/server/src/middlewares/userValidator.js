@@ -24,7 +24,7 @@ module.exports = {
     checkEditProfile : async(req,res,next) => {
         try {
             await header('authorization').notEmpty().withMessage("Token required").run(req)
-            await body('name').notEmpty().isAlphanumeric().withMessage("Name required").run(req)
+            await body('name').notEmpty().withMessage("Name required").run(req)
             await body('email').notEmpty().isEmail().withMessage("Email required").run(req)
 
             const validation = validationResult(req)

@@ -13,10 +13,12 @@ import {
   Select,
   Flex,
   HStack,
-  Button
+  Button,
+  TableContainer
 } from '@chakra-ui/react';
 import convertToUppercase from '../../../../helpers/upperCase';
 import { PaginationAddress } from '../pagination';
+import { FilterMutation } from './mobileFilterMutation';
 
 export const SuperRequests = ({
   data,
@@ -45,7 +47,18 @@ export const SuperRequests = ({
       <Heading  mb={4}>
         Request History
       </Heading>
-      <Flex justifyContent={"flex-end"}>
+      <FilterMutation
+      filterStatus={filterStatus}
+      filterProduct={filterProduct}
+      dateFilter={dateFilter}
+      sortDirection={sortDirection}
+      onSortDirection={onSortDirection}
+      handleDateFilter={handleDateFilter}
+      onFilterProduct={onFilterProduct}
+      onFilterStatus={onFilterStatus}
+      product={product}
+      />
+      <Flex justifyContent={"flex-end"} display={{ base: 'none', md: "block" }}>
         <HStack p={5} w={"50%"} gap={2}>
         <Select
             placeholder="Product"
@@ -114,6 +127,8 @@ export const SuperRequests = ({
           <Heading>No request</Heading>
         </Center>
       ) : (
+        <TableContainer>
+
         <Table variant="simple">
           <Thead>
             <Tr>
@@ -140,6 +155,7 @@ export const SuperRequests = ({
             </Tr>
           ))}
         </Table>
+      </TableContainer>
       )}
       <PaginationAddress totalpage={totalpage} />
     </Box>

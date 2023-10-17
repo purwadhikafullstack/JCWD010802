@@ -21,6 +21,7 @@ import { BsSearch } from "react-icons/bs";
 import { PaginationProfile } from "./PaginationProfile";
 import axios from "../../../api/axios";
 import headersGen from "../../../api/headers";
+import { toast } from "react-toastify";
 
 export const AddressCard = () => {
   const token = localStorage.getItem("token");
@@ -50,6 +51,7 @@ export const AddressCard = () => {
       setPage(response.data.totalpage);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load addresses!")
     }
   };
   const getCity = async (data) => {
@@ -58,6 +60,7 @@ export const AddressCard = () => {
       setCities(response.data.city.rajaongkir.results);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load cities!")
     }
   };
   const getProvince = async (data) => {
@@ -66,6 +69,7 @@ export const AddressCard = () => {
       setProvince(response.data.province.rajaongkir.results);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load provinces!")
     }
   };
   const handleSearch = (result) => {

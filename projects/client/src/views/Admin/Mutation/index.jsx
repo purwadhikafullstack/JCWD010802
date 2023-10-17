@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ManualStockMutationForm } from '../components/Mutation/stockMutationForm';
 import { SuperRequests } from '../components/Mutation/superRequest';
 import axios from '../../../api/axios';
+import { toast } from 'react-toastify';
 
 export const MutationView = () => {
   const [filterStatus, setFilterStatus] = useState('');
@@ -40,6 +41,7 @@ export const MutationView = () => {
       setWarehouse(response.data);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load resources!")
     }
   };
 
@@ -57,6 +59,7 @@ export const MutationView = () => {
       setProduct(response.data.result);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load resources!")
     }
   };
 
@@ -66,6 +69,7 @@ export const MutationView = () => {
       setRequest(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
+      toast.error("Failed to load incoming requests!")
     }
   };
 
@@ -76,6 +80,7 @@ export const MutationView = () => {
       setPageAllRequests(response.data.totalpage);
     } catch (error) {
       console.error('Error fetching data:', error);
+      toast.error("Failed to load stock request!")
     }
   };
 
@@ -86,6 +91,7 @@ export const MutationView = () => {
       setPageSuperRequests(response.data.totalpage);
     } catch (error) {
       console.error('Error fetching data:', error);
+      toast.error("Failed to load stock request!")
     }
   };
   const handleOpenModal = () => {

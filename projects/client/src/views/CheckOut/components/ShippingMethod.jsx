@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { setCost,setShip } from "../../../redux/costSlice";
 import formatIDR from "../../../helpers/formatIDR";
 import axios from "../../../api/axios";
+import { toast } from "react-toastify";
 
 export const ShippingMethod = ({ selectedAddress, totalWeight }) => {
   const [warehouse, setWarehouse] = useState();
@@ -22,6 +23,7 @@ export const ShippingMethod = ({ selectedAddress, totalWeight }) => {
       setWarehouse(response.data.origin);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load warehouse!")
     }
   }, [selectedAddress?.address.lat, selectedAddress?.address.lng]);
 

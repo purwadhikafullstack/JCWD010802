@@ -14,7 +14,10 @@ import { PieChart, Pie, Cell, Tooltip, Legend,BarChart, Bar, XAxis, YAxis, Carte
 import { StatCard } from '../components/Dashboard/statCard';
 import axios from '../../../api/axios';
 import formatIDR from '../../../helpers/formatIDR';
-
+import {
+  useMediaQuery, 
+} from '@chakra-ui/react';
+import { toast } from 'react-toastify';
 export const Dashboard = () => {
   const [data, setData] = useState({
     totalUser: 0,
@@ -35,12 +38,14 @@ export const Dashboard = () => {
       setData(response.data);
     } catch (error) {
       console.error(error);
+      toast.error("Failed to load dashboard information!")
     }
   };
 
   useEffect(() => {
     getData();
   }, []);
+  const [isSmallerScreen] = useMediaQuery('(max-width: 768px');
 
   const COLORS = [
     "#0088FE",

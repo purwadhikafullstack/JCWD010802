@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 import headersGen from "../../../api/headers"
 import axios from "../../../api/axios"
+import { toast } from "react-toastify"
 
 export const StockView = () => {
     const user = useSelector((state) => state.user.value)
@@ -31,6 +32,7 @@ export const StockView = () => {
             setTotalPage(response.data.totalpage)
         } catch (error) {
             console.log(error);
+            toast.error("Failed to load stock!")
         }
     }
     const getCategory = async () => {
@@ -39,6 +41,7 @@ export const StockView = () => {
             setCategory(response.data.result);
         } catch (error) {
             console.log(error);
+            toast.error("Failed to load categories!")
         }
     }
     const getWarehouse = async () => {
@@ -46,7 +49,8 @@ export const StockView = () => {
             const response = await axios.get("/warehouse/?limit=9999999")
             setWarehouse(response.data.result);
         } catch (error) {
-            
+            console.log(error);
+            toast.error("Failed to load warehouse list!")
         }
     }
     const handleSelectCat = (id) => {

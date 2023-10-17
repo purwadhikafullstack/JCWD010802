@@ -16,6 +16,7 @@ import {
 import formatIDR from "../../helpers/formatIDR";
 import { RemoveButton } from "./components/removeWishlist";
 import axios from "../../api/axios";
+import { toast } from "react-toastify";
   
   export const WishlistView = () => {
     const location = useLocation();
@@ -44,6 +45,7 @@ import axios from "../../api/axios";
       } catch (error) {
         console.error(error);
         setLoading(false);
+        toast.error("Failed to load wishlist!")
       }
     };
   

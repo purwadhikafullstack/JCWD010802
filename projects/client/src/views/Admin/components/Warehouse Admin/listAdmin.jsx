@@ -37,6 +37,8 @@ export const ListAdmin = () => {
       setPage(response.data.totalPage);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load admins!")
+
     } };
   const getProfile = async (userId) => {
     try {
@@ -44,6 +46,8 @@ export const ListAdmin = () => {
       setProfile(response.data.result);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load  admin profile!")
+
     }};
   const updateAdminData = (editedAdminData) => {
     setAdmin((prevAdmin) =>
@@ -100,6 +104,7 @@ export const ListAdmin = () => {
       setWarehouse(response.data);
     } catch (error) {
       console.log(error);
+      toast.error("Failed to load warehouse list!")
     }};
   const toggleMenu = (index) => {
     setOpenMenuIndex((prevIndex) => (prevIndex === index ? null : index));
