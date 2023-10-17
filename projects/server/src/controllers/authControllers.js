@@ -4,15 +4,15 @@ const forgotToken = db.token
 const {Op, where} = require("sequelize")
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-require('dotenv').config()
 const fs = require('fs')
 const handlebars = require('handlebars')
 const transporter = require('../middlewares/transporter')
+const path = require("path")
 
 module.exports = {
     forgotPassword: async (req, res) => {
         try {
-            const { email } = req.body;
+            const { email, feURL } = req.body;
             const findUser = await user.findOne({where:{email:email}})
     
             const existingToken = await forgotToken.findOne({
@@ -46,12 +46,12 @@ module.exports = {
                 token: token,
                 userId: result.id, 
             });
-            const data = await fs.readFileSync('./reset.html', 'utf-8');
+            const data = await fs.readFileSync(path.join(__dirname, '../templates/reset.html'), 'utf-8');
             const tempCompile = await handlebars.compile(data);
-            const tempResult = tempCompile({ token });
+            const tempResult = tempCompile({ token, feURL });
     
             await transporter.sendMail({
-                from: "kuga@gmail.com",
+                from: process.env.USER_MAILER,
                 to: email,
                 subject: "Reset Password",
                 html: tempResult,
