@@ -1,10 +1,12 @@
-import { Flex, Input, Select } from "@chakra-ui/react";
+import { Flex, Input, Select, Button } from "@chakra-ui/react";
 import { ChartReport } from "../components/SalesReport/chartReport";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "../../../api/axios";
 import { useSelector } from "react-redux";
 import { TableSales } from "../components/SalesReport/tableSalesReport";
+import { BsTrash3 } from "react-icons/bs";
+
 
 export const SalesReportView = () => {
   const location = useLocation();
@@ -20,9 +22,9 @@ export const SalesReportView = () => {
   const productId = params.get("productId") || "";
   const currentDate = new Date();
   const year = currentDate.getFullYear();
-  let month = currentDate.getMonth() + 1; 
+  let month = currentDate.getMonth() + 1;
   if (month < 10) {
-    month = `0${month}`; 
+    month = `0${month}`;
   }
   const todayDate = `${year}-${month}`;
   const date = params.get("date") || todayDate;
@@ -41,6 +43,7 @@ export const SalesReportView = () => {
       console.log(error);
     }
   };
+
   const getTableSales = async () => {
     try {
       const response = await axios.get(
@@ -54,31 +57,28 @@ export const SalesReportView = () => {
       console.log(err);
     }
   };
+
   const getWarehouse = async () => {
     try {
-      const response = await axios.get(
-        `/warehouse/list`
-      );
+      const response = await axios.get("/warehouse/list");
       setWarehouse(response.data);
     } catch (error) {
       console.log(error);
     }
   };
+
   const getCategory = async () => {
     try {
-      const response = await axios.get(
-        `/category?limit=9999`
-      );
+      const response = await axios.get("/category?limit=9999");
       setCategory(response.data.result);
     } catch (err) {
       console.log(err);
     }
   };
+
   const getProduct = async () => {
     try {
-      const response = await axios.get(
-        `/product?limit=9999`
-      );
+      const response = await axios.get("/product?limit=9999");
       setProduct(response.data.result);
     } catch (error) {
       console.log(error);
@@ -104,6 +104,17 @@ export const SalesReportView = () => {
       `?warehouseId=${warehouseId}&categoryId=${categoryId}&productId=${productId}&date=${e.target.value}`
     );
   };
+  const handleReset = () => {
+    const resetWarehouseId = "";
+    const resetCategoryId = "1";
+    const resetProductId = "";
+    const resetDate = todayDate;
+
+    navigate(
+      `?warehouseId=${resetWarehouseId}&categoryId=${resetCategoryId}&productId=${resetProductId}&date=${resetDate}`
+    );
+  };
+
   useEffect(() => {
     getChartReport();
     getTableSales();
@@ -111,6 +122,7 @@ export const SalesReportView = () => {
     getCategory();
     getProduct();
   }, [warehouseId, categoryId, productId, date]);
+
   return (
     <Flex gap={5} w={"full"} direction={"column"}>
       <Flex w={"full"} gap={3} mt={6}>
@@ -132,7 +144,7 @@ export const SalesReportView = () => {
         ) : null}
         <Select
           id="categorySelect"
-          defaultValuevalue={categoryId}
+          value={categoryId}
           onChange={handleCategory}
           maxWidth="200px"
           borderColor={"2px solid black"}
@@ -146,7 +158,7 @@ export const SalesReportView = () => {
         </Select>
         <Select
           id="productSelect"
-          defaultValue={productId}
+          value={productId}
           onChange={handleProduct}
           maxWidth="200px"
           borderColor={"2px solid black"}
@@ -161,9 +173,18 @@ export const SalesReportView = () => {
         <Input
           w={"max-content"}
           type="month"
+          value={date}
           onChange={handleDate}
           borderColor={"2px solid black"}
-        ></Input>
+        />
+         <Button
+            rightIcon={<BsTrash3 />}
+            colorScheme="red"
+            variant="outline"
+            onClick={handleReset}
+          >
+            Reset
+          </Button>
       </Flex>
       <Flex direction={"column"} alignContent={"center"} w={"full"}>
         <ChartReport category={category} chart={chart} />

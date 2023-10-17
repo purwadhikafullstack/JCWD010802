@@ -1,5 +1,11 @@
 const { Sequelize, Op } = require("sequelize");
-const { journal, stock, product, warehouseAdmin, warehouse } = require("../models");
+const {
+    journal,
+    stock,
+    product,
+    warehouseAdmin,
+    warehouse,
+} = require("../models");
 
 module.exports = {
     getStockHistory: async (req, res) => {
@@ -11,7 +17,9 @@ module.exports = {
             const search = req.query.search || "";
             const warehouseId = +req.query.warehouseId || null;
             const today = new Date();
-            const defaultMonthly = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}`;
+            const defaultMonthly = `${today.getFullYear()}-${(today.getMonth() + 1)
+                .toString()
+                .padStart(2, "0")}`;
             const monthly = req.query.monthly || defaultMonthly;
             const productName = {
                 name: {
@@ -19,11 +27,12 @@ module.exports = {
                 },
             };
             const stockCondition = {
-                warehouseId: warehouseId !== null ?
-                    warehouseId :
-                    {
-                        [Sequelize.Op.ne]: null,
-                    },
+                warehouseId:
+                    warehouseId !== null
+                        ? warehouseId
+                        : {
+                            [Sequelize.Op.ne]: null,
+                        },
             };
             const dateFilter = {};
             if (monthly) {
@@ -42,11 +51,14 @@ module.exports = {
             });
     
             let result;
+    
             if (isAdmin) {
                 result = await journal.findAll({
                     include: {
                         model: stock,
-                        where: { warehouseId: isAdmin.warehouseId },
+                        where: {
+                            warehouseId: isAdmin.warehouseId,
+                        },
                         include: {
                             model: product,
                             where: {
@@ -73,7 +85,40 @@ module.exports = {
                         where: {
                             ...stockCondition,
                         },
-                        include: [{
+                        include: [
+                            {
+                                model: product,
+                                where: {
+                                    [Sequelize.Op.and]: [
+                                        {
+                                            isDeleted: false,
+                                        },
+                                        productName,
+                                    ],
+                                },
+                            },
+                            {
+                                model: warehouse,
+                            },
+                        ],
+                    },
+                    where: {
+                        ...dateFilter,
+                    },
+                    order: [["createdAt", sort]],
+                    limit,
+                    offset,
+                });
+            }
+    
+            const total = await journal.count({
+                include: {
+                    model: stock,
+                    where: {
+                        ...stockCondition,
+                    },
+                    include: [
+                        {
                             model: product,
                             where: {
                                 [Sequelize.Op.and]: [
@@ -84,40 +129,10 @@ module.exports = {
                                 ],
                             },
                         },
-                        {model: warehouse}
+                        {
+                            model: warehouse,
+                        },
                     ],
-                    },
-                    where: {
-                        ...dateFilter,
-                    },
-                    order: [["createdAt", sort]],
-                    limit,
-                    offset,
-                });
-            }
-            console.log('Resul[0]',result[0].stock);
-            const jurnalMapping = result.map((item)=> item.quantity)
-            const stockBulanIni = jurnalMapping.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
-            console.log(stockBulanIni,jurnalMapping);
-            let totalStock;
-            totalStock = result[0].stock.quantity - stockBulanIni
-            console.log('Total stock', totalStock);
-            result.forEach(item => {
-                if (item.description === 'Add') {
-                    item.stock.quantity = totalStock + item.quantity;
-                } else if (item.description === 'Reduce') {
-                    item.stock.quantity = totalStock - item.quantity;
-                }
-                console.log(item.stock.quantity);
-                totalStock = item.stock.quantity
-            });
-    
-            const total = await journal.count({
-                include: {
-                    model: stock,
-                    where: {
-                        ...stockCondition,
-                    },
                 },
                 where: {
                     ...dateFilter,
@@ -137,7 +152,7 @@ module.exports = {
                 message: err.message,
             });
         }
-    },
+    },    
     getReportProduct: async (req, res) => {
         try {
             const page = +req.query.page || 1;
@@ -147,7 +162,9 @@ module.exports = {
             const search = req.query.search || "";
             const warehouseId = +req.query.warehouseId || null;
             const today = new Date();
-            const defaultMonthly = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}`;
+            const defaultMonthly = `${today.getFullYear()}-${(today.getMonth() + 1)
+                .toString()
+                .padStart(2, "0")}`;
             const monthly = req.query.monthly || defaultMonthly;
             const productName = {
                 name: {
@@ -155,11 +172,12 @@ module.exports = {
                 },
             };
             const stockCondition = {
-                warehouseId: warehouseId !== null ?
-                    warehouseId :
-                    {
-                        [Sequelize.Op.ne]: null,
-                    },
+                warehouseId:
+                    warehouseId !== null
+                        ? warehouseId
+                        : {
+                            [Sequelize.Op.ne]: null,
+                        },
             };
             const dateFilter = {};
             let startDate, endDate;
@@ -204,16 +222,14 @@ module.exports = {
                             },
                             {
                                 model: warehouse,
-                                attributes: ['id', 'name'],
+                                attributes: ["id", "name"],
                             },
                         ],
                     },
                     where: {
                         ...dateFilter,
                     },
-                    order: [
-                        ["createdAt", sort]
-                    ],
+                    order: [["createdAt", sort]],
                     limit,
                     offset,
                 });
@@ -236,26 +252,26 @@ module.exports = {
                             },
                             {
                                 model: warehouse,
-                                attributes: ['id', 'name'],
+                                attributes: ["id", "name"],
                             },
                         ],
                     },
                     where: {
                         ...dateFilter,
                     },
-                    order: [
-                        ["createdAt", sort]
-                    ],
+                    order: [["createdAt", sort]],
                     limit,
                     offset,
                 });
             }
-            const filteredResults = monthly ? results.filter((result) => {
-                const updatedAt = new Date(result.updatedAt || result.createdAt);
-                return updatedAt >= startDate && updatedAt <= endDate;
-            }) : results;
+            const filteredResults = monthly
+                ? results.filter((result) => {
+                    const updatedAt = new Date(result.updatedAt || result.createdAt);
+                    return updatedAt >= startDate && updatedAt <= endDate;
+                })
+                : results;
     
-            const productTotals = {};
+            let productTotals = {};
     
             filteredResults.forEach((result) => {
                 const productName = result.stock.product.name;
@@ -271,13 +287,16 @@ module.exports = {
                     };
                 }
     
-                if (description === "Add") {
+                if (description === 'Add') {
                     productTotals[productName].tambah += quantity;
-                } else if (description === "Reduce") {
-                    productTotals[productName].kurang -= quantity;
+                } else if (description === 'Reduce') {
+                    productTotals[productName].kurang += quantity;
                 }
-
-                productTotals[productName].quantity = result.stock.quantity + productTotals[productName].tambah + productTotals[productName].kurang;
+    
+                productTotals[productName].quantity =
+                    result.stock.quantity +
+                    productTotals[productName].tambah +
+                    productTotals[productName].kurang;
     
                 const updatedAt = new Date(result.updatedAt || result.createdAt);
                 if (
@@ -307,8 +326,8 @@ module.exports = {
             groupedResults.forEach((result) => {
                 result.entries.sort(
                     (a, b) =>
-                    new Date(b.updatedAt || b.createdAt) -
-                    new Date(a.updatedAt || a.createdAt)
+                        new Date(b.updatedAt || b.createdAt) -
+                        new Date(a.updatedAt || a.createdAt)
                 );
             });
     
@@ -321,6 +340,23 @@ module.exports = {
                 include: {
                     model: stock,
                     where: stockCondition,
+                    include: [
+                        {
+                            model: product,
+                            where: {
+                                [Sequelize.Op.and]: [
+                                    {
+                                        isDeleted: false,
+                                    },
+                                    productName,
+                                ],
+                            },
+                        },
+                        {
+                            model: warehouse,
+                            attributes: ["id", "name"],
+                        },
+                    ],
                 },
                 where: dateFilter,
             });
@@ -338,6 +374,4 @@ module.exports = {
             });
         }
     },
-    
-    
 };
