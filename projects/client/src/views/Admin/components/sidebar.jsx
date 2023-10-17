@@ -302,7 +302,7 @@ export const Sidebar = () => {
               _active={{ bg: "#517664" }}
               mr="10px"
             >
-              <Avatar size="sm" />
+              <Avatar size="sm" src={`${process.env.REACT_APP_BASE_URL}/profileImg/${user?.profileImg}`}/>
             </MenuButton>
             <MenuList color="#517664">
               <MenuItem as={Link} to={"/profile"}>
