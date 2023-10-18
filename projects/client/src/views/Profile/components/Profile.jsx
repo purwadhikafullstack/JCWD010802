@@ -39,6 +39,7 @@ export const ProfileCard = () => {
       console.log(error);
     }
   };
+  console.log(process.env);
   const onLogOut = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("warehouseId");

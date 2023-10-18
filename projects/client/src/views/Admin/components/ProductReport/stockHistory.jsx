@@ -12,7 +12,6 @@ import { PaginationAddress } from "../pagination";
 import { useSelector } from "react-redux";
 import { Filtering } from "./components/filteringProductStock";
 
-
 export const StockHistory = ({
   history,
   page,
@@ -47,6 +46,7 @@ export const StockHistory = ({
               <Th>Name</Th>
               <Th>Add/reduce</Th>
               <Th>Action</Th>
+              <Th>From</Th>
               <Th>Total stock</Th>
               <Th>Created at</Th>
             </Tr>
@@ -62,9 +62,9 @@ export const StockHistory = ({
                   ) : null}
                   <Td>{item.stock?.product?.name}</Td>
                   <Td>{item.quantity}</Td>
+                  <Td>{item.description}</Td>
                   <Td>{actionNote}</Td>
                   <Td>{item.stock.quantity}</Td>
-
                   <Td>{createdAtDate}</Td>
                 </Tr>
               );

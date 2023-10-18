@@ -25,7 +25,7 @@ module.exports = {
     checkVerified : async(req,res,next) => {
         try {
             await header('authorization').notEmpty().withMessage("Token required").run(req)
-            await body('name').notEmpty().isAlphanumeric().withMessage("Name required").run(req)
+            await body('name').notEmpty().withMessage("Name required").run(req)
             await body('password').notEmpty().isStrongPassword({
                 minLength: 6,
                 minLowercase: 1,

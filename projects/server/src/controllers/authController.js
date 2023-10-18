@@ -12,7 +12,7 @@ const warehouseAdmin = db.warehouseAdmin
 module.exports = {
     register: async (req, res) => {
         try {
-            const { email } = req.body
+            const { email, feURL } = req.body
             const t = await db.sequelize.transaction()
 
             const isEmailExist = await user.findOne({ where: { email } })
@@ -27,7 +27,7 @@ module.exports = {
 
                 const data = fs.readFileSync(path.join(__dirname, '../templates/register.html'), 'utf-8')
                 const tempCompile = await handlebars.compile(data)
-                const tempResult = tempCompile({ token })
+                const tempResult = tempCompile({ token, feURL })
 
                 await transporter.sendMail({
                     from: process.env.USER_MAILER,
@@ -101,7 +101,7 @@ module.exports = {
     },
     resendVerif: async (req, res) => {
         try {
-            const { email, regisToken } = req.body
+            const { email, regisToken, feURL } = req.body
 
             const result = await user.findOne({ where: { email }})
             const tokenExist = await dbtoken.findOne({ where: { token: regisToken }})
@@ -111,10 +111,9 @@ module.exports = {
             const token = jwt.sign(payload, process.env.KEY_JWT, { expiresIn: "3d" })
             await dbtoken.create({ token })
 
-            const data = fs.readFileSync('./templates/register.html', 'utf-8')
-            console.log(data);
+            const data = fs.readFileSync(path.join(__dirname, '../templates/register.html'), 'utf-8')
             const tempCompile = await handlebars.compile(data)
-            const tempResult = tempCompile({ token })
+            const tempResult = tempCompile({ token, feURL })
 
             await transporter.sendMail({
                 from: process.env.USER_MAILER,

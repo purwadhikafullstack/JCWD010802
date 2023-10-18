@@ -97,7 +97,6 @@ module.exports = {
             });
         }
     },
-    
     createProduct: async (req, res) => {
         try {
             const {
@@ -108,6 +107,7 @@ module.exports = {
                 description
             } = req.body;
             const productImg = req.file.filename
+            const t = await db.sequelize.transaction()
             const catLike = await categories.findOne({
                 where: {
                     id: categoryId
@@ -122,30 +122,36 @@ module.exports = {
                 status: false,
                 message: "file size to large"
             }
-            const result = await product.create({
-                name,
-                price,
-                weight,
-                description,
-                categoryId: catLike.id,
-                productImg,
-            })
-            const allWarehouse = await warehouse.findAll({ where: { isDeleted: false } })
-            allWarehouse.forEach(async (item) => {
-                await stock.create({
-                    productId: result.id,
-                    warehouseId: item.id,
-                    isDeleted: false,
-                    quantity: 0
+            try {
+                const result = await product.create({
+                    name,
+                    price,
+                    weight,
+                    description,
+                    categoryId: catLike.id,
+                    productImg,
+                }, { transaction: t })
+                const allWarehouse = await warehouse.findAll({ where: { isDeleted: false } })
+                allWarehouse.forEach(async (item) => {
+                    await stock.create({
+                        productId: result.id,
+                        warehouseId: item.id,
+                        isDeleted: false,
+                        quantity: 0
+                    }, { transaction: t })
                 })
-            })
-            res.status(201).send({
-                msg: "Success to create new product",
-                status: true,
-                result
-            });
+                await t.commit()
+                res.status(201).send({
+                    msg: "Success to create new product",
+                    status: true,
+                    result
+                });
+            } catch (error) {
+                await t.rollback()
+                throw error
+            }
         } catch (err) {
-            console.error(err);
+            console.log(err);
             res.status(400).send({
                 status: false,
                 message: err.message

@@ -97,8 +97,7 @@ module.exports = {
               message: 'Warehouse not found',
             });
           }
-          const isWarehouseExist = await warehouse.findOne({ where: { name:req.body.name} })
-          if (isWarehouseExist) throw { message: "Warehouse Name Must be Unique" }
+        
           const updatedData = {}; 
       
           if (req.body.address) {

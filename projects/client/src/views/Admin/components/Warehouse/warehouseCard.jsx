@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Heading,
   Text,
-  Stack,
-  Badge,
   Divider,
   Button,
   Image,
@@ -13,7 +11,6 @@ import {
 } from '@chakra-ui/react';
 import {EditWarehouseModal} from './editWarehouseModal';
 import {DeleteWarehouseModal} from './deleteWarehouseModal';
-import axios from '../../../../api/axios';
 
 export const WarehouseCard = ({ data,setReload,reload }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -44,16 +41,16 @@ export const WarehouseCard = ({ data,setReload,reload }) => {
       minW={"200px"}
     >
       <VStack>
-
       <Heading size="md" mb="2">
-        {data.name}
+        {data?.name}
       </Heading>
       <Image src={`${process.env.REACT_APP_BASE_URL}/warehouseImg/${data?.image}`}  height={"140px"} width={"140px"}
     objectFit='cover' borderRadius={"10px"}/>
     </VStack>
     <Flex h={"50px"}>
 
-      <Text color="gray.500" fontSize={"16px"}>{data.address.address}, {data.address.nama_kota}, {data.address.nama_provinsi}, {data.address.kode_pos}</Text>
+      <Text color="gray.500" fontSize={"16px"}>{data.address?.address}, {data.address?.nama_kota}, {data.address?.nama_provinsi}, {data.address?.kode_pos}</Text>
+
     </Flex>
      
         <Divider my="3" />
@@ -66,8 +63,8 @@ export const WarehouseCard = ({ data,setReload,reload }) => {
 
       <EditWarehouseModal
         data={data}
-        city={data.address.kota}
-        provinces={data.address.provinsi}
+        city={data?.address?.kota}
+        provinces={data?.address?.provinsi}
         reload={reload}
         setReload={setReload}        
         isOpen={isEditModalOpen}
@@ -75,10 +72,10 @@ export const WarehouseCard = ({ data,setReload,reload }) => {
       />
       <DeleteWarehouseModal
         isOpen={isDeleteModalOpen}
-        warehouseName={data.name}
+        warehouseName={data?.name}
         setReload={setReload}
         reload={reload}
-        id={data.id}
+        id={data?.id}
         onClose={handleDeleteModalClose}
       />
     </Box>
