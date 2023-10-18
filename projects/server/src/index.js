@@ -15,7 +15,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
-app.use("/", express.static(path.join(__dirname + "./../public")));
+app.use("/", express.static(__dirname + "./../public"));
 
 //#region API ROUTES
 
@@ -24,7 +24,7 @@ app.use("/", express.static(path.join(__dirname + "./../public")));
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/address', addressRouter);
-app.use('/api/location', rajaongkirRouter); 
+app.use('/api/location', rajaongkirRouter); //---Perbaiki 
 app.use('/api/product', productRouter);
 app.use('/api/category', categoryRouter)
 app.use('/api/user/',userRouters)
