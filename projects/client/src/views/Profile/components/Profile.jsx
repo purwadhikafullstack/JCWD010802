@@ -14,6 +14,8 @@ import { setCartOut } from "../../../redux/cartSlice";
 import { setPriceOut } from "../../../redux/totalPrice";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { setValue } from "../../../redux/userSlice";
+
 
 export const ProfileCard = () => {
   const profile = useSelector((state) => state.user.value);
@@ -39,6 +41,8 @@ export const ProfileCard = () => {
   const EditProfile = async (data) => {
     try {
       await axios.patch(`/user/edit`, data, { headers });
+      let updateProfile = { ...profile, name: data.name, email: data.email };
+      dispatch(setValue(updateProfile));
       toast.success("Profile updated successfully", {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 2000,
