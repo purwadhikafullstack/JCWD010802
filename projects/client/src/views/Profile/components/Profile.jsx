@@ -13,17 +13,29 @@ import { setLogOut } from "../../../redux/userSlice";
 import { setCartOut } from "../../../redux/cartSlice";
 import { setPriceOut } from "../../../redux/totalPrice";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export const ProfileCard = () => {
   const profile = useSelector((state) => state.user.value);
+  const [image, setImage] = useState();
+  const [reload, setReload] = useState(0);
   const token = localStorage.getItem("token");
   const headers = headersGen(token);
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const CreateSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     email: Yup.string().email().required("Email is required"),
   });
+  const getImage = async () => {
+    try {
+      const response = await axios.get(`/user`, { headers });
+      setImage(response.data.result);
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to load image!");
+    }
+  };
   const EditProfile = async (data) => {
     try {
       await axios.patch(`/user/edit`, data, { headers });
@@ -39,7 +51,6 @@ export const ProfileCard = () => {
       console.log(error);
     }
   };
-  console.log(process.env);
   const onLogOut = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("warehouseId");
@@ -58,7 +69,12 @@ export const ProfileCard = () => {
       navigate("/login");
     }, 1500);
   };
-
+  const triggerReload = () => {
+    setReload(!reload);
+  };
+  useEffect(() => {
+    getImage();
+  }, [reload]);
   return (
     <Flex direction={{ base: "column", lg: "row" }}>
       <Box
@@ -72,12 +88,16 @@ export const ProfileCard = () => {
       >
         <Flex justifyContent={"center"} alignItems={"center"} w="full">
           <VStack spacing={5}>
-            <Avatar
-              size="2xl"
-              src={`${process.env.REACT_APP_BASE_URL}/profileImg/${profile.profileImg}`}
-              name={profile.name}
-            />
-            <ChangeImage />
+            {image?.map((item) => (
+              <Box>
+                <Avatar
+                  size="2xl"
+                  src={`${process.env.REACT_APP_BASE_URL}/profileImg/${item.profileImg}`}
+                  name={profile.name}
+                />
+              </Box>
+            ))}
+            <ChangeImage reload={triggerReload} />
           </VStack>
         </Flex>
       </Box>
@@ -146,8 +166,14 @@ export const ProfileCard = () => {
         </Box>
       </Box>
       <ToastContainer />
-      <Button w="full" color="white" bg="red" mt="20px" display={{ base: "block", lg: "none"}}
-      onClick={onLogOut}>
+      <Button
+        w="full"
+        color="white"
+        bg="red"
+        mt="20px"
+        display={{ base: "block", lg: "none" }}
+        onClick={onLogOut}
+      >
         Logout
       </Button>
     </Flex>

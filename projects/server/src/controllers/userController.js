@@ -13,7 +13,7 @@ module.exports = {
             });
             res.status(200).send({
                 status: true,
-                message: 'Detail address',
+                message: 'Details personal data',
                 result,
             });
         } catch (err) {

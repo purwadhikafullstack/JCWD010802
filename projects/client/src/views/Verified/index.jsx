@@ -13,7 +13,6 @@ export const VerifiedView = () => {
   const getToken = async () => {
     try {
       const response = await axios.get(`/auth/${token}`)
-      console.log(response);
       setSuccess(true)
     } catch (error) {
       console.log(error);

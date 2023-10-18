@@ -104,7 +104,6 @@ export const Dashboard = () => {
   };
   const maxDataValue = Math.max(...data.categorySales.map(item => item.totalSales));
 
-console.log(maxDataValue);
   return (
     <Box p={4}>
       <Heading as="h1" size="xl" mb={4}>
