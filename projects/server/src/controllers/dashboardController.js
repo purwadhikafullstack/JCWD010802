@@ -38,23 +38,21 @@ module.exports = {
       const totalAdmin = await warehouseAdmin.count({});
       const totalUser = await user.count({});
   
-      // Calculate the date range for this month and last month
       const today = new Date();
       const lastMonth = new Date();
       lastMonth.setMonth(lastMonth.getMonth() - 1);
-      lastMonth.setDate(1); // Set it to the 1st of last month
+      lastMonth.setDate(1); 
   
       const totalSalesThisMonth = await order.sum('totalPrice', {
         where: {
           statusId: [4, 5],
           createdAt: {
-            [Op.gte]: lastMonth, // Filter orders created on or after the 1st of last month
-            [Op.lt]: today, // Filter orders up to the current date
+            [Op.gte]: lastMonth, 
+            [Op.lt]: today, 
           },
         },
       });
   
-      // Query total sales per product
       const productSales = await orderItem.findAll({
         attributes: [
           "productId",
@@ -64,14 +62,19 @@ module.exports = {
         include: [
           {
             model: product,
-            attributes: ["price","name"], // Include product price
+            attributes: ["price", "name"],
+          },
+          {
+            model: order,
+            where: { statusId: [4, 5] }, 
           },
         ],
         group: ["productId", "product.id", "product.price"],
       });
+      
       const productSalesByCategory = await orderItem.findAll({
         attributes: [
-          [sequelize.col('product.categoryId'), 'categoryId'], // Include categoryId from Product
+          [sequelize.col('product.categoryId'), 'categoryId'],
           [sequelize.fn('sum', sequelize.col('quantity')), 'totalQuantity'],
           [sequelize.literal('SUM(quantity * product.price)'), 'totalSales'],
         ],
@@ -79,14 +82,22 @@ module.exports = {
           {
             model: product,
             attributes: ["price", "name", "categoryId"],
-            include:[{
-              model:category,
-              attributes:["name"]
-            }], // Include categoryId from Product
+            include: [
+              {
+                model: category,
+                attributes: ["name"],
+              },
+            ],
+          },
+          {
+            model: order,
+            attributes: [],
+            where: { statusId: [4, 5] }, 
           },
         ],
-        group: ["product.categoryId"], // Group by categoryId
+        group: ["product.categoryId"],
       });
+      
       
   
       res.status(200).send({
@@ -99,7 +110,7 @@ module.exports = {
         totalAdmin: totalAdmin,
         categoriesWithProductCount: categoriesWithProductCount,
         totalSalesThisMonth: totalSalesThisMonth,
-        productSales: productSales, // Includes product price, total quantity, and total sales
+        productSales: productSales, 
         categorySales:productSalesByCategory
       });
     } catch (error) {
