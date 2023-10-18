@@ -2,21 +2,10 @@ const multer = require('multer')
 const fs = require('fs')
 
 module.exports = {
-    multerUpload: (directory, name = "PIMG") => {
-        let defaultDirectory = "./src/public"; 
+    multerUpload: (directory = __dirname + "/public", name = "PIMG") => {
         const storage = multer.diskStorage({
             destination: (req, file, cb) => {
-                const pathDirectory = directory? defaultDirectory + directory: defaultDirectory;
-        if (fs.existsSync(pathDirectory)) {
-          cb(null, pathDirectory);
-        } else {
-          fs.mkdir(pathDirectory, { recursive: true }, (err) => {
-            if (err) {
-              console.log(err);
-            }
-            cb(err, pathDirectory);
-          });
-        }
+                cb(null,directory)
             },
             filename: (req, file, cb) => {
                 cb(null, 
