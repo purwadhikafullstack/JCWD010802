@@ -59,20 +59,48 @@ export const AddToCartMobile = ({ detail, stock }) => {
                 });
             }
         }
-    };
+    }
+    const handleAddToWishlist = async () => {
+        try {
+          if (data.isVerified) {
+            const response = await axios.post(
+              `/cart/wishlist/${detail.id}`, 
+              {},
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+    
+            toast.success('Product added to wishlist', { position: 'top-center' });
+          } else {
+            toast.error('You are not verified. Verify your account to access more features.', {
+              position: toast.POSITION.TOP_CENTER,
+            });
+
+            setTimeout(() => {
+              navigate('/login');
+            }, 2500);
+          }
+        } catch (error) {
+
+          console.log(error);
+          if (error) {
+            toast.error(error.response.data.message,{ position: 'top-center'
+          })
+          } else {
+            toast.error("Failed to add product to wishlist");
+          }
+        }
+      };
     return (
-        <Flex w="100vw" position="fixed" bottom={"60px"} h={"60px"} bg={"white"} zIndex={999} p="20px" align="center" justifyContent="space-between">
+        <Flex w="100vw" position="fixed" bottom={"60px"} h={"60px"} bg={"white"} zIndex={999} p="20px" align="center" gap={2}>
             <ToastContainer />
-            <IconButton icon={<AiOutlineHeart />} variant="outline" borderColor={"#517664"} />
-            <Button
-                bg={"white"} color={'#517664'} borderColor={"#517664"}
-                border={"1px"} _hover={{ bg: {} }}
-                w={"40%"}
-            > Buy Now
-            </Button>
+            <IconButton icon={<AiOutlineHeart />} variant="outline" borderColor={"#517664"} onClick={handleAddToWishlist}/>
             {data.isVerified ? (
             <Button
-              bg={"#517664"} color={'white'} _hover={{ bg: "#2d3319" }} w={"40%"} onClick={handleAddToCart} leftIcon={<AiOutlinePlus />}>
+              bg={"#517664"} color={'white'} _hover={{ bg: "#2d3319" }} w={"100%"} onClick={handleAddToCart} leftIcon={<AiOutlinePlus />}>
               Cart
             </Button>
           ) : (
@@ -80,7 +108,7 @@ export const AddToCartMobile = ({ detail, stock }) => {
               bg={"#517664"}
               color={'white'}
               _hover={{ bg: "#2d3319" }}
-              w={"40%"}
+              w={"100%"}
               onClick={
                 handleAddToCart
               }

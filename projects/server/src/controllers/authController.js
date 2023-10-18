@@ -68,7 +68,12 @@ module.exports = {
 
             let payload = { id: result.id }
             const token = jwt.sign(payload, process.env.KEY_JWT, { expiresIn: '3d' })
-
+            const findToken = await dbtoken.findOne(
+                {where:{userId:result.id}}
+            )
+            if (findToken) {
+                await findToken.destroy()
+            }
             res.status(200).send({
                 message: "Login Success, welcome!",
                 result,
