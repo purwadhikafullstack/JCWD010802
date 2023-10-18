@@ -6,7 +6,8 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerOverlay,
-  Flex,
+  Stack,
+  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useRef } from "react";
@@ -43,9 +44,10 @@ export const DrawerSortingCategory = () => {
           />
           <DrawerHeader>Filter by</DrawerHeader>
           <DrawerBody>
-          <Flex gap={3}>
-          <SortCategory />
-        </Flex>
+            <Stack spacing={3} px={"10px"}>
+              <Text fontWeight={"bold"}>Alphabetically :</Text>
+              <SortCategory />
+            </Stack>
           </DrawerBody>
         </DrawerContent>
       </Drawer>

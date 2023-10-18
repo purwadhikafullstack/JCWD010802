@@ -18,7 +18,6 @@ export const DetailCard = () => {
     const getDetail = async () => {
         try {
             const response = await axios.get(`/product/${id}`)
-            console.log(response.data.result);
             setDetail(response.data.result)
         } catch (error) {
             console.log(error);

@@ -49,7 +49,9 @@ export const AllProduct = () => {
   return (
     <Box minH={"100vh"} bgColor={"#edf3f8"} w={"full"} pb="20px">
       <Container maxW="container.lg" pt={"100px"}>
+        <Box mb={3}>
         <DrawerSorting />
+        </Box>
         <Flex wrap="wrap" justifyContent="center"
         gap={3}>
           {product.map((item, index) => (
