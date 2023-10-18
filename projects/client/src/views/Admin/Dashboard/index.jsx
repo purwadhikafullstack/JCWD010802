@@ -37,7 +37,7 @@ export const Dashboard = () => {
       const response = await axios.get('/dashboard');
       setData(response.data);
     } catch (error) {
-      console.error(error);
+      console.log(error);
       toast.error("Failed to load dashboard information!")
     }
   };
