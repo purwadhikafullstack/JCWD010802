@@ -39,8 +39,7 @@ export const AddressCard = () => {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [sort, setSort] = useState("DESC");
-  const itemsPerPage = 5;
-
+  
   const AllAdrress = async () => {
     try {
       const response = await axios.get(

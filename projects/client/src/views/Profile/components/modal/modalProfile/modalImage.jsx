@@ -22,7 +22,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "../../../../../api/axios";
 
-export const ChangeImage = () => {
+export const ChangeImage = ({reload}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef(null);
   const token = localStorage.getItem("token");
@@ -40,6 +40,7 @@ export const ChangeImage = () => {
         headers,
         "Content-Type": "multipart/form-data",
       });
+      reload()
       toast.success("Image profile updated successfully", {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 2000,
