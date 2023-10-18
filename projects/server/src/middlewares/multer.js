@@ -3,7 +3,7 @@ const fs = require('fs')
 
 module.exports = {
     multerUpload: (directory, name = "PIMG") => {
-        let defaultDirectory = "./public"; 
+        let defaultDirectory = "./src/public"; 
         const storage = multer.diskStorage({
             destination: (req, file, cb) => {
                 const pathDirectory = directory? defaultDirectory + directory: defaultDirectory;
