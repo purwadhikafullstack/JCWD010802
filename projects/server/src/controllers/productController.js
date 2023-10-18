@@ -106,23 +106,29 @@ module.exports = {
                 weight,
                 description
             } = req.body;
-            const productImg = req.file.filename
-            const t = await db.sequelize.transaction()
-            const catLike = await categories.findOne({
-                where: {
-                    id: categoryId
-                }
-            })
-            if (!catLike) {
-                return res.status(400).send({
-                    message: 'Category not found'
-                })
-            };
-            if (req.file.size > 1024 * 1024) throw {
-                status: false,
-                message: "file size to large"
-            }
+            const productImg = req.file.filename;
+            const t = await db.sequelize.transaction();
+    
             try {
+                const catLike = await categories.findOne({
+                    where: {
+                        id: categoryId
+                    }
+                });
+                if (!catLike) {
+                    await t.rollback();
+                    return res.status(400).send({
+                        message: 'Category not found'
+                    });
+                }
+    
+                if (req.file.size > 1024 * 1024) {
+                    await t.rollback();
+                    return res.status(400).send({
+                        message: "File size too large"
+                    });
+                }
+    
                 const result = await product.create({
                     name,
                     price,
@@ -130,25 +136,30 @@ module.exports = {
                     description,
                     categoryId: catLike.id,
                     productImg,
-                }, { transaction: t })
-                const allWarehouse = await warehouse.findAll({ where: { isDeleted: false } })
-                allWarehouse.forEach(async (item) => {
-                    await stock.create({
-                        productId: result.id,
-                        warehouseId: item.id,
-                        isDeleted: false,
-                        quantity: 0
-                    }, { transaction: t })
-                })
-                await t.commit()
+                }, { transaction: t });
+    
+                const allWarehouse = await warehouse.findAll({ where: { isDeleted: false } });
+    
+                await Promise.all(
+                    allWarehouse.map(async (item) => {
+                        await stock.create({
+                            productId: result.id,
+                            warehouseId: item.id,
+                            isDeleted: false,
+                            quantity: 0
+                        }, { transaction: t });
+                    })
+                );
+    
+                await t.commit();
                 res.status(201).send({
-                    msg: "Success to create new product",
+                    msg: "Success in creating a new product",
                     status: true,
                     result
                 });
             } catch (error) {
-                await t.rollback()
-                throw error
+                await t.rollback();
+                throw error;
             }
         } catch (err) {
             console.log(err);
@@ -157,7 +168,7 @@ module.exports = {
                 message: err.message
             });
         }
-    },
+    },    
     editProduct: async (req, res) => {
         try {
             const {
