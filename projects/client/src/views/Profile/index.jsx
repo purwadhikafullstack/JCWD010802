@@ -3,9 +3,7 @@ import { ProfileCard } from "./components/Profile";
 import { AddressCard } from "./components/Address";
 import { OrderList } from "./components/OrderList";
 import { useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-import { NotFound } from "../../pages/Error";
-
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 export const ProfileView = () => {
   const data = useSelector(state=>state.user.value)
@@ -33,7 +31,7 @@ export const ProfileView = () => {
       <TabList >
         <Tab bgColor={"white"} onClick={() => navigate("/profile")}>Profile</Tab>
         <Tab bgColor={"white"} onClick={() => navigate("/profile#address")}>Address</Tab>
-        {data.roleId===1?(
+        {data.roleId === 1 ? (
           <Tab bgColor={"white"} onClick={() => navigate("/profile#myorder")}>My Order</Tab>
         ):(
           null
@@ -54,7 +52,7 @@ export const ProfileView = () => {
     </Flex>
   )}else{
     return (
-    <NotFound/>)
+    <Navigate to="/login" state={{ from: location }} replace/>)
   }
 
 };

@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { InputField } from "../../../components/input/InputField";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setValue } from "../../../redux/userSlice";
 import { setCart } from "../../../redux/cartSlice";
@@ -22,6 +22,9 @@ export const LoginCard = () => {
   const dispatch = useDispatch();
   const toast = useToast();
   const navigate = useNavigate();
+  const location = useLocation()
+  const fromUser = location.state?.from?.pathname || "/"
+  const fromAdmin = location.state?.from?.pathname || "/admin"
 
   const SeePsw = () => {
     setShowPassword(!showPassword);
@@ -69,9 +72,9 @@ export const LoginCard = () => {
       dispatch(setPrice(cartResponse.data.totalPrice));
       setTimeout(() => {
         if (response.data.result.roleId === 1) {
-          navigate("/");
+          navigate(fromUser, { replace: true });
         } else {
-          navigate("/admin");
+          navigate(fromAdmin, { replace: true });
         }
       }, 2000);
     } catch (error) {
