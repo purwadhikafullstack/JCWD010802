@@ -74,7 +74,6 @@ module.exports = {
             if (findToken) {
                 await findToken.destroy()
             }
-            res.status(200).send({ message:"Change Password Success"})
             res.status(200).send({
                 message: "Login Success, welcome!",
                 result,
