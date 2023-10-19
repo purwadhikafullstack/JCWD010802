@@ -79,6 +79,7 @@ module.exports = {
                 console.log(warehouses);
                 if (availableStock < quantity) {
                   let nearestWarehouse = null;
+                  let nearestWarehouseName 
                   let shortestDistance = Infinity;
                   warehouses.forEach((warehouse) => {
                     if (warehouse.warehouseId === sourceWarehouse.id) {
@@ -94,6 +95,8 @@ module.exports = {
                     if (distance < shortestDistance) {
                       shortestDistance = distance;
                       nearestWarehouse = warehouse.warehouseId;
+                      nearestWarehouseName = warehouse.warehouse.name
+
 
                     }
                   });
@@ -115,12 +118,14 @@ module.exports = {
                     status: 'approved',
                     from: nearestWarehouse,
                     to: sourceWarehouse.id,
+                    from_name: nearestWarehouseName,
+                    to_name: sourceWarehouse.name,
                     stockId: transferStock.id,
                     quantity,
                     type: 'automatic',
                     orderId: id,
                   });
-            
+
                   const newJournalred = await journal.create({
                     description: "reduce",
                     quantity: -quantity,
