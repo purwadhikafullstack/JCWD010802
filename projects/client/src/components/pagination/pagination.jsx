@@ -9,12 +9,15 @@ export const Pagination = ({ totalpage }) => {
   const navigate = useNavigate();
   const search = params.get("search") || "";
   const sort = params.get("sort") || "";
+  const category = params.get("category") || "";
+  const minPrice = params.get("minPrice") || "";
+  const maxPrice = params.get("maxPrice") || "";
   const currentpage = Number(params.get("page")) || 1;
 
   function handlePage(newPage) {
     if (newPage >= 1 && newPage <= totalpage) {
       params.set("page", newPage);
-      navigate(`?search=${search}&sort=${sort}&page=${newPage}`);
+      navigate(`?search=${search}&sort=${sort}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&page=${newPage}`);
     }
   }
   return (
