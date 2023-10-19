@@ -46,7 +46,7 @@ module.exports = {
                 token: token,
                 userId: result.id, 
             });
-            const data = await fs.readFileSync(path.join(__dirname,'../template/reset.html'), 'utf-8');
+            const data = await fs.readFileSync(path.join(__dirname,'../templates/reset.html'), 'utf-8');
 
             const tempCompile = await handlebars.compile(data);
             const tempResult = tempCompile({ token, feURL });

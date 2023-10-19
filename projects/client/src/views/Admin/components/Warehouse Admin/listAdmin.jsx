@@ -1,5 +1,6 @@
+
 import React, { useEffect, useState } from "react";
-import {Button,Flex,Box,Heading,Text,VStack,Card,Image, Select, HStack, Input,InputGroup,InputLeftElement,Icon,Stack,} from "@chakra-ui/react";
+import {Button,Flex,Box,Heading,Text,VStack,Card,Image, Select, HStack, Input,InputGroup,InputLeftElement,Icon,Stack, useSafeLayoutEffect,} from "@chakra-ui/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AdminMenu } from "./adminMenu";
@@ -11,7 +12,7 @@ import { AdminEditForm } from "./editAdmin";
 import { BsSearch } from "react-icons/bs";
 import axios from "../../../../api/axios";
 
-export const ListAdmin = () => {
+export const ListAdmin = ({reload,setReload}) => {
   const [admin, setAdmin] = useState([]);
   const [warehouse, setWarehouse] = useState([]);
   const [openMenuIndex, setOpenMenuIndex] = useState(null);
@@ -122,7 +123,7 @@ export const ListAdmin = () => {
     getAdmin();
     getWarehouse();
     getProfile();
-  }, [currentPage, warehouseId,search]);
+  }, [currentPage, warehouseId,search,reload]);
   return (
     <>
     
