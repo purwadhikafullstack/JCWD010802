@@ -16,7 +16,7 @@ export const WarehouseAdmin = () =>{
         <AddAdminButton setReload={setReload} reload={reload}/>
             </Flex>
             <Box >
-        <ListAdmin/>
+        <ListAdmin reload={reload} setReload={setReload}/>
             </Box>
         </Box>
     )

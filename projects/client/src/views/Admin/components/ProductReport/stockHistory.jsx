@@ -54,7 +54,7 @@ export const StockHistory = ({
           <Tbody>
             {history?.map((item) => {
               const createdAtDate = item.updatedAt.split("T")[0];
-              const actionNote = item.requestHistoryId ? "Manual request" : item.orderId ? "Sales" : "Stock update";
+              const actionNote = item.requestHistoryId ? "Stock mutation" : item.orderId ? "Sales" : "Stock update";
               return (
                 <Tr>
                   {user.roleId === 3 ? (
