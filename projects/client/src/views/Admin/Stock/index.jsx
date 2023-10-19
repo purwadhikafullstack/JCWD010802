@@ -69,7 +69,7 @@ export const StockView = () => {
         getStock()
         getCategory()
         getWarehouse()
-    }, [categoryId, warehouseId, search, totalPage, reload])
+    }, [categoryId, warehouseId, search, totalPage, reload, currentPage])
     return (
         <Flex p="10px" justify="center">
             <Flex w="full" direction="column" gap={3}>
