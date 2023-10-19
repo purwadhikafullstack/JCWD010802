@@ -92,7 +92,10 @@ module.exports = {
           });
       }
   
-      total = stockSummary.length;
+      total = await stock.findAll({
+        include: [{ model: product, where: filter }, { model: warehouse }],
+        where: warehouseFilter
+      });
       } else {
         result = await stock.findAll({
           include: [{ model: product, where: filter }, { model: warehouse }],
