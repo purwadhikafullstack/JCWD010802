@@ -92,7 +92,7 @@ module.exports = {
           });
       }
   
-      total = await stock.findAll({
+      total = await stock.count({
         include: [{ model: product, where: filter }, { model: warehouse }],
         where: warehouseFilter
       });
