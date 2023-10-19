@@ -97,13 +97,14 @@ module.exports = {
                       nearestWarehouse = warehouse.warehouseId;
                       nearestWarehouseName = warehouse.warehouse.name
 
+
                     }
                   });
                   if (!nearestWarehouse) {
                     return res.status(400).send(`No suitable nearest warehouse found for product ${productId}.`);
                   }
                   const transferStock = await stock.findOne({
-                    where: { productId, warehouseId: nearestWarehouse },include: { model: warehouse}
+                    where: { productId, warehouseId: nearestWarehouse },
                   });
             
                   if (!transferStock || transferStock.quantity < quantity) {
@@ -124,6 +125,7 @@ module.exports = {
                     type: 'automatic',
                     orderId: id,
                   });
+
                   const newJournalred = await journal.create({
                     description: "reduce",
                     quantity: -quantity,
