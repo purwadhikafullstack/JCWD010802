@@ -22,8 +22,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "../../../../../api/axios";
 
-export const ChangePassword = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+export const ChangePassword = ({ id, isOpen, onClose, reload }) => {
   const finalRef = React.useRef(null);
   const token = localStorage.getItem("token");
   const headers = headersGen(token);
@@ -53,16 +52,17 @@ export const ChangePassword = () => {
       const response = await axios.patch(`/user/changePassword`, data, {
         headers,
       });
+      reload();
+      onClose();
       toast.success("Password change successfully", {
         position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2000
+        autoClose: 2000,
       });
-      onClose();
     } catch (error) {
       console.log(error);
       toast.error("Error to change password", {
         position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2000
+        autoClose: 2000,
       });
     }
   };
@@ -81,76 +81,70 @@ export const ChangePassword = () => {
       }}
     >
       {(props) => (
-        <Box as={Form}>
-          <Text
-            onClick={onOpen}
-            color={"blue.400"}
-            fontSize={"xs"}
-            cursor={"pointer"}
-          >
-            Change password
-          </Text>
+        <>
           <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader>Change password</ModalHeader>
+              <ModalHeader>Change user password</ModalHeader>
               <ModalCloseButton />
-              <ModalBody>
-                <Box as={Form}>
-                  <FormControl>
-                    <InputField
-                      label="Current password"
-                      name="oldPassword"
-                      id="oldPassword"
-                      className="oldPassword"
-                      type={showPassword ? "text" : "password"}
-                      w="300px"
-                      mb="10px"
-                      placeholder="Enter your current password"
-                    />
-                    <InputField
-                      label="New Password"
-                      name="password"
-                      id="password"
-                      className="password"
-                      type={showPassword ? "text" : "password"}
-                      w="300px"
-                      mb="10px"
-                      placeholder="Enter your new password here"
-                    />
-                    <InputField
-                      label="Confirm password"
-                      name="confirmPassword"
-                      id="confirmPassword"
-                      className="confirmPassword"
-                      type={showPassword ? "text" : "password"}
-                      w="300px"
-                      mb="10px"
-                      placeholder="Enter your confirm password here"
-                    />
-                    <Checkbox
-                      textColor={"black"}
-                      isChecked={showPassword}
-                      onChange={SeePsw}
-                      mb={4}
-                    >
-                      Show Password
-                    </Checkbox>
-                  </FormControl>
-                </Box>
-              </ModalBody>
-              <ModalFooter>
-                <Button colorScheme="red" mr={3} onClick={onClose}>
-                  Close
-                </Button>
-                <Button colorScheme="green" onClick={props.handleSubmit}>
-                  Accept
-                </Button>
-              </ModalFooter>
+              <Form>
+                <ModalBody>
+                  <Box as={Form}>
+                    <FormControl>
+                      <InputField
+                        label="Current password"
+                        name="oldPassword"
+                        id="oldPassword"
+                        className="oldPassword"
+                        type={showPassword ? "text" : "password"}
+                        w="300px"
+                        mb="10px"
+                        placeholder="Enter your current password"
+                      />
+                      <InputField
+                        label="New Password"
+                        name="password"
+                        id="password"
+                        className="password"
+                        type={showPassword ? "text" : "password"}
+                        w="300px"
+                        mb="10px"
+                        placeholder="Enter your new password here"
+                      />
+                      <InputField
+                        label="Confirm password"
+                        name="confirmPassword"
+                        id="confirmPassword"
+                        className="confirmPassword"
+                        type={showPassword ? "text" : "password"}
+                        w="300px"
+                        mb="10px"
+                        placeholder="Enter your confirm password here"
+                      />
+                      <Checkbox
+                        textColor={"black"}
+                        isChecked={showPassword}
+                        onChange={SeePsw}
+                        mb={4}
+                      >
+                        Show Password
+                      </Checkbox>
+                    </FormControl>
+                  </Box>
+                </ModalBody>
+                <ModalFooter>
+                  <Button colorScheme="red" mr={3} onClick={onClose}>
+                    Close
+                  </Button>
+                  <Button colorScheme="green" onClick={props.handleSubmit}>
+                    Accept
+                  </Button>
+                </ModalFooter>
+              </Form>
             </ModalContent>
           </Modal>
           <ToastContainer />
-        </Box>
+        </>
       )}
     </Formik>
   );
