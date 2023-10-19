@@ -79,6 +79,7 @@ module.exports = {
                 console.log(warehouses);
                 if (availableStock < quantity) {
                   let nearestWarehouse = null;
+                  let nearestWarehouseName 
                   let shortestDistance = Infinity;
                   warehouses.forEach((warehouse) => {
                     if (warehouse.warehouseId === sourceWarehouse.id) {
@@ -94,6 +95,7 @@ module.exports = {
                     if (distance < shortestDistance) {
                       shortestDistance = distance;
                       nearestWarehouse = warehouse.warehouseId;
+                      nearestWarehouseName = warehouse.warehouse.name
 
                     }
                   });
@@ -101,7 +103,7 @@ module.exports = {
                     return res.status(400).send(`No suitable nearest warehouse found for product ${productId}.`);
                   }
                   const transferStock = await stock.findOne({
-                    where: { productId, warehouseId: nearestWarehouse },
+                    where: { productId, warehouseId: nearestWarehouse },include: { model: warehouse}
                   });
             
                   if (!transferStock || transferStock.quantity < quantity) {
@@ -115,12 +117,13 @@ module.exports = {
                     status: 'approved',
                     from: nearestWarehouse,
                     to: sourceWarehouse.id,
+                    from_name: nearestWarehouseName,
+                    to_name: sourceWarehouse.name,
                     stockId: transferStock.id,
                     quantity,
                     type: 'automatic',
                     orderId: id,
                   });
-            
                   const newJournalred = await journal.create({
                     description: "reduce",
                     quantity: -quantity,
