@@ -113,14 +113,25 @@ module.exports = {
             updatedData.nama_kota = city.data.rajaongkir.results.city_name;
             updatedData.nama_provinsi = city.data.rajaongkir.results.province;
           }
-      
+          
           if (req.body.kode_pos) {
             updatedData.kode_pos = req.body.kode_pos;
           }
-      
-          if (req.body.name) {
+          
+
+          if (req.body.name && req.body.name !== gudang.name) {
+            const gudangSamaNama = await warehouse.findOne({
+                where: {
+                    name: req.body.name
+                }
+            });
+
+            if (gudangSamaNama && gudangSamaNama.id !== id) {
+                return res.status(400).send({ message: "Warehouse name must be unique" });
+            }
+
             updatedData.name = req.body.name;
-          }
+        }
       
           if (req.file && req.file.filename) {
             updatedData.image = req.file.filename;
