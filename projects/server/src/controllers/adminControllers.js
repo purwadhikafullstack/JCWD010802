@@ -139,28 +139,45 @@ getAdminProfile: async (req,res) => {
     try {
         const id = req.params.id;
         const updateFields = {};
-        const isEmailExist = await user.findOne({ where: { email: req.body.email } })
-            if (isEmailExist) throw { message: "Email already used" }
-        
+        const existingUser = await user.findOne({
+            where: {
+                id: id
+            }
+        });
+
+        if (!existingUser) {
+            return res.status(404).send({ message: "Admin not found" });
+        }
+
         if (req.body.name) {
             updateFields.name = req.body.name;
         }
-        
-        if (req.body.email) {
+
+        if (req.body.email && req.body.email !== existingUser.email) {
+            const userWithSameEmail = await user.findOne({
+                where: {
+                    email: req.body.email
+                }
+            });
+
+            if (userWithSameEmail && userWithSameEmail.id !== id) {
+                return res.status(400).send({ message: "Email already used" });
+            }
+
             updateFields.email = req.body.email;
         }
-      
-        console.log(id);
+
         const result = await user.update(updateFields, {
-            where: { id: id }
+            where: {
+                id: id
+            }
         });
-        
-        console.log(updateFields);
-        res.status(200).send({ msg: "Success to edit admin" ,result});
+
+        res.status(200).send({ msg: "Success to edit admin", result });
     } catch (error) {
         console.error(error);
         res.status(400).send({ error, msg: "Failed to edit admin" });
     }
-},
+}
 
 }
