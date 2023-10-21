@@ -1,12 +1,12 @@
+import headersGen from "../../../api/headers"
+import axios from "../../../api/axios"
 import { Flex, Heading } from "@chakra-ui/react"
 import { StockTable } from "../components/Stock/StockTable"
 import { useEffect, useState } from "react"
-import { Pagination } from "../../../components/pagination/pagination"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
-import headersGen from "../../../api/headers"
-import axios from "../../../api/axios"
 import { toast } from "react-toastify"
+import { PaginationStock } from "../components/Stock/PaginationStock"
 
 export const StockView = () => {
     const user = useSelector((state) => state.user.value)
@@ -27,7 +27,7 @@ export const StockView = () => {
 
     const getStock = async () => {
         try {
-            const response = await axios.get(`/stock?categoryId=${categoryId}&warehouseId=${warehouseId}&search=${search}&page=${currentPage}`, { headers })
+            const response = await axios.get(`/stock?categoryId=${categoryId}&warehouseId=${warehouseId}&search=${search}&page=${currentPage}&limit=10`, { headers })
             setStock(response.data.result);
             setTotalPage(response.data.totalpage)
         } catch (error) {
@@ -84,7 +84,7 @@ export const StockView = () => {
                 reload={triggerReload}
                 user={user}
                 />
-                <Pagination totalpage={totalPage} />
+                <PaginationStock totalpage={totalPage} />
             </Flex>
         </Flex>
     )
