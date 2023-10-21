@@ -39,7 +39,7 @@ export const AddressCard = () => {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [sort, setSort] = useState("DESC");
-  
+
   const AllAdrress = async () => {
     try {
       const response = await axios.get(
@@ -50,7 +50,7 @@ export const AddressCard = () => {
       setPage(response.data.totalpage);
     } catch (error) {
       console.log(error);
-      toast.error("Failed to load addresses!")
+      toast.error("Failed to load addresses!");
     }
   };
   const getCity = async (data) => {
@@ -59,7 +59,7 @@ export const AddressCard = () => {
       setCities(response.data.city.rajaongkir.results);
     } catch (error) {
       console.log(error);
-      toast.error("Failed to load cities!")
+      toast.error("Failed to load cities!");
     }
   };
   const getProvince = async (data) => {
@@ -68,7 +68,7 @@ export const AddressCard = () => {
       setProvince(response.data.province.rajaongkir.results);
     } catch (error) {
       console.log(error);
-      toast.error("Failed to load provinces!")
+      toast.error("Failed to load provinces!");
     }
   };
   const handleSearch = (result) => {
@@ -112,72 +112,80 @@ export const AddressCard = () => {
           <Sort sort={sort} setSort={setSort} />
         </Flex>
       </Flex>
-      {address?.map((item, index) => (
-        <Box
-          bgColor={"whiteAlpha.700"}
-          p={5}
-          borderWidth="1px"
-          borderRadius="lg"
-          boxShadow="lg"
-          display="flex"
-          w="full"
-          mb={5}
-        >
-          <Flex width={"full"}>
-            <Box w="50%">
-              {item?.isPrimary ? (
-                <Badge colorScheme="whatsapp" mb={3}>
-                  Primary address
-                </Badge>
-              ) : null}
-              <Heading fontSize="24px" mb={5}>
-                {`${item?.address?.address}`}
-              </Heading>
-              <Text>{`${item?.address?.nama_kota}, ${item?.address?.nama_provinsi}`}</Text>
-            </Box>
-            <Box w="50%">
-              <Flex
-                direction={{ base: "column", lg: "row" }}
-                gap={1}
-                justifyContent={"flex-end"}
-                align={{ base: "flex-end" }}
-              >
-                {item.isPrimary ? null : (
-                  <Button
-                    mb={5}
-                    colorScheme="whatsapp"
-                    size={"xs"}
-                    onClick={() => {
-                      setOnOpenModalPrimary(true);
-                      setSelectedAddress(item);
-                    }}
+      {address?.length === 0 ? (
+        <Text color="red">
+          No address are available, please create your address first!{" "}
+        </Text>
+      ) : (
+        <>
+          {address?.map((item, index) => (
+            <Box
+              bgColor={"whiteAlpha.700"}
+              p={5}
+              borderWidth="1px"
+              borderRadius="lg"
+              boxShadow="lg"
+              display="flex"
+              w="full"
+              mb={5}
+            >
+              <Flex width={"full"}>
+                <Box w="50%">
+                  {item?.isPrimary ? (
+                    <Badge colorScheme="whatsapp" mb={3}>
+                      Primary address
+                    </Badge>
+                  ) : null}
+                  <Heading fontSize="24px" mb={5}>
+                    {`${item?.address?.address}`}
+                  </Heading>
+                  <Text>{`${item?.address?.nama_kota}, ${item?.address?.nama_provinsi}`}</Text>
+                </Box>
+                <Box w="50%">
+                  <Flex
+                    direction={{ base: "column", lg: "row" }}
+                    gap={1}
+                    justifyContent={"flex-end"}
+                    align={{ base: "flex-end" }}
                   >
-                    Set primary
-                  </Button>
-                )}
-                <Button
-                  mb={5}
-                  colorScheme="blue"
-                  size={"xs"}
-                  onClick={() => {
-                    setOnOpenModalEdit(true);
-                    setSelectedAddress(item);
-                  }}
-                >
-                  Edit
-                </Button>
-                {item.isPrimary ? null : (
-                  <DeleteAddress
-                    id={item.id}
-                    reload={reload}
-                    setReload={setReload}
-                  />
-                )}
+                    {item.isPrimary ? null : (
+                      <Button
+                        mb={5}
+                        colorScheme="whatsapp"
+                        size={"xs"}
+                        onClick={() => {
+                          setOnOpenModalPrimary(true);
+                          setSelectedAddress(item);
+                        }}
+                      >
+                        Set primary
+                      </Button>
+                    )}
+                    <Button
+                      mb={5}
+                      colorScheme="blue"
+                      size={"xs"}
+                      onClick={() => {
+                        setOnOpenModalEdit(true);
+                        setSelectedAddress(item);
+                      }}
+                    >
+                      Edit
+                    </Button>
+                    {item.isPrimary ? null : (
+                      <DeleteAddress
+                        id={item.id}
+                        reload={reload}
+                        setReload={setReload}
+                      />
+                    )}
+                  </Flex>
+                </Box>
               </Flex>
             </Box>
-          </Flex>
-        </Box>
-      ))}
+          ))}
+        </>
+      )}
       <PaginationProfile
         totalpage={page}
         currentpage={currentPage}
