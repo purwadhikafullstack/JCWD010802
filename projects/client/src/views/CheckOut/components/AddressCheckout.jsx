@@ -4,66 +4,45 @@ import {
   Divider,
   Flex,
   Heading,
-  Icon,
-  Input,
-  InputGroup,
-  InputLeftElement,
   Text,
   VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { BsSearch } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 import { AddAddress } from "../../Profile/components/modal/modalAddress/modalAddAdddress";
 import { Pagination } from "../../../components/pagination/pagination";
 import { EditAddress } from "../../Profile/components/modal/modalAddress/modalEditAddress";
 import { PrimaryAddress } from "../../Profile/components/modal/modalAddress/modalPrimaryAddress";
 import axios from "../../../api/axios";
-import headersGen from "../../../api/headers";
 import { toast } from "react-toastify";
+import { SearchAddress } from "./searchAddress";
 
-export const AddressCheckout = ({ handleClick, selectedId }) => {
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const search = params.get("search") || "";
-  const sort = params.get("sort") || "";
-  const currentPage = Number(params.get("page")) || 1;
-  const token = localStorage.getItem("token");
-  const headers = headersGen(token);
-  const [address, setAddress] = useState([]);
+export const AddressCheckout = ({
+  handleClick,
+  address,
+  selectedAddress,
+  setSelectedAddress,
+  reload,
+  setReload,
+  page,
+}) => {
   const [cities, setCities] = useState([]);
   const [province, setProvince] = useState([]);
   const [dataCities, setDataCities] = useState([]);
   const [dataProvince, setDataProvince] = useState([]);
-  const [page, setPage] = useState([]);
-  const [selectedAddress, setSelectedAddress] = useState({});
   const [onOpenModalPrimary, setOnOpenModalPrimary] = useState(false);
   const [onOpenModalEdit, setOnOpenModalEdit] = useState(false);
-  const [reload, setReload] = useState(0);
-  const itemsPerPage = 5;
+  const [otherAddress, setOtherAddress] = useState({});
   const navigate = useNavigate();
 
-  const AllAdrress = async () => {
-    try {
-      const response = await axios.get(
-        `/address?search=${search}&sort=${sort}&page=${currentPage}&limit=3`,
-        { headers }
-      );
-      setAddress(response.data.result);
-      setPage(response.data.totalpage);
-    } catch (error) {
-      console.log(error);
-      toast.error("Failed to load addresses!")
-    }
-  };
   const getCity = async (data) => {
     try {
       const response = await axios.get(`/location/city`, data);
       setCities(response.data.city.rajaongkir.results);
     } catch (error) {
       console.log(error);
-      toast.error("Failed to load cities!")
+      toast.error("Failed to load cities!");
     }
   };
   const getProvince = async (data) => {
@@ -72,17 +51,14 @@ export const AddressCheckout = ({ handleClick, selectedId }) => {
       setProvince(response.data.province.rajaongkir.results);
     } catch (error) {
       console.log(error);
-      toast.error("Failed to load provinces!")
+      toast.error("Failed to load provinces!");
     }
   };
-  const handleSearch = (result) => {
-    navigate(`?search=${result.target.value}`);
-  };
+
   useEffect(() => {
-    AllAdrress();
     getCity();
     getProvince();
-  }, [search, sort, currentPage, reload]);
+  }, []);
   useEffect(() => {
     setDataCities(cities);
     setDataProvince(province);
@@ -91,21 +67,7 @@ export const AddressCheckout = ({ handleClick, selectedId }) => {
   return (
     <Box>
       <VStack>
-        <InputGroup>
-          <Input
-            variant="outline"
-            placeholder="Search"
-            _placeholder={{ color: "black" }}
-            defaultValue={search}
-            type={"search"}
-            color={"black"}
-            onChange={handleSearch}
-            borderColor={"2px solid black"}
-          />
-          <InputLeftElement>
-            <Icon as={BsSearch} color={"gray.500"} />
-          </InputLeftElement>
-        </InputGroup>
+        <SearchAddress />
         <AddAddress
           dataCities={dataCities}
           dataProvince={dataProvince}
@@ -124,7 +86,8 @@ export const AddressCheckout = ({ handleClick, selectedId }) => {
           w="full"
           mb={5}
           style={{
-            borderRight: selectedId === item.id ? "10px solid green" : "none",
+            borderRight:
+              selectedAddress?.id === item.id ? "10px solid green" : "none",
           }}
         >
           <Flex width={"full"} direction={"column"}>
@@ -154,7 +117,7 @@ export const AddressCheckout = ({ handleClick, selectedId }) => {
                       size={"xs"}
                       onClick={() => {
                         setOnOpenModalPrimary(true);
-                        setSelectedAddress(item);
+                        setOtherAddress(item);
                       }}
                       _hover={{ color: "green.500" }}
                     >
@@ -168,7 +131,7 @@ export const AddressCheckout = ({ handleClick, selectedId }) => {
                     />
                   </>
                 )}
-                {selectedId === item.id ? null : (
+                {selectedAddress?.id === item.id ? null : (
                   <>
                     <Text
                       as={"button"}
@@ -193,7 +156,7 @@ export const AddressCheckout = ({ handleClick, selectedId }) => {
                   size={"xs"}
                   onClick={() => {
                     setOnOpenModalEdit(true);
-                    setSelectedAddress(item);
+                    setOtherAddress(item);
                   }}
                   _hover={{ color: "green.500" }}
                 >
@@ -208,19 +171,19 @@ export const AddressCheckout = ({ handleClick, selectedId }) => {
       <EditAddress
         onOpen={onOpenModalEdit}
         onClose={() => setOnOpenModalEdit(false)}
-        id={selectedAddress?.addressId}
+        id={otherAddress?.addressId}
         dataCities={dataCities}
         dataProvince={dataProvince}
-        address={selectedAddress?.address?.address}
-        province={selectedAddress?.address?.provinsi}
-        city={selectedAddress?.address?.kota}
-        postal={selectedAddress?.address?.kode_pos}
+        address={otherAddress?.address?.address}
+        province={otherAddress?.address?.provinsi}
+        city={otherAddress?.address?.kota}
+        postal={otherAddress?.address?.kode_pos}
         reload={reload}
         setReload={setReload}
       />
       <PrimaryAddress
         onOpen={onOpenModalPrimary}
-        id={selectedAddress.addressId}
+        id={otherAddress?.addressId}
         onClose={() => setOnOpenModalPrimary(false)}
         reload={reload}
         setReload={setReload}
