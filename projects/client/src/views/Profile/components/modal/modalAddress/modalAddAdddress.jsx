@@ -16,8 +16,8 @@ import {
 } from "@chakra-ui/react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { InputField } from "../../../../../components/input/InputField";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
 import axios from "../../../../../api/axios";
 import headersGen from "../../../../../api/headers";
@@ -26,8 +26,8 @@ export const AddAddress = ({ dataCities, dataProvince, reload, setReload }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef(null);
   const token = localStorage.getItem("token");
-  const headers = headersGen(token)
-  
+  const headers = headersGen(token);
+
   const CreateSchema = Yup.object().shape({
     address: Yup.string().required("Address is required"),
     kota: Yup.string().required("City is required"),
@@ -38,11 +38,11 @@ export const AddAddress = ({ dataCities, dataProvince, reload, setReload }) => {
   const handleSubmit = async (data) => {
     try {
       const response = await axios.post(`/address/add`, data, { headers });
-      toast.success('Address added successfully');
+      toast.success("Address added successfully");
       onClose();
-      setReload(!reload)
+      setReload(!reload);
     } catch (error) {
-      toast.error('Error adding address');
+      toast.error("Error adding address");
       console.log(error);
     }
   };
@@ -91,7 +91,7 @@ export const AddAddress = ({ dataCities, dataProvince, reload, setReload }) => {
                         name="provinsi"
                         onChange={(e) => {
                           const selectedProvinceId = e.target.value;
-                          props.setFieldValue("provinsi", selectedProvinceId); 
+                          props.setFieldValue("provinsi", selectedProvinceId);
                           props.setFieldValue("kota", "");
                         }}
                         value={props.values.provinsi}
@@ -119,14 +119,14 @@ export const AddAddress = ({ dataCities, dataProvince, reload, setReload }) => {
                         name="kota"
                         onChange={(e) => {
                           const selectedCityId = e.target.value;
-                          props.setFieldValue("kota", selectedCityId); 
+                          props.setFieldValue("kota", selectedCityId);
                         }}
-                        value={props.values.kota} 
+                        value={props.values.kota}
                       >
                         {dataCities
                           .filter(
                             (city) => city.province_id === props.values.provinsi
-                          ) 
+                          )
                           .map((city) => (
                             <option key={city.city_id} value={city.city_id}>
                               {city.city_name}
@@ -161,7 +161,11 @@ export const AddAddress = ({ dataCities, dataProvince, reload, setReload }) => {
               </ModalFooter>
             </ModalContent>
           </Modal>
-          <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+          />
         </Box>
       )}
     </Formik>

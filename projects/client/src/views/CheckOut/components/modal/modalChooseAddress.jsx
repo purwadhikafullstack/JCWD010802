@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Box,
-  Button,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -10,12 +9,22 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import { AddressCheckout } from "../AddressCheckout";
 
-export const ModalChooseAddress = ({ id, onOpen, onClose, handleClick, selectedId  }) => {
+export const ModalChooseAddress = ({
+  id,
+  onOpen,
+  onClose,
+  handleClick,
+  address,
+  selectedAddress,
+  setSelectedAddress,
+  reload,
+  setReload,
+  page,
+}) => {
   const finalRef = React.useRef(null);
-
   return (
     <Box>
       <Modal finalFocusRef={finalRef} isOpen={onOpen} onClose={onClose}>
@@ -24,10 +33,17 @@ export const ModalChooseAddress = ({ id, onOpen, onClose, handleClick, selectedI
           <ModalHeader>Choose address to deliver</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <AddressCheckout handleClick={handleClick} selectedId={selectedId}/>
+            <AddressCheckout
+              handleClick={handleClick}
+              address={address}
+              selectedAddress={selectedAddress}
+              setSelectedAddress={setSelectedAddress}
+              reload={reload}
+              setReload={setReload}
+              page={page}
+            />
           </ModalBody>
-          <ModalFooter>
-          </ModalFooter>
+          <ModalFooter></ModalFooter>
         </ModalContent>
       </Modal>
     </Box>
