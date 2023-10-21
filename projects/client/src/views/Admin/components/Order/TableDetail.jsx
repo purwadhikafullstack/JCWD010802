@@ -101,6 +101,10 @@ export const TableDetail = ({ id, data, reload }) => {
         <Flex direction="column" w="full">
             <Table variant="simple" size="sm">
                 <Tr>
+                    <Th className="left-header">Invoice</Th>
+                    <Td className="right-data">{data?.invoice}</Td>
+                </Tr>
+                <Tr>
                     <Th className="left-header">Total</Th>
                     <Td className="right-data">{formatIDR(data?.totalPrice)}</Td>
                 </Tr>
