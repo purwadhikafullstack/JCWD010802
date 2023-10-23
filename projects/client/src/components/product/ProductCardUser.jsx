@@ -13,6 +13,7 @@ export const ProductCardUser = ({ name, price, image, category, reload, setReloa
           borderRadius="10px"
           shadow="md"
           key={name}
+          cursor={"pointer"}
           >
           <Box>
             <Image
