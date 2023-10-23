@@ -39,6 +39,7 @@ export const AllRequests = ({
     accepted: { color: 'green' },
     rejected: { color: 'red' },
     requested: { color: 'orange' },
+    approved: {color:"green"}
   };
 
   
