@@ -79,7 +79,7 @@ module.exports = {
                 });
             }
         } catch (err) {
-            console.error(err);
+            console.log(err);
             res.status(400).send({
                 status: false,
                 message: err.message,
