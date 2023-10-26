@@ -18,10 +18,6 @@ module.exports = {
             const minPrice = +req.query.minPrice || 0;
             const maxPrice = +req.query.maxPrice || 9999999999;
     
-            const filter = {
-                isDeleted: false,
-            };
-    
             if (search) {
                 filter[Op.or] = [
                     {
@@ -39,7 +35,7 @@ module.exports = {
             filter.price = {
                 [Op.between]: [minPrice, maxPrice],
             };
-
+    
             let order = [];
             if (sort === "az") {
                 order.push(["name", "ASC"]);
